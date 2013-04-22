@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=620, user-scalable=no">
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+    <style>
+    html, body { 
+      height:100%; 
+      padding:0;
+      margin:0;
+    }
+    body {
+      margin: 0;
+      background: #333;
+      color:white;
+      padding: 10px;
+    }
+    * {
+      font-family: 'Droid Sans', sans-serif;
+    }
+    h3 {
+      margin: 20px 0 10px 0;
+    }
+    .image {
+      width: 400px;
+      height: 200px;
+    }
+    .image-wide {
+      width: 600px;
+      height: 250px;
+    }
+    .image li, .image-wide li {
+      background-size: cover;
+      background-position: center center;
+    }
+    div.layer {
+      background-color:rgba(0, 0, 0, 0.5);
+      padding:5px;
+    }
+    .repo {
+      width: 300px;
+      height: 200px;
+      
+    }
+    .repo li {
+      padding:10px;
+      color:black;
+      background: #bbb;
+    }
+    div.repo-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom:10px;
+      text-decoration:underline;
+    }
+    </style>
+  </head>
+  <body ng-app="myApp" ng-controller='demoController'>
+    <h1>AngularJS Touch Carousel</h1>
+    <div class='intro'>Transform any ng-repeat in a mobile friendly carousel, just by adding a 'carousel' attribute to your 'ul' element. AngularJS magic :)<br><br>
+    Try to swipe these demos with your mouse or smartphone :
+    </div>
+
+    <h3>Discover sports</h3>
+    <ul carousel class="image">
+      <li ng-repeat="image in sportImages" style="background-image:url({{ image }});"><div class="layer">{{ image }}</div></li>
+    </ul>
+
+    <h3>Our Public GitHub repos</h3>
+    
+    <ul carousel class="repo" >
+      <li ng-repeat="repo in githubRepos">
+          <div class="repo-name">{{ repo.name }}</div>
+          {{ repo.description }}<br>
+          <br>
+          <b>watchers</b> : {{ repo.watchers_count }}<br>
+          <b>forks</b> : {{ repo.forks_count }}<br>
+          <b>open issues</b> : {{ repo.open_issues_count }}<br>
+      </li>
+    </ul>
+
+    <h3>Discover cities</h3>
+    <ul carousel class="image-wide">
+      <li ng-repeat="image in cityImages" style="background-image:url({{ image }});"><div class="layer">{{ image }}</div></li>
+    </ul>
+
+    <br><br><br>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.1/angular.js"></script>
+
+    <!-- include carousel src -->
+    <script src="./src/angular-carousel.js"></script>
+    <link href='./src/angular-carousel.css' rel='stylesheet' type='text/css'>
+
+    <script>
+    /* demo page code */
+    angular.module('myApp', ['angular-carousel'])
+      .controller('demoController', function($scope, $http) {
+        $scope.sportImages = [];
+        $scope.cityImages = [];
+        $scope.githubRepos = [];
+
+        $http.get('https://api.github.com/users/revolunet/repos', {
+          params: {
+            sort: 'updated',
+            order:'desc'
+          }
+        }).success(function(data) {
+          $scope.githubRepos = data;
+        }).error(function() {
+          alert('cannot fetch github API');
+        })
+
+        for (var i=0; i<10; i++) {
+          $scope.sportImages.push('http://lorempixel.com/400/200/sports/' + i + '/');
+          $scope.cityImages.push('http://lorempixel.com/400/200/city/' + i + '/');
+        }
+      })
+
+    </script>
+  </body>
+</html>
