@@ -8,6 +8,8 @@ It handles click and touch events.
 
 Demo : http://revolunet.github.io/angular-carousel
 
+Proudly brought to you by the [@revolunet](http://twitter.com/revolunet) team.
+
 ## Usage :
 
 Add a dependency to `angular-carousel` module in your application.
@@ -26,6 +28,7 @@ Then, just add a `carousel` attribute to your `<ul>` block and your `<li>`'s bec
 Of course, include `angular-carousel.js` and `angular-carousel.css` in your project.
 
 ## Todo :
+ - Grunt build
  - Tests :)
  - cancel swipe if too short
  - indicator
