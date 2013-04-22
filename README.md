@@ -4,9 +4,11 @@ This is a simple carousel implementation for AngularJS ng-repeats.
 
 For best performances on mobile devices, it uses CSS 3D transforms (GPU accel).
 
-It handles click and touch events.
+It handles click and touch events and runs only on webkit at the moment.
 
 Demo : http://revolunet.github.io/angular-carousel
+
+Comments and contributions welcome :)
 
 Proudly brought to you by the [@revolunet](http://twitter.com/revolunet) team.
 
@@ -32,6 +34,7 @@ Of course, include `angular-carousel.js` and `angular-carousel.css` in your proj
  - Tests :)
  - cancel swipe if too short
  - indicator
+ - optional auto-slide
  - buffer slides (3) to reduce DOM size and allow dynamic add/remove of slides (inifinite scroll)
 
 ## Inspirations
