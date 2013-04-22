@@ -1,3 +1,10 @@
+/**
+ * Angular Carousel - Mobile friendly touch carousel for AngularJS
+ * @version v0.0.1 - 2013-04-23
+ * @link http://revolunet.com.github.com/angular-carousel
+ * @author Julien Bouquillon <julien@revolunet.com>
+ * @license MIT License, http://www.opensource.org/licenses/MIT
+ */
 /*global angular, $*/
 
 "use strict";
