@@ -1,11 +1,11 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.1 - 2013-04-23
+ * @version v0.0.1 - 2013-04-24
  * @link http://revolunet.com.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
-/*global angular, console $*/
+/*global angular, console, $*/
 
 "use strict";
 
@@ -57,7 +57,8 @@ angular.module('angular-carousel', [])
               startX = 0,
               startOffset  = 0,
               offset  = 0,
-              curSlide = 0;
+              curSlide = 0,
+              minSwipePercentage = 0.1;
 
           // add a wrapper div that will hide overflow
           var carousel = iElement.wrap("<div id='" + carouselId +"' class='carousel-container'></div>"),
@@ -82,6 +83,8 @@ angular.module('angular-carousel', [])
               event = event.originalEvent.touches[0];
             else if ((typeof event.touches !== 'undefined') && event.touches.length > 0)
               event = event.touches[0];
+            else if ((typeof event.changedTouches !== 'undefined') && event.changedTouches.length > 0)
+              event = event.changedTouches[0];
             return event;
           };
 
@@ -120,12 +123,19 @@ angular.module('angular-carousel', [])
 
           var swipeEnd = function(event) {
             /* when movement ends, go to next slide or stay on the same */
-            var slideCount = getSlidesCount();
+            event = transformEvent(event);
+            var slideCount = getSlidesCount(),
+                prevSlide = curSlide;
             if (swiping > 0) {
               swiping = 0;
               curSlide = offset < startOffset ? curSlide + 1 : curSlide - 1;
               curSlide = Math.min(Math.max(curSlide, 0), slideCount - 1);
-              var slideWidth = container.getWidth();
+              var slideWidth = container.getWidth(),
+                  delta = event.clientX - startX;
+              if (Math.abs(delta) <= slideWidth * minSwipePercentage) {
+                // prevent swipe if not swipped enough
+                curSlide = prevSlide;
+              }
               offset = curSlide * -slideWidth;
               carousel.removeClass('carousel-noanimate').addClass('carousel-animate').css('-webkit-transform', 'translate3d(' + offset + 'px,0,0)');
             }

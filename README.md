@@ -32,7 +32,7 @@ Of course, include `angular-carousel.js` and `angular-carousel.css` in your proj
 ## Todo :
  - ~~Grunt build~~
  - more tests :)
- - cancel swipe if too short
+ - ~~cancel swipe if too short~~
  - indicator
  - optional auto-slide
  - buffer slides (3) to reduce DOM size and allow dynamic add/remove of slides (inifinite scroll)
