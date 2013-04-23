@@ -88,6 +88,7 @@ angular.module('angular-carousel', [])
               swiping = 1;
               startX = event.clientX;
             }
+            angular.element(document.body).bind('mouseup', swipeEnd);
           };
 
           var swipe = function(event) {
@@ -115,6 +116,7 @@ angular.module('angular-carousel', [])
           };
 
           var swipeEnd = function(event) {
+            angular.element(document.body).unbind('mouseup', swipeEnd);
             /* when movement ends, go to next slide or stay on the same */
             event = transformEvent(event);
             var slideCount = getSlidesCount(),
@@ -134,16 +136,10 @@ angular.module('angular-carousel', [])
             }
           };
 
-          var mouseExit = function(event) {
-            // todo : cancel swipe if going outside the area
-            console.log('mouseExit', event, event.targetElement);
-          };
-
           // bind events
           container.bind('mousedown touchstart', swipeStart);
           container.bind('mousemove touchmove', swipe);
           container.bind('mouseup touchend', swipeEnd);
-          carousel.bind('mouseleave', mouseExit, true);
 
           scope.destroy = function(callback) {
               // todo
