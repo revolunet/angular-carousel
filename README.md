@@ -30,8 +30,8 @@ Then, just add a `carousel` attribute to your `<ul>` block and your `<li>`'s bec
 Of course, include `angular-carousel.js` and `angular-carousel.css` in your project.
 
 ## Todo :
- - Grunt build
- - Tests :)
+ - ~~Grunt build~~
+ - more tests :)
  - cancel swipe if too short
  - indicator
  - optional auto-slide
