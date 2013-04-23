@@ -5,7 +5,7 @@
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
-/*global angular, $*/
+/*global angular, console $*/
 
 "use strict";
 
@@ -15,13 +15,13 @@ http://github.com/revolunet/angular-carousel
 */
 
 angular.module('angular-carousel', [])
-  .directive('carousel', function($document) {
+  .directive('carousel', ['$document', function($document) {
     // track number of carousel instances
     var carousels = 0;
     return {
       restrict: 'A',
       scope: true,
-      controller: function($scope, $element, $attrs) {
+      controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
         /*
           listen for item add/remove in the ng-repeat
           only used to resize the container based on the first slide added
@@ -43,7 +43,7 @@ angular.module('angular-carousel', [])
         this.getWidth = function() {
           return width;
         };
-      },
+      }],
       compile: function(tElement, tAttrs) {
 
         tElement.addClass('carousel-slides');
@@ -148,7 +148,7 @@ angular.module('angular-carousel', [])
         };
       }
     };
-  })
+  }])
   .directive('slideAnnouncer', function() {
     /* listen to modifications on the ng-repeat */
     return {
