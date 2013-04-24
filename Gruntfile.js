@@ -50,11 +50,20 @@ module.exports = function(grunt) {
         versionFile: 'package.json'
       }
     },
+    stage: {
+      options: {
+        files: ['CHANGELOG.md']
+      }
+    },
     release: {
       options: {
         commitMessage: '<%= version %>',
         tagName: 'v<%= version %>',
-        file: 'package.json'
+        file: 'package.json',
+        push: false,
+        tag: false,
+        pushTags: false,
+        npm: false
       }
     },
     jshint: {
@@ -120,6 +129,16 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-conventional-changelog');
 
+  grunt.registerTask('stage', 'git add files before running the release task', function () {
+    var files = this.options().files;
+    grunt.util.spawn({
+      cmd: process.platform === 'win32' ? 'git.cmd' : 'git',
+      args: ['add'].concat(files)
+    }, grunt.task.current.async());
+  });
+
+
+
   grunt.renameTask('release', 'originalRelease');
 
   // Default task.
@@ -133,7 +152,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['test', 'concat', 'uglify', 'cssmin']);
 
   // release task
-  grunt.registerTask('release', ['build', 'changelog', 'originalRelease']);
+  grunt.registerTask('release', ['build', 'changelog', 'stage', 'originalRelease']);
 
 
   // Provides the "karma" task.
