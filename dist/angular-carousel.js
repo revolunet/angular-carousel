@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.1 - 2013-04-24
+ * @version v0.0.2 - 2013-04-24
  * @link http://revolunet.com.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -117,7 +117,11 @@ angular.module('angular-carousel', [])
                 ratio = 3;
               offset = startOffset + deltaX / ratio;
               carousel.css({
-                '-webkit-transform': 'translate3d(' + offset + 'px,0,0)'
+                '-webkit-transform': 'translate3d(' + offset + 'px,0,0)',
+                '-moz-transform': 'translate3d(' + offset + 'px,0,0)',
+                '-ms-transform': 'translate3d(' + offset + 'px,0,0)',
+                '-o-transform': 'translate3d(' + offset + 'px,0,0)',
+                'transform': 'translate3d(' + offset + 'px,0,0)'
               }).removeClass().addClass('carousel-noanimate');
             }
           };
@@ -139,7 +143,13 @@ angular.module('angular-carousel', [])
                 curSlide = prevSlide;
               }
               offset = curSlide * -slideWidth;
-              carousel.removeClass('carousel-noanimate').addClass('carousel-animate').css('-webkit-transform', 'translate3d(' + offset + 'px,0,0)');
+              carousel.removeClass('carousel-noanimate').addClass('carousel-animate').css({
+                '-webkit-transform': 'translate3d(' + offset + 'px,0,0)',
+                '-moz-transform': 'translate3d(' + offset + 'px,0,0)',
+                '-ms-transform': 'translate3d(' + offset + 'px,0,0)',
+                '-o-transform': 'translate3d(' + offset + 'px,0,0)',
+                'transform': 'translate3d(' + offset + 'px,0,0)'
+              });
             }
           };
 

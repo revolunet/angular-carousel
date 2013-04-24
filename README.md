@@ -2,9 +2,7 @@
 
 This is a simple carousel implementation for AngularJS ng-repeats.
 
-For best performances on mobile devices, it uses CSS 3D transforms (GPU accel).
-
-It handles click and touch events and runs only on webkit at the moment.
+For best performances on mobile devices, it uses CSS 3D transforms (GPU accel) and handles click or touch events.
 
 Demo : http://revolunet.github.io/angular-carousel
 
