@@ -1,3 +1,5 @@
+/* global require, module, */
+
 'use strict';
 
 module.exports = function(grunt) {
@@ -40,6 +42,19 @@ module.exports = function(grunt) {
       dist: {
         src: ['<%= concat.dist.dest %>'],
         dest: '<%= dirs.dest %>/<%= pkg.name %>.min.js'
+      }
+    },
+    changelog: {
+      options: {
+        dest: 'CHANGELOG.md',
+        versionFile: 'package.json'
+      }
+    },
+    release: {
+      options: {
+        commitMessage: '<%= version %>',
+        tagName: 'v<%= version %>',
+        file: 'package.json'
       }
     },
     jshint: {
@@ -102,6 +117,10 @@ module.exports = function(grunt) {
   // Load the plugin that provides the "watch" task.
   //grunt.loadNpmTasks('grunt-contrib-watch');
 
+  grunt.loadNpmTasks('grunt-release');
+  grunt.loadNpmTasks('grunt-conventional-changelog');
+
+  grunt.renameTask('release', 'originalRelease');
 
   // Default task.
   grunt.registerTask('default', ['test']);
@@ -112,6 +131,9 @@ module.exports = function(grunt) {
 
   // Build task.
   grunt.registerTask('build', ['test', 'concat', 'uglify', 'cssmin']);
+
+  // release task
+  grunt.registerTask('release', ['build', 'changelog', 'originalRelease']);
 
 
   // Provides the "karma" task.
