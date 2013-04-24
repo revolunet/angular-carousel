@@ -13,9 +13,9 @@ basePath = './..';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
-  'test/lib/jquery.min.js',
-  'test/lib/angular/angular.js',
-  'test/lib/angular/angular-mocks.js',
+  'components/jquery/jquery.min.js',
+  'components/angular/angular.js',
+  'components/angular-mocks/angular-mocks.js',
   'src/*.js',
   'test/unit/*.js'
 ];
