@@ -88,7 +88,7 @@ angular.module('angular-carousel', [])
               swiping = 1;
               startX = event.clientX;
             }
-            angular.element(document.body).bind('mouseup', swipeEnd);
+            $document.bind('mouseup', swipeEnd);
           };
 
           var swipe = function(event) {
@@ -116,7 +116,7 @@ angular.module('angular-carousel', [])
           };
 
           var swipeEnd = function(event) {
-            angular.element(document.body).unbind('mouseup', swipeEnd);
+            $document.unbind('mouseup', swipeEnd);
             /* when movement ends, go to next slide or stay on the same */
             event = transformEvent(event);
             var slideCount = getSlidesCount(),
