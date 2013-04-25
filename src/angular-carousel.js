@@ -26,8 +26,7 @@ angular.module('angular-carousel', [])
           if (nbItems===1) {
             // auto resize the container to fit the first slide
             width = elm[0].getBoundingClientRect().width;
-            // todo : 2px substract because of some mobile viewports weirds behaviours (android)
-            $element.parent().css('width', (this.getWidth() - 2) + 'px');
+            $element.parent().css('width', this.getWidth() + 'px');
           }
         };
         this.removeElement = function(elm){

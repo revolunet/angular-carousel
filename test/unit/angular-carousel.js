@@ -27,7 +27,7 @@ describe('carousel', function () {
           {text: '3rd slide'}
         ]
       },
-      template: '<ul carousel ><li ng-repeat="item in items">{{ item.text }}</li></ul>'
+      template: '<ul carousel><li ng-repeat="item in items">{{ item.text }}</li></ul>'
     };
     angular.extend(scope, sampleData.scope);
     var $element = $(sampleData.template).appendTo($sandbox);
@@ -54,6 +54,11 @@ describe('carousel', function () {
         scope.items.push({text:'4th slide'});
         scope.$digest();
         expect(elm.find('li[slide-announcer=true]').length).toBe(4);
+    });
+    it('generated container outerWidth should match the ul outerWidth', function () {
+        var elm = compileTpl();
+        scope.$digest();
+        expect(elm.parent().outerWidth()).toBe(elm.outerWidth());
     });
   });
 });

@@ -1,9 +1,11 @@
-# 0.0.2 (2013-04-24)
+# 0.0.3 (2013-04-25)
 
 ## Features
 ### chore
 
 * add grunt+tests (e6a523f)
+
+* add changelog to gruntfile (7f64380)
 
 ### carousel
 
@@ -23,5 +25,9 @@
 * endSwipe on every mouseup (4c9c276)
 
 * use $document instead of document (57dfee0)
+
+* add vendor prefixes, fix #2 (2bae8db)
+
+* grunt remove useless (ff43d11)
 
 

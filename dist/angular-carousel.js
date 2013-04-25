@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.3 - 2013-04-24
+ * @version v0.0.3 - 2013-04-25
  * @link http://revolunet.com.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -33,8 +33,7 @@ angular.module('angular-carousel', [])
           if (nbItems===1) {
             // auto resize the container to fit the first slide
             width = elm[0].getBoundingClientRect().width;
-            // todo : 2px substract because of some mobile viewports weirds behaviours (android)
-            $element.parent().css('width', (this.getWidth() - 2) + 'px');
+            $element.parent().css('width', this.getWidth() + 'px');
           }
         };
         this.removeElement = function(elm){
