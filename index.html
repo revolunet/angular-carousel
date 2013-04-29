@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=620, user-scalable=no">
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
     <style>
@@ -29,7 +30,7 @@
       height: 200px;
     }
     .image-wide {
-      width: 600px;
+      width: 500px;
       height: 250px;
     }
     .image li, .image-wide li {
@@ -61,18 +62,33 @@
   <body ng-app="myApp" ng-controller='demoController'>
     <a href="https://github.com/revolunet/angular-carousel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
     <h1>AngularJS Touch Carousel</h1>
-    <div class='intro'>Transform any ng-repeat in a mobile friendly carousel, just by adding a 'carousel' attribute to your 'ul' element. AngularJS magic :)<br><br>
+    <div class='intro'>Transform any ng-repeat in a mobile friendly carousel, just by adding a 'rn-carousel' attribute to your 'ul' element. AngularJS magic :)<br><br>
     Try to swipe these demos with your mouse or your finger :
     </div>
 
-    <h3>Discover sports</h3>
-    <ul carousel class="image">
-      <li ng-repeat="image in sportImages" style="background-image:url({{ image }});"><div class="layer">{{ image }}</div></li>
+
+    <h3>Discover cities</h3>
+    <ul rn-carousel class="image">
+      <li ng-repeat="image in cityImages" style="background-image:url({{ image }});">
+        <div class="layer" data-ng-bind-html-unsafe="image"></div>
+      </li>
     </ul>
 
+
+    <h3 data-ng-bind-html-unsafe="'Discover sports (slide ' + (currentSport + 1) + '/' + sportImages.length + ')'"></h3>
+    This carousel has indicator enabled, two way data-binding and custom controls.<br><br>
+    <ul data-rn-carousel data-rn-carousel-indicator="true" data-rn-carousel-index="currentSport" class="image">
+      <li ng-repeat="image in sportImages" style="background-image:url({{ image }});">
+        <div class="layer" data-ng-bind-html-unsafe="image"></div>
+      </li>
+    </ul>
+
+    <button ng-click="currentSport = currentSport - 1" ng-disabled="currentSport == 0">prev</button>
+    <button ng-click="currentSport = currentSport + 1" ng-disabled="currentSport == sportImages.length - 1">next</button>
+    <br>
     <h3>Our Public GitHub repos</h3>
-    
-    <ul carousel class="repo" >
+    This carousel has a more advanced template, but works the same way.<br><br>
+    <ul rn-carousel class="repo" >
       <li ng-repeat="repo in githubRepos">
           <div class="repo-name">{{ repo.name }}</div>
           {{ repo.description }}<br>
@@ -83,10 +99,6 @@
       </li>
     </ul>
 
-    <h3>Discover cities</h3>
-    <ul carousel class="image-wide">
-      <li ng-repeat="image in cityImages" style="background-image:url({{ image }});"><div class="layer">{{ image }}</div></li>
-    </ul>
 
     <br><br><br>
 
@@ -103,6 +115,8 @@
         $scope.sportImages = [];
         $scope.cityImages = [];
         $scope.githubRepos = [];
+
+        $scope.currentSport = 2;
 
         $http.get('https://api.github.com/users/revolunet/repos', {
           params: {

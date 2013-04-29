@@ -106,8 +106,7 @@ module.exports = function(grunt) {
         }
       },
       options: {
-        configFile: 'test/karma.conf.js',
-        browsers: ['Chrome']
+        configFile: 'test/karma.conf.js'
       }
     }
   });

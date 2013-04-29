@@ -8,65 +8,122 @@ http://github.com/revolunet/angular-carousel
 */
 
 angular.module('angular-carousel', [])
-  .directive('carousel', ['$document', function($document) {
+  .directive('rnCarousel', ['$document', '$compile', '$parse', function($document, $compile, $parse) {
     // track number of carousel instances
     var carousels = 0;
+
+    // track any ngRepeat directive
+    function extractNgRepeatExpression(elm) {
+      var ngRepeatPrefix =  "ngRepeat:";
+      function getNgRepeatExpressionFromComment(comment) {
+        // extract the expression from generated comment and trim it
+        var expression = comment.nodeValue.substring(ngRepeatPrefix.length + 1);
+        return(
+            expression.replace( /^\s+|\s+$/g, "" )
+        );
+      }
+     function getNgRepeatExpression() {
+        // extract the generated comment node
+        var nodes = Array.prototype.slice.call(elm.contents());
+        var ngRepeatComment = nodes.filter(
+            function(node) {
+                return(
+                    ( node.nodeType === 8 ) &&
+                    ( node.nodeValue.indexOf(ngRepeatPrefix) !== -1 )
+                );
+            }
+        );
+        return(
+            getNgRepeatExpressionFromComment(
+                ngRepeatComment[0]
+            )
+        );
+      }
+      var expression = getNgRepeatExpression();
+      // extract the list part of the final expression
+      var expressionPattern = /^([^\s]+) in (.+)$/i;
+      var expressionParts = expression.match( expressionPattern );
+      return expressionParts[2];
+    }
+
     return {
       restrict: 'A',
       scope: true,
-      controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
-        /*
-          listen for item add/remove in the ng-repeat
-          only used to resize the container based on the first slide added
-        */
-        var nbItems = 0;
-        var width = 0;
-        this.addElement = function(elm){
-          nbItems++;
-          if (nbItems===1) {
-            // auto resize the container to fit the first slide
-            width = elm[0].getBoundingClientRect().width;
-            $element.parent().css('width', this.getWidth() + 'px');
-          }
-        };
-        this.removeElement = function(elm){
-          nbItems--;
-        };
-        this.getWidth = function() {
-          return width;
-        };
-      }],
       compile: function(tElement, tAttrs) {
 
-        tElement.addClass('carousel-slides');
-        tElement.find('li').attr('slide-announcer', true);
+        tElement.addClass('rn-carousel-slides');
 
         return function(scope, iElement, iAttrs, controller) {
           // init some variables
           carousels++;
-          var carouselId = 'carousel-' + carousels;
+          var carouselId = 'rn-carousel-' + carousels;
           var swiping = 0,
               startX = 0,
               startOffset  = 0,
               offset  = 0,
-              curSlide = 0,
-              minSwipePercentage = 0.1;
+              minSwipePercentage = 0.1,
+              containerWidth = 0;
 
           // add a wrapper div that will hide overflow
-          var carousel = iElement.wrap("<div id='" + carouselId +"' class='carousel-container'></div>"),
+          var carousel = iElement.wrap("<div id='" + carouselId +"' class='rn-carousel-container'></div>"),
               container = carousel.parent();
 
-          // todo : cannot access this controller method from a bound event ? #WTF
-          container.getWidth = controller.getWidth;
+          scope.carouselItems = [];
+          scope.carouselIndex = 0;
+          if (iAttrs.rnCarouselIndex) {
+              // attribute data binding
+              var activeModel = $parse(iAttrs['rnCarouselIndex']);
+              scope.$watch('carouselIndex', function(newValue) {
+                activeModel.assign(scope.$parent, newValue);
+              });
+              scope.$parent.$watch($parse(iAttrs.rnCarouselIndex), function(newValue) {
+                scope.carouselIndex = newValue;
+                updateSlidePosition();
+              });
+          } else {
+              // if no bound indicator, just watch index and update display
+              scope.$watch('carouselIndex', function(newValue) {
+                updateSlidePosition();
+              });
+          }
 
-          var getSlides = function() {
-              /* returns items in the carousel */
-              return carousel.find('li');
-          };
+          // extract the ngRepeat expression and watch it
+          var collectionName = extractNgRepeatExpression(iElement);
+          scope.$watch(collectionName, function(newValue, oldValue) {
+            // update local list reference when slides updated
+            // also update container width based on first item width
+            scope.carouselItems = newValue;
+            var slides = carousel.find('li');
+            if (slides.length > 0) {
+              containerWidth = slides[0].getBoundingClientRect().width;
+              container.css('width', containerWidth + 'px');
+              updateSlidePosition();
+            } else {
+              containerWidth = 0;
+            }
+          }, true);
+
+          // enable carousel indicator
+          var showIndicator = (iAttrs['rnCarouselIndicator']==='true');
+          if (showIndicator) {
+            var indicator = $compile("<div id='" + carouselId +"-indicator' index='carouselIndex' items='carouselItems' data-rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
+            container.append(indicator);
+          }
 
           var getSlidesCount = function() {
-              /* returns the detected number of items in the carousel */
-              return getSlides().length;
+              /* returns the number of items in the carousel */
+              return scope.carouselItems.length;
+          };
+
+          var updateSlidePosition = function() {
+              offset = scope.carouselIndex * -containerWidth;
+              carousel.removeClass('rn-carousel-noanimate').addClass('rn-carousel-animate').css({
+                '-webkit-transform': 'translate3d(' + offset + 'px,0,0)',
+                '-moz-transform': 'translate3d(' + offset + 'px,0,0)',
+                '-ms-transform': 'translate3d(' + offset + 'px,0,0)',
+                '-o-transform': 'translate3d(' + offset + 'px,0,0)',
+                'transform': 'translate3d(' + offset + 'px,0,0)'
+              });
           };
 
           var transformEvent = function(event) {
@@ -105,7 +162,7 @@ angular.module('angular-carousel', [])
               var slideCount = getSlidesCount();
               // ratio is used for the 'rubber band' effect
               var ratio = 1;
-              if ((curSlide === 0 && event.clientX > startX) || (curSlide === slideCount - 1 && event.clientX < startX))
+              if ((scope.carouselIndex === 0 && event.clientX > startX) || (scope.carouselIndex === slideCount - 1 && event.clientX < startX))
                 ratio = 3;
               offset = startOffset + deltaX / ratio;
               carousel.css({
@@ -114,7 +171,7 @@ angular.module('angular-carousel', [])
                 '-ms-transform': 'translate3d(' + offset + 'px,0,0)',
                 '-o-transform': 'translate3d(' + offset + 'px,0,0)',
                 'transform': 'translate3d(' + offset + 'px,0,0)'
-              }).removeClass().addClass('carousel-noanimate');
+              }).removeClass().addClass('rn-carousel-noanimate');
             }
           };
 
@@ -123,25 +180,23 @@ angular.module('angular-carousel', [])
             /* when movement ends, go to next slide or stay on the same */
             event = transformEvent(event);
             var slideCount = getSlidesCount(),
-                prevSlide = curSlide;
+                tmpSlide;
             if (swiping > 0) {
               swiping = 0;
-              curSlide = offset < startOffset ? curSlide + 1 : curSlide - 1;
-              curSlide = Math.min(Math.max(curSlide, 0), slideCount - 1);
-              var slideWidth = container.getWidth(),
-                  delta = event.clientX - startX;
-              if (Math.abs(delta) <= slideWidth * minSwipePercentage) {
+              tmpSlide = offset < startOffset ? scope.carouselIndex + 1 : scope.carouselIndex - 1;
+              tmpSlide = Math.min(Math.max(tmpSlide, 0), slideCount - 1);
+
+              var delta = event.clientX - startX;
+              if (Math.abs(delta) <= containerWidth * minSwipePercentage) {
                 // prevent swipe if not swipped enough
-                curSlide = prevSlide;
+                tmpSlide = scope.carouselIndex;
               }
-              offset = curSlide * -slideWidth;
-              carousel.removeClass('carousel-noanimate').addClass('carousel-animate').css({
-                '-webkit-transform': 'translate3d(' + offset + 'px,0,0)',
-                '-moz-transform': 'translate3d(' + offset + 'px,0,0)',
-                '-ms-transform': 'translate3d(' + offset + 'px,0,0)',
-                '-o-transform': 'translate3d(' + offset + 'px,0,0)',
-                'transform': 'translate3d(' + offset + 'px,0,0)'
+              var changed = (scope.carouselIndex !== tmpSlide);
+              scope.$apply(function() {
+                scope.carouselIndex = tmpSlide;
               });
+              // reset position if same slide (watch not triggered)
+              if (!changed) updateSlidePosition();
             }
           };
 
@@ -150,26 +205,20 @@ angular.module('angular-carousel', [])
           container.bind('mousemove touchmove', swipe);
           container.bind('mouseup touchend', swipeEnd);
 
-          scope.destroy = function(callback) {
-              // todo
-          };
         };
       }
     };
   }])
-  .directive('slideAnnouncer', function() {
-    /* listen to modifications on the ng-repeat */
+  .directive('rnCarouselIndicators', [function() {
     return {
       restrict: 'A',
-      require : '^carousel',
-      link: function(scope, element, attrs, slideAnnouncerCtrl) {
-          if(!slideAnnouncerCtrl){
-              return;
-          }
-          slideAnnouncerCtrl.addElement(element);
-          scope.$on("$destroy",function(){
-             slideAnnouncerCtrl.removeElement(element);
-          });
-      }
+      replace: true,
+      scope: {
+        items: '=',
+        index: '='
+      },
+      template: '<div class="rn-carousel-indicator">' +
+                  '<span ng-repeat="item in items" ng-class="{active: $index==$parent.index}">●</span>' +
+                '</div>'
     };
-  });
+  }]);

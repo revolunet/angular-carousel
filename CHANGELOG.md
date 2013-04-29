@@ -1,4 +1,4 @@
-# 0.0.3 (2013-04-25)
+# 0.0.4 (2013-04-29)
 
 ## Features
 ### chore
@@ -29,5 +29,7 @@
 * add vendor prefixes, fix #2 (2bae8db)
 
 * grunt remove useless (ff43d11)
+
+* remove 2px hack, fix #6 (e40be8c)
 
 
