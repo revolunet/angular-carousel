@@ -2,7 +2,7 @@
 
 This is a simple carousel implementation for AngularJS ng-repeats, optimised for mobile devices.
 
-Demo : http://revolunet.github.io/angular-carousel
+Demo : http://revolunet.github.io/angular-carousel and making of article  : http://blog.revolunet.com/blog/2013/05/02/angular-carousel-making-of/
 
 Comments and contributions welcome :)
 
