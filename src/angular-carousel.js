@@ -12,46 +12,16 @@ angular.module('angular-carousel', [])
     // track number of carousel instances
     var carousels = 0;
 
-    // track any ngRepeat directive
-    function extractNgRepeatExpression(elm) {
-      var ngRepeatPrefix =  "ngRepeat:";
-      function getNgRepeatExpressionFromComment(comment) {
-        // extract the expression from generated comment and trim it
-        var expression = comment.nodeValue.substring(ngRepeatPrefix.length + 1);
-        return(
-            expression.replace( /^\s+|\s+$/g, "" )
-        );
-      }
-     function getNgRepeatExpression() {
-        // extract the generated comment node
-        var nodes = Array.prototype.slice.call(elm.contents());
-        var ngRepeatComment = nodes.filter(
-            function(node) {
-                return(
-                    ( node.nodeType === 8 ) &&
-                    ( node.nodeValue.indexOf(ngRepeatPrefix) !== -1 )
-                );
-            }
-        );
-        return(
-            getNgRepeatExpressionFromComment(
-                ngRepeatComment[0]
-            )
-        );
-      }
-      var expression = getNgRepeatExpression();
-      // extract the list part of the final expression
-      var expressionPattern = /^([^\s]+) in (.+)$/i;
-      var expressionParts = expression.match( expressionPattern );
-      return expressionParts[2];
-    }
-
     return {
       restrict: 'A',
       scope: true,
       compile: function(tElement, tAttrs) {
 
         tElement.addClass('rn-carousel-slides');
+
+        // extract the ngRepeat expression from the li attribute
+        var repeatExpression = tElement.find('li')[0].attributes['ng-repeat'].nodeValue,
+           collectionName = repeatExpression.match( /^([^\s]+) in (.+)$/i )[2];
 
         return function(scope, iElement, iAttrs, controller) {
           // init some variables
@@ -87,8 +57,7 @@ angular.module('angular-carousel', [])
               });
           }
 
-          // extract the ngRepeat expression and watch it
-          var collectionName = extractNgRepeatExpression(iElement);
+          // watch the ngRepeat expression for changes
           scope.$watch(collectionName, function(newValue, oldValue) {
             // update local list reference when slides updated
             // also update container width based on first item width
