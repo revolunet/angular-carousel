@@ -1,4 +1,4 @@
-/* global require, module, */
+/* global require, module, process */
 
 'use strict';
 
@@ -42,17 +42,6 @@ module.exports = function(grunt) {
       dist: {
         src: ['<%= concat.dist.dest %>'],
         dest: '<%= dirs.dest %>/<%= pkg.name %>.min.js'
-      }
-    },
-    changelog: {
-      options: {
-        dest: 'CHANGELOG.md',
-        versionFile: 'package.json'
-      }
-    },
-    stage: {
-      options: {
-        files: ['CHANGELOG.md']
       }
     },
     release: {
@@ -126,15 +115,6 @@ module.exports = function(grunt) {
   //grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.loadNpmTasks('grunt-release');
-  grunt.loadNpmTasks('grunt-conventional-changelog');
-
-  grunt.registerTask('stage', 'git add files before running the release task', function () {
-    var files = this.options().files;
-    grunt.util.spawn({
-      cmd: process.platform === 'win32' ? 'git.cmd' : 'git',
-      args: ['add'].concat(files)
-    }, grunt.task.current.async());
-  });
 
 
 
@@ -148,10 +128,8 @@ module.exports = function(grunt) {
   grunt.registerTask('test-server', ['karma:server']);
 
   // Build task.
-  grunt.registerTask('build', ['test', 'concat', 'uglify', 'cssmin', 'changelog']);
+  grunt.registerTask('build', ['test', 'concat', 'uglify', 'cssmin']);
 
-  // release task
-  grunt.registerTask('release', ['build', 'changelog']);
 
 
   // Provides the "karma" task.
