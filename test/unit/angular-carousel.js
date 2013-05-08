@@ -20,27 +20,28 @@ describe('carousel', function () {
 
  function compileTpl(overrideOptions) {
     var options = {
-      showIndicator: false,
-      index: 1,
-      useIndex: true,
-      useIndicator: true
+      useIndex: false,
+      useIndicator: false,
+      useBuffer: false
     };
     if (overrideOptions) angular.extend(options, overrideOptions);
-    var showIndicator = !!options.showIndicator;
     var sampleData = {
       scope: {
-        items: [
-          {text: '1st slide'},
-          {text: '2nd slide'},
-          {text: '3rd slide'}
-        ],
-        index: options.index
+        items: [],
+        localIndex: 5
       }
     };
-    var tpl = '<ul data-rn-carousel ';
-    if (options.useIndicator) tpl += ' data-rn-carousel-indicator="' + showIndicator + '" ';
-    if (options.useIndex) tpl += ' data-rn-carousel-index="index" ';
-    tpl += '><li class="test" style="width:200px" ng-repeat="item in items">{{ item.text }}</li></ul>';
+    for (var i=0; i<25; i++) {
+      sampleData.scope.items.push({
+        text: 'slide #' + i,
+        id: i
+      });
+    }
+    var tpl = '<ul rn-carousel ';
+    if (options.useIndicator) tpl += ' rn-carousel-indicator ';
+    if (options.useBuffer) tpl += ' rn-carousel-buffered ';
+    if (options.useIndex) tpl += ' rn-carousel-index="' + options.useIndex + '" ';
+    tpl += '><li class="test" style="width:200px" ng-repeat="item in items" id="slide-{{ item.id }}">{{ item.text }}</li></ul>';
 
     angular.extend(scope, sampleData.scope);
     var $element = $(tpl).appendTo($sandbox);
@@ -57,7 +58,7 @@ describe('carousel', function () {
     expect(curMatrix).toBe(expectedMatrix);
   }
 
-  describe('check carousel directive with an index defined', function () {
+  describe('directive', function () {
     it('should add a wrapper div around the ul/li', function () {
         var elm = compileTpl();
         expect(elm.parent().hasClass('rn-carousel-container')).toBe(true);
@@ -74,19 +75,42 @@ describe('carousel', function () {
         var elm = compileTpl();
         expect(elm.parent().outerWidth()).toBe(elm.outerWidth());
     });
+  });
+
+  describe('directive with a data-bound index defined', function () {
     it('the index attribute should be used to position the first visible slide', function () {
-        var elm = compileTpl();
+        var elm = compileTpl({useIndex: 'localIndex'});
         validCSStransform(elm);
     });
     it('index change should update the carousel position', function () {
-        var elm = compileTpl();
-        scope.index = 2;
+        var elm = compileTpl({useIndex: 'localIndex'});
+        scope.localIndex = 5;
+        scope.$digest();
+        validCSStransform(elm);
+    });
+    it('carousel index should be bound to local index', function () {
+        var elm = compileTpl({useIndex: 'localIndex'});
+        scope.localIndex = 5;
+        scope.$digest();
+        expect(elm.scope().carouselIndex).toBe(scope.localIndex);
+    });
+  });
+
+  describe('directive with a numeric index defined', function () {
+    it('the index attribute should be used to position the first visible slide', function () {
+        var elm = compileTpl({useIndex: 5});
+        validCSStransform(elm);
+    });
+    it('index change should update the carousel position', function () {
+        // check watcher present event if not a bindable attribute
+        var elm = compileTpl({useIndex: 5});
+        elm.scope().carouselIndex = 9;
         scope.$digest();
         validCSStransform(elm);
     });
   });
 
-  describe('check carousel directive with no index defined', function () {
+  describe('directive with no index defined', function () {
     it('should add a wrapper div around the ul/li', function () {
         var elm = compileTpl({useIndex:false});
         expect(elm.parent().hasClass('rn-carousel-container')).toBe(true);
@@ -107,32 +131,44 @@ describe('carousel', function () {
         var elm = compileTpl({useIndex:false});
         validCSStransform(elm);
     });
-    it('index change should update the carousel position', function () {
-        var elm = compileTpl({useIndex:false});
-        scope.index = 2;
-        scope.$digest();
-        validCSStransform(elm);
-    });
   });
 
-  describe('check carousel indicator directive', function () {
+  describe('indicator directive', function () {
     it('should add an indicator div', function () {
-        var elm = compileTpl({showIndicator: true});
+        var elm = compileTpl({useIndicator: true});
         expect(elm.parent().find('.rn-carousel-indicator').length).toBe(1);
     });
     it('should add enough indicators', function () {
-        var elm = compileTpl({showIndicator: true});
+        var elm = compileTpl({useIndicator: true});
         expect(elm.parent().find('.rn-carousel-indicator span').length).toBe(scope.items.length);
     });
-    it('should have an active indicator based on the current index', function () {
-        var elm = compileTpl({showIndicator: true});
-        expect(elm.parent().find('.rn-carousel-indicator span:nth-of-type(' + (scope.index + 1) + ')').hasClass('active')).toBe(true);
+    it('should have an active indicator based on the carousel index', function () {
+        var elm = compileTpl({useIndicator: true});
+        expect(elm.parent().find('.rn-carousel-indicator span:nth-of-type(' + (elm.scope().carouselIndex + 1) + ')').hasClass('active')).toBe(true);
     });
-    it('should update the active indicator when index changes', function () {
-        var elm = compileTpl({showIndicator: true});
-        scope.index = 2;
+    it('should update the active indicator when local index changes', function () {
+        var elm = compileTpl({useIndicator: true, useIndex: 'localIndex'});
+        scope.localIndex = 2;
         scope.$digest();
-        expect(elm.parent().find('.rn-carousel-indicator span:nth-of-type(' + (scope.index + 1) + ')').hasClass('active')).toBe(true);
+        expect(elm.parent().find('.rn-carousel-indicator span:nth-of-type(' + (scope.localIndex + 1) + ')').hasClass('active')).toBe(true);
     });
   });
+
+  describe('buffered carousel', function () {
+    it('should minimize the DOM', function () {
+        var elm = compileTpl({useBuffer: true});
+        expect(elm.find('li').length).toBe(elm.scope().carouselBufferSize);
+    });
+    it('should position the buffered slides correctly', function () {
+        var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
+        scope.localIndex = 5;
+        scope.$digest();
+        expect(elm.find('li')[0].id).toBe('slide-' + (scope.localIndex - 1));
+    });
+    it('should position the buffered slides correctly even if index is zero', function () {
+        var elm = compileTpl({useBuffer: true, useIndex: '0'});
+        expect(elm.find('li')[0].id).toBe('slide-0');
+    });
+  });
+
 });

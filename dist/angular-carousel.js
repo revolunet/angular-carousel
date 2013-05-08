@@ -15,7 +15,12 @@ http://github.com/revolunet/angular-carousel
 */
 
 angular.module('angular-carousel', [])
-  .directive('rnCarousel', ['$document', '$compile', '$parse', function($document, $compile, $parse) {
+  .filter('carouselSlice', function() {
+    return function(arr, start, end) {
+      return arr.slice(start, end);
+    };
+  })
+  .directive('rnCarousel', ['$document', '$compile', '$parse', '$timeout', function($document, $compile, $parse, $timeout) {
     // track number of carousel instances
     var carousels = 0;
 
@@ -27,19 +32,29 @@ angular.module('angular-carousel', [])
         tElement.addClass('rn-carousel-slides');
 
         // extract the ngRepeat expression from the li attribute
-        var repeatExpression = tElement.find('li')[0].attributes['ng-repeat'].nodeValue,
-           collectionName = repeatExpression.match( /^([^\s]+) in (.+)$/i )[2];
+        // TODO: handle various ng-repeat syntaxes
+        var liAttribute = tElement.find('li')[0].attributes['ng-repeat'],
+            originalCollection = liAttribute.value.match( /^([^\s]+) in (.+)$/i )[2];
+
+        var isBuffered = angular.isDefined(tAttrs['rnCarouselBuffered']);
+
+        if (isBuffered) {
+          // update the current ngRepat expression and add a slice for buffered carousel
+          var sliceExpression = '|carouselSlice:carouselBufferStart:carouselBufferStart+carouselBufferSize';
+          liAttribute.value += sliceExpression;
+        }
 
         return function(scope, iElement, iAttrs, controller) {
           // init some variables
           carousels++;
-          var carouselId = 'rn-carousel-' + carousels;
-          var swiping = 0,
+          var carouselId = 'rn-carousel-' + carousels,
+              swiping = 0,
               startX = 0,
               startOffset  = 0,
               offset  = 0,
               minSwipePercentage = 0.1,
-              containerWidth = 0;
+              containerWidth = 0,
+              initialPosition = true;
 
           // add a wrapper div that will hide overflow
           var carousel = iElement.wrap("<div id='" + carouselId +"' class='rn-carousel-container'></div>"),
@@ -47,28 +62,86 @@ angular.module('angular-carousel', [])
 
           scope.carouselItems = [];
           scope.carouselIndex = 0;
+
+          var updateCarouselPadding = function(offset) {
+            // replace DOM elements with padding
+            carousel.addClass('rn-carousel-noanimate').css({
+              'padding-left': (offset* containerWidth) + 'px'
+            });
+          };
+          var transitionEndCallback = function() {
+            // when carousel transition is finished,
+            // check if we need to update the DOM (add/remove slides)
+            // TODO: prevent overlapping
+            var isLeftEdge = (scope.carouselIndex > 0 && (scope.carouselIndex - scope.carouselBufferStart) === 0),
+                isRightEdge = (scope.carouselIndex < (getSlidesCount() - 1) && (scope.carouselIndex - scope.carouselBufferStart) === carousel.find('li').length - 1);
+            if (isLeftEdge || isRightEdge) {
+              // update the buffer, and add a padding to replace the content
+              var direction = isLeftEdge?-1:+1;
+              updateCarouselPadding((scope.carouselBufferStart + direction));
+              scope.$apply(function() {
+                scope.carouselBufferStart += direction;
+              });
+            }
+          };
+
+          var vendorPrefixes = ["webkit", "moz"];
+          function getCSSProperty(property, value) {
+            // cross browser CSS properties generator
+            var css = {};
+            css[property] = value;
+            angular.forEach(vendorPrefixes, function(prefix, idx) {
+              css['-' + prefix.toLowerCase() + '-' + property] = value;
+            });
+            return css;
+          }
+
+          // for buffered carousels
+          if (isBuffered) {
+            scope.carouselBufferSize = 3;
+            scope.carouselBufferStart = 0;
+            carousel[0].addEventListener('webkitTransitionEnd', transitionEndCallback, false);  // webkit
+            carousel[0].addEventListener('transitionend', transitionEndCallback, false);        // mozilla
+          }
+
+          function watchLocalIndex() {
+            scope.$watch('carouselIndex', function(newValue, oldValue) {
+              if (newValue!==oldValue) {
+                updateSlidePosition();
+              }
+            });
+          }
+
+          // handle rn-carousel-index attribute data binding
           if (iAttrs.rnCarouselIndex) {
-              // attribute data binding
               var activeModel = $parse(iAttrs['rnCarouselIndex']);
-              scope.$watch('carouselIndex', function(newValue) {
-                activeModel.assign(scope.$parent, newValue);
-              });
-              scope.$parent.$watch($parse(iAttrs.rnCarouselIndex), function(newValue) {
-                scope.carouselIndex = newValue;
-                updateSlidePosition();
-              });
+              if (angular.isFunction(activeModel.assign)) {
+                // check if this property is assignable then watch it
+                scope.$watch('carouselIndex', function(newValue) {
+                  activeModel.assign(scope.$parent, newValue);
+                });
+                scope.$parent.$watch($parse(iAttrs.rnCarouselIndex), function(newValue, oldValue) {
+                  scope.carouselIndex = newValue;
+                  if (newValue!==oldValue) {
+                    updateSlidePosition();
+                  }
+                });
+              } else if (!isNaN(iAttrs['rnCarouselIndex'])) {
+                // if user just set an initial number, set it then start watching
+                watchLocalIndex();
+                scope.carouselIndex = parseInt(iAttrs['rnCarouselIndex'], 10);
+              }
           } else {
-              // if no bound indicator, just watch index and update display
-              scope.$watch('carouselIndex', function(newValue) {
-                updateSlidePosition();
-              });
+              // just watch index and update display accordingly
+              watchLocalIndex();
           }
 
           // watch the ngRepeat expression for changes
-          scope.$watch(collectionName, function(newValue, oldValue) {
+          scope.$watch(originalCollection, function(newValue, oldValue) {
             // update local list reference when slides updated
             // also update container width based on first item width
             scope.carouselItems = newValue;
+
             var slides = carousel.find('li');
             if (slides.length > 0) {
               containerWidth = slides[0].getBoundingClientRect().width;
@@ -80,7 +153,7 @@ angular.module('angular-carousel', [])
           }, true);
 
           // enable carousel indicator
-          var showIndicator = (iAttrs['rnCarouselIndicator']==='true');
+          var showIndicator = angular.isDefined(iAttrs['rnCarouselIndicator']);
           if (showIndicator) {
             var indicator = $compile("<div id='" + carouselId +"-indicator' index='carouselIndex' items='carouselItems' data-rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
             container.append(indicator);
@@ -92,14 +165,23 @@ angular.module('angular-carousel', [])
           };
 
           var updateSlidePosition = function() {
-              offset = scope.carouselIndex * -containerWidth;
-              carousel.removeClass('rn-carousel-noanimate').addClass('rn-carousel-animate').css({
-                '-webkit-transform': 'translate3d(' + offset + 'px,0,0)',
-                '-moz-transform': 'translate3d(' + offset + 'px,0,0)',
-                '-ms-transform': 'translate3d(' + offset + 'px,0,0)',
-                '-o-transform': 'translate3d(' + offset + 'px,0,0)',
-                'transform': 'translate3d(' + offset + 'px,0,0)'
-              });
+            var skipAnimation = (initialPosition===true);
+            if (isBuffered && (scope.carouselIndex < scope.carouselBufferStart || scope.carouselIndex > (scope.carouselBufferStart + scope.carouselBufferSize - 1))) {
+              // asked position is out of buffer, reinitialize it
+              scope.carouselBufferStart = scope.carouselIndex - 1;
+              skipAnimation = true;
+              updateCarouselPadding(scope.carouselBufferStart);
+            }
+            offset = scope.carouselIndex * -containerWidth;
+            if (skipAnimation===true) {
+                carousel.addClass('rn-carousel-noanimate')
+                    .css(getCSSProperty('transform',  'translate3d(' + offset + 'px,0,0)'));
+            } else {
+                carousel.removeClass('rn-carousel-noanimate')
+                    .addClass('rn-carousel-animate')
+                    .css(getCSSProperty('transform',  'translate3d(' + offset + 'px,0,0)'));
+            }
+            initialPosition = false;
           };
 
           var transformEvent = function(event) {
@@ -141,13 +223,9 @@ angular.module('angular-carousel', [])
               if ((scope.carouselIndex === 0 && event.clientX > startX) || (scope.carouselIndex === slideCount - 1 && event.clientX < startX))
                 ratio = 3;
               offset = startOffset + deltaX / ratio;
-              carousel.css({
-                '-webkit-transform': 'translate3d(' + offset + 'px,0,0)',
-                '-moz-transform': 'translate3d(' + offset + 'px,0,0)',
-                '-ms-transform': 'translate3d(' + offset + 'px,0,0)',
-                '-o-transform': 'translate3d(' + offset + 'px,0,0)',
-                'transform': 'translate3d(' + offset + 'px,0,0)'
-              }).removeClass().addClass('rn-carousel-noanimate');
+              carousel.css(getCSSProperty('transform',  'translate3d(' + offset + 'px,0,0)'))
+                      .removeClass()
+                      .addClass('rn-carousel-noanimate');
             }
           };
 

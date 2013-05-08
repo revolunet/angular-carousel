@@ -16,7 +16,7 @@ Then, just add a `rn-carousel` attribute to your `<ul>` block and your `<li>`'s 
 
 ```html
 <h3>Discover sports</h3>
-<ul data-rn-carousel class="image">
+<ul rn-carousel class="image">
   <li ng-repeat="image in sportImages" style="background-image:url({{ image }});">
     <div class="layer">{{ image }}</div>
   </li>
@@ -28,19 +28,18 @@ Of course, include `angular-carousel.js` and `angular-carousel.css` in your proj
 ## Features :
 
  - Mobile friendly, tested on webkit+firefox
- - CSS 3D trasnformations with GPU accel
+ - CSS 3D transformations with GPU accel
  - `rn-carousel-index` two way binding to control the carousel position, see demo page.
- - `rn-carousel-indicator='true'` to turn on the indicator, see demo page.
+ - `rn-carousel-indicator` to turn on the indicator, see demo page.
+ - `rn-carousel-buffered` to buffer the carousel, good if you have many or unlimited items inside.
 
 ## Todo :
- - ~~Grunt build~~
  - moar tests :)
  - perfs improvements
- - ~~cancel swipe if too short~~
- - ~~indicator~~
- - ~~index two way binding~~
  - optional auto-slide
- - buffer slides (3) to reduce DOM size and allow dynamic add/remove of slides (inifinite scroll)
+ - optional auto-infinite (restart at 0 at the end)
+ - buffering : allow buffer size tuning (default=3 slides)
+ - buffering : add intelligent indicators
 
 ## Inspirations
  - https://github.com/ajoslin/angular-mobile-nav

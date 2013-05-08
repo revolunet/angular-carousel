@@ -11,8 +11,6 @@ ul.rn-carousel-slides {
   overflow: visible;
   -webkit-transform: translate3d(0px, 0, 0);
   -moz-transform: translate3d(0px, 0, 0);
-  -ms-transform: translate3d(0px, 0, 0);
-  -o-transform: translate3d(0px, 0, 0);
   transform: translate3d(0px, 0, 0);
   padding: 0;
   margin: 0;
@@ -25,11 +23,9 @@ ul.rn-carousel-slides li {
   height: 100%;
 } 
 .rn-carousel-animate {
-  -webkit-transition: all .2s ease-out;
-  -moz-transition: all .2s ease-out;
-  -ms-transition: all .2s ease-out;
-  -o-transition: all .2s ease-out;
-  transition: all .2s ease-out;
+  -webkit-transition: -webkit-transform .2s ease-out;
+  -moz-transition: -moz-transform .2s ease-out;
+  transition: transform .2s ease-out;
 }
 .rn-carousel-noanimate {
   -webkit-transition: none;
@@ -49,7 +45,7 @@ ul.rn-carousel-slides li {
 .rn-carousel-indicator span {
   padding: 0 5px;
   color: #333;
-  transition: color .5s ease-out;
+  transition: color .2s ease-out;
 }
 .rn-carousel-indicator span.active {
   color:white;
