@@ -32,7 +32,8 @@ Of course, include `angular-carousel.js` and `angular-carousel.css` in your proj
  - `rn-carousel-index` two way binding to control the carousel position, see demo page.
  - `rn-carousel-indicator` to turn on the indicator, see demo page.
  - `rn-carousel-buffered` to buffer the carousel, good if you have many or unlimited items inside.
-
+ - `rn-carousel-on-end="addSlides(index)"` : callback called when carousel reach the penultimate slide. you can then add elements if needed.
+ 
 ## Todo :
  - moar tests :)
  - perfs improvements

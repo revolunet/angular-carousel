@@ -61,6 +61,18 @@
     ul li {
       list-style-type: none
     }
+    ul.basic {
+      width:300px;
+      height:200px;
+    }
+    ul.basic li {
+      text-align:center;
+      padding-top:80px;
+      font-size: 22px;
+    }
+    a {
+      color:white;
+    }
     </style>
   </head>
   <body ng-app="myApp" ng-controller='demoController'>
@@ -104,6 +116,16 @@
       </li>
     </ul>
 
+    <h3>Infinite carousel</h3>
+    This carousel is buffered and slides are generated on-demand<br>
+    Check the <a href="infinite.html">full screen example for mobile devices</a>.
+    <br><br>
+    <ul rn-carousel rn-carousel-buffered rn-carousel-on-end="generateSlides(index)" class="basic">
+      <li ng-repeat="page in pages" style="background-color:{{ page.bg }};">
+        <div>{{page.date|date}}</div>
+      </li>
+    </ul>
+
     <br><br><br>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.1/angular.js"></script>
@@ -139,6 +161,37 @@
           }
           $scope.cityImages.push('http://lorempixel.com/400/200/city/' + i + '/');
         }
+
+        // infinite carousel stuff
+        var currentDay = (new Date()),
+            colors = ['#339966', '#336699', '#cc9933', '#cc6633', '#cc3366', '#66cc33'];
+
+        function addPage() {
+          // generate a single page, with color and a new date
+          var colorIndex = $scope.pages.length % colors.length;
+          $scope.pages.push({
+            bg: colors[colorIndex],
+            date: currentDay
+          })
+          currentDay = new Date(currentDay.getTime() + 60*60*24*1000);
+        }
+
+        // add some initial pages
+        $scope.pages = [];
+        addPage();
+        addPage();
+        addPage();
+        addPage();
+        addPage();
+
+        $scope.generateSlides = function() {
+          // callback called when carousel reach the penultimate slide
+          // add some slides (could be one)
+          addPage();
+          addPage();
+          addPage();
+        };
+
       })
 
     </script>

@@ -75,6 +75,14 @@ angular.module('angular-carousel', [])
               scope.$apply(function() {
                 scope.carouselBufferStart += direction;
               });
+
+              if (isRightEdge && iAttrs.rnCarouselOnEnd) {
+                // user set a callback function, when we reach the right edge
+                // call it and send the last known slide index
+                $parse(iAttrs.rnCarouselOnEnd)(scope, {
+                  index: (scope.carouselIndex + 1)
+                });
+              }
             }
           };
 
@@ -95,6 +103,7 @@ angular.module('angular-carousel', [])
             scope.carouselBufferStart = 0;
             carousel[0].addEventListener('webkitTransitionEnd', transitionEndCallback, false);  // webkit
             carousel[0].addEventListener('transitionend', transitionEndCallback, false);        // mozilla
+
           }
 
           function watchLocalIndex() {
@@ -107,22 +116,22 @@ angular.module('angular-carousel', [])
 
           // handle rn-carousel-index attribute data binding
           if (iAttrs.rnCarouselIndex) {
-              var activeModel = $parse(iAttrs['rnCarouselIndex']);
+              var activeModel = $parse(iAttrs.rnCarouselIndex);
               if (angular.isFunction(activeModel.assign)) {
                 // check if this property is assignable then watch it
                 scope.$watch('carouselIndex', function(newValue) {
                   activeModel.assign(scope.$parent, newValue);
                 });
-                scope.$parent.$watch($parse(iAttrs.rnCarouselIndex), function(newValue, oldValue) {
+                scope.$parent.$watch(activeModel, function(newValue, oldValue) {
                   scope.carouselIndex = newValue;
                   if (newValue!==oldValue) {
                     updateSlidePosition();
                   }
                 });
-              } else if (!isNaN(iAttrs['rnCarouselIndex'])) {
+              } else if (!isNaN(iAttrs.rnCarouselIndex)) {
                 // if user just set an initial number, set it then start watching
                 watchLocalIndex();
-                scope.carouselIndex = parseInt(iAttrs['rnCarouselIndex'], 10);
+                scope.carouselIndex = parseInt(iAttrs.rnCarouselIndex, 10);
               }
           } else {
               // just watch index and update display accordingly
@@ -146,7 +155,7 @@ angular.module('angular-carousel', [])
           }, true);
 
           // enable carousel indicator
-          var showIndicator = angular.isDefined(iAttrs['rnCarouselIndicator']);
+          var showIndicator = angular.isDefined(iAttrs.rnCarouselIndicator);
           if (showIndicator) {
             var indicator = $compile("<div id='" + carouselId +"-indicator' index='carouselIndex' items='carouselItems' data-rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
             container.append(indicator);
