@@ -11,6 +11,12 @@
   "engines": {
     "node": ">= 0.8"
   },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://revolunet.mit-license.org"
+    }
+  ],
   "dependencies": {},
   "devDependencies": {
     "karma": "~ 0.8.0",
