@@ -42,7 +42,6 @@ describe('carousel', function () {
     if (options.useBuffer) tpl += ' rn-carousel-buffered ';
     if (options.useIndex) tpl += ' rn-carousel-index="' + options.useIndex + '" ';
     tpl += '><li class="test" style="width:200px" ng-repeat="item in items" id="slide-{{ item.id }}">{{ item.text }}</li></ul>';
-
     angular.extend(scope, sampleData.scope);
     var $element = $(tpl).appendTo($sandbox);
     $element = $compile($element)(scope);
@@ -102,11 +101,23 @@ describe('carousel', function () {
         validCSStransform(elm);
     });
     it('index change should update the carousel position', function () {
-        // check watcher present event if not a bindable attribute
+        // check watcher present even if index is not a bindable attribute
         var elm = compileTpl({useIndex: 5});
         elm.scope().carouselIndex = 9;
         scope.$digest();
         validCSStransform(elm);
+    });
+    it('index out of range should set the carousel to last slide', function () {
+        var elm = compileTpl({useIndex: 100});
+        expect(elm.scope().carouselIndex).toBe(scope.items.length - 1);
+        expect(elm.find('li').length).toBe(scope.items.length);
+        expect(elm.find('li:last')[0].id).toBe('slide-' + (scope.items.length - 1));
+    });
+    it('negative index should set the carousel to first slide', function () {
+        var elm = compileTpl({useIndex: -100});
+        expect(elm.scope().carouselIndex).toBe(0);
+        expect(elm.find('li').length).toBe(scope.items.length);
+        expect(elm.find('li')[0].id).toBe('slide-0');
     });
   });
 
@@ -167,7 +178,23 @@ describe('carousel', function () {
     });
     it('should position the buffered slides correctly even if index is zero', function () {
         var elm = compileTpl({useBuffer: true, useIndex: '0'});
+        expect(elm.find('li').length).toBe(elm.scope().carouselBufferSize);
         expect(elm.find('li')[0].id).toBe('slide-0');
+    });
+    it('should position the buffered slides correctly with a out of range index', function () {
+        var elm = compileTpl({useBuffer: true, useIndex: '100'});
+        expect(elm.scope().carouselIndex).toBe(scope.items.length - 1);
+        var firstId = scope.items.length - elm.scope().carouselBufferSize;
+        expect(elm.find('li').length).toBe(elm.scope().carouselBufferSize);
+        expect(elm.find('li')[0].id).toBe('slide-' + firstId);
+        expect(elm.find('li:last')[0].id).toBe('slide-' + (firstId + elm.scope().carouselBufferSize - 1));
+    });
+    it('should position the buffered slides correctly with a negative index', function () {
+        var elm = compileTpl({useBuffer: true, useIndex: '-100'});
+        expect(elm.scope().carouselIndex).toBe(0);
+        expect(elm.find('li').length).toBe(elm.scope().carouselBufferSize);
+        expect(elm.find('li')[0].id).toBe('slide-0');
+        expect(elm.find('li:last')[0].id).toBe('slide-' + (elm.scope().carouselBufferSize - 1));
     });
   });
 

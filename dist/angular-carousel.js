@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.5 - 2013-05-10
+ * @version v0.0.5 - 2013-05-11
  * @link http://revolunet.com.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -175,11 +175,22 @@ angular.module('angular-carousel', [])
 
           var updateSlidePosition = function() {
             var skipAnimation = (initialPosition===true);
-            if (isBuffered && (scope.carouselIndex < scope.carouselBufferStart || scope.carouselIndex > (scope.carouselBufferStart + scope.carouselBufferSize - 1))) {
-              // asked position is out of buffer, reinitialize it
-              scope.carouselBufferStart = scope.carouselIndex - 1;
-              skipAnimation = true;
-              updateCarouselPadding(scope.carouselBufferStart);
+            // check we're not out of bounds
+            if (scope.carouselIndex < 0) {
+              scope.carouselIndex=0;
+            }
+            if (scope.carouselIndex > getSlidesCount() - 1) {
+              scope.carouselIndex = getSlidesCount() - 1;
+            }
+            // check if requested position is out of buffer
+            if (isBuffered) {
+              if ((scope.carouselIndex < scope.carouselBufferStart) || (scope.carouselIndex > (scope.carouselBufferStart + scope.carouselBufferSize - 1))) {
+                  scope.carouselBufferStart = scope.carouselIndex - 1;
+                  skipAnimation = true;
+                  updateCarouselPadding(scope.carouselBufferStart);
+              }
+              // ensure buffer start never reduces buffer and is never negative
+              scope.carouselBufferStart = Math.max(0, Math.min(scope.carouselBufferStart, getSlidesCount() - scope.carouselBufferSize));
             }
             offset = scope.carouselIndex * -containerWidth;
             if (skipAnimation===true) {
