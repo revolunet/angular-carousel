@@ -7,13 +7,13 @@ Angular touch carousel with CSS GPU accel
 http://github.com/revolunet/angular-carousel
 */
 
-angular.module('angular-carousel', [])
+angular.module('angular-carousel', ['ngMobile'])
   .filter('carouselSlice', function() {
     return function(arr, start, end) {
       return arr.slice(start, end);
     };
   })
-  .directive('rnCarousel', ['$document', '$compile', '$parse', '$timeout', function($document, $compile, $parse, $timeout) {
+  .directive('rnCarousel', ['$document', '$compile', '$parse', '$timeout', '$swipe', function($document, $compile, $parse, $timeout, $swipe) {
     // track number of carousel instances
     var carousels = 0;
 
@@ -197,80 +197,58 @@ angular.module('angular-carousel', [])
             initialPosition = false;
           };
 
-          var transformEvent = function(event) {
-            /* allow mouseEvent + touchEvent */
-            if ((typeof event.originalEvent !== 'undefined') && event.originalEvent.touches > 0)
-              event = event.originalEvent.touches[0];
-            else if ((typeof event.touches !== 'undefined') && event.touches.length > 0)
-              event = event.touches[0];
-            else if ((typeof event.changedTouches !== 'undefined') && event.changedTouches.length > 0)
-              event = event.changedTouches[0];
-            return event;
-          };
-
-          var swipeStart = function(event) {
-            /* capture initial event position */
-            event = transformEvent(event);
-            if (swiping === 0) {
-              swiping = 1;
-              startX = event.clientX;
-            }
-            $document.bind('mouseup', swipeEnd);
-          };
-
-          var swipe = function(event) {
-            /* follow cursor movement */
-            if (swiping===0) return;
-            event.preventDefault();
-            event = transformEvent(event);
-
-            var deltaX = event.clientX - startX;
-            if (swiping === 1 && deltaX !== 0) {
-              swiping = 2;
-              startOffset = offset;
-            }
-            else if (swiping === 2) {
-              var slideCount = getSlidesCount();
-              // ratio is used for the 'rubber band' effect
-              var ratio = 1;
-              if ((scope.carouselIndex === 0 && event.clientX > startX) || (scope.carouselIndex === slideCount - 1 && event.clientX < startX))
-                ratio = 3;
-              offset = startOffset + deltaX / ratio;
-              carousel.css(getCSSProperty('transform',  'translate3d(' + offset + 'px,0,0)'))
-                      .removeClass()
-                      .addClass('rn-carousel-noanimate');
-            }
-          };
-
-          var swipeEnd = function(event) {
-            $document.unbind('mouseup', swipeEnd);
-            /* when movement ends, go to next slide or stay on the same */
-            event = transformEvent(event);
-            var slideCount = getSlidesCount(),
-                tmpSlide;
-            if (swiping > 0) {
-              swiping = 0;
-              tmpSlide = offset < startOffset ? scope.carouselIndex + 1 : scope.carouselIndex - 1;
-              tmpSlide = Math.min(Math.max(tmpSlide, 0), slideCount - 1);
-
-              var delta = event.clientX - startX;
-              if (Math.abs(delta) <= containerWidth * minSwipePercentage) {
-                // prevent swipe if not swipped enough
-                tmpSlide = scope.carouselIndex;
+          $swipe.bind(carousel, {
+            start: function(coords) {
+              /* capture initial event position */
+              if (swiping === 0) {
+                swiping = 1;
+                startX = coords.x;
               }
-              var changed = (scope.carouselIndex !== tmpSlide);
-              scope.$apply(function() {
-                scope.carouselIndex = tmpSlide;
-              });
-              // reset position if same slide (watch not triggered)
-              if (!changed) updateSlidePosition();
-            }
-          };
+            },
+            move: function (coords) {
+              /* follow cursor movement */
+              if (swiping===0) return;
 
-          // bind events
-          container.bind('mousedown touchstart', swipeStart);
-          container.bind('mousemove touchmove', swipe);
-          container.bind('mouseup touchend', swipeEnd);
+              var deltaX = coords.x - startX;
+              if (swiping === 1 && deltaX !== 0) {
+                swiping = 2;
+                startOffset = offset;
+              }
+              else if (swiping === 2) {
+                var slideCount = getSlidesCount();
+                // ratio is used for the 'rubber band' effect
+                var ratio = 1;
+                if ((scope.carouselIndex === 0 && coords.x > startX) || (scope.carouselIndex === slideCount - 1 && coords.x < startX))
+                  ratio = 3;
+                offset = startOffset + deltaX / ratio;
+                carousel.css(getCSSProperty('transform',  'translate3d(' + offset + 'px,0,0)'))
+                        .removeClass()
+                        .addClass('rn-carousel-noanimate');
+              }
+            },
+            end: function (coords) {
+              /* when movement ends, go to next slide or stay on the same */
+              var slideCount = getSlidesCount(),
+                  tmpSlide;
+              if (swiping > 0) {
+                swiping = 0;
+                tmpSlide = offset < startOffset ? scope.carouselIndex + 1 : scope.carouselIndex - 1;
+                tmpSlide = Math.min(Math.max(tmpSlide, 0), slideCount - 1);
+
+                var delta = coords.x - startX;
+                if (Math.abs(delta) <= containerWidth * minSwipePercentage) {
+                  // prevent swipe if not swipped enough
+                  tmpSlide = scope.carouselIndex;
+                }
+                var changed = (scope.carouselIndex !== tmpSlide);
+                scope.$apply(function() {
+                  scope.carouselIndex = tmpSlide;
+                });
+                // reset position if same slide (watch not triggered)
+                if (!changed) updateSlidePosition();
+              }
+            }
+          });
 
         };
       }
