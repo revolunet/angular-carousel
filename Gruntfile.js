@@ -16,6 +16,16 @@ module.exports = function(grunt) {
       ' * @license MIT License, http://www.opensource.org/licenses/MIT\n' +
       ' */\n'
     },
+    connect: {
+      devserver: {
+        options: {
+          port: 9999,
+          hostname: '0.0.0.0',
+          base: '.',
+          keepalive: true
+        }
+      }
+    },
     dirs: {
       dest: 'dist'
     },
@@ -42,17 +52,6 @@ module.exports = function(grunt) {
       dist: {
         src: ['<%= concat.dist.dest %>'],
         dest: '<%= dirs.dest %>/<%= pkg.name %>.min.js'
-      }
-    },
-    release: {
-      options: {
-        commitMessage: '<%= version %>',
-        tagName: 'v<%= version %>',
-        file: 'package.json',
-        push: false,
-        tag: false,
-        pushTags: false,
-        npm: false
       }
     },
     jshint: {
@@ -111,14 +110,11 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-cssmin');
 
+  grunt.loadNpmTasks('grunt-contrib-connect');
+
   // Load the plugin that provides the "watch" task.
   //grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.loadNpmTasks('grunt-release');
-
-
-
-  grunt.renameTask('release', 'originalRelease');
 
   // Default task.
   grunt.registerTask('default', ['test']);
@@ -130,7 +126,8 @@ module.exports = function(grunt) {
   // Build task.
   grunt.registerTask('build', ['test', 'concat', 'uglify', 'cssmin']);
 
-
+  // run devserver
+  grunt.registerTask('webserver', ['connect:devserver']);
 
   // Provides the "karma" task.
   grunt.registerMultiTask('karma', 'Starts up a karma server.', function() {
