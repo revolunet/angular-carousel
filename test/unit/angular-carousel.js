@@ -1,4 +1,4 @@
-/*global beforeEach, afterEach, describe, it, inject, expect, module, angular, $*/
+/*global browserTrigger, beforeEach, afterEach, describe, it, inject, expect, module, angular, $*/
 
 describe('carousel', function () {
   'use strict';
