@@ -5,7 +5,9 @@ describe('carousel', function () {
 
   var scope, $compile, $sandbox;
 
-  beforeEach(module('angular-carousel'));
+  beforeEach(
+    module('angular-carousel')
+  );
 
   beforeEach(inject(function ($rootScope, _$compile_) {
       scope = $rootScope;
@@ -197,5 +199,92 @@ describe('carousel', function () {
         expect(elm.find('li:last')[0].id).toBe('slide-' + (elm.scope().carouselBufferSize - 1));
     });
   });
+
+  function fakeMove(elm, distance) {
+    // trigger a carousel swipe movement
+    var startX = 10,
+        startY = 10,
+        endX = distance + startX;
+
+    browserTrigger(elm, 'touchstart', [], startX, startY);
+    browserTrigger(elm, 'touchmove', [], endX, startY);
+    browserTrigger(elm, 'touchmove', [], endX, startY);
+    browserTrigger(elm, 'touchend', [], endX, startY);
+  }
+
+  describe('swipe behaviour', function () {
+    it('should not show prev slide if swipe backwards at index 0', function() {
+        // yes, backwards swipe means positive pixels count :)
+        var elm = compileTpl();
+        fakeMove(elm, 30);
+        expect(elm.scope().carouselIndex).toBe(0);
+    });
+    it('should not show next slide if swipe forward at last slide', function() {
+        var elm = compileTpl();
+        elm.scope().carouselIndex = scope.items.length - 1;
+        fakeMove(elm, -30);
+        expect(elm.scope().carouselIndex).toBe(scope.items.length - 1);
+    });
+    it('should move slide backward if backwards swipe at index > 0', function() {
+        var elm = compileTpl({useIndex: 1});
+        fakeMove(elm, 30);
+        expect(elm.scope().carouselIndex).toBe(0);
+    });
+    it('should move to next slide on swipe forward', function() {
+        var elm = compileTpl();
+        fakeMove(elm, -30);
+        expect(elm.scope().carouselIndex).toBe(1);
+    });
+    it('should not move to next slide on too little swipe forward', function() {
+        var elm = compileTpl();
+        var minSwipe = elm.outerWidth() * 0.1;
+        fakeMove(elm, -minSwipe);
+        expect(elm.scope().carouselIndex).toBe(0);
+    });
+    it('should not move to prev slide on too little swipe backward', function() {
+        var elm = compileTpl({useIndex: 1});
+        var minSwipe = elm.outerWidth() * 0.1;
+        fakeMove(elm, minSwipe);
+        expect(elm.scope().carouselIndex).toBe(1);
+    });
+    it('should follow multiple moves', function() {
+        var elm = compileTpl();
+        fakeMove(elm, -30);
+        fakeMove(elm, -200);
+        fakeMove(elm, -300);
+        expect(elm.scope().carouselIndex).toBe(3);
+        fakeMove(elm, 1000);
+        fakeMove(elm, 100);
+        expect(elm.scope().carouselIndex).toBe(1);
+        fakeMove(elm, 100);
+        fakeMove(elm, 100);
+        fakeMove(elm, 100);
+        expect(elm.scope().carouselIndex).toBe(0);
+    });
+  });
+
+  describe('swipe buffered behaviour', function () {
+    it('should follow multiple moves and buffer accordingly', function() {
+        var elm = compileTpl({useBuffer: true});
+        fakeMove(elm, -30);
+        fakeMove(elm, -200);
+        fakeMove(elm, -300);
+        expect(elm.find('li').length).toBe(elm.scope().carouselBufferSize);
+        expect(elm.find('li')[0].id).toBe('slide-2');
+        expect(elm.scope().carouselIndex).toBe(3);
+        fakeMove(elm, 1000);
+        fakeMove(elm, 100);
+        expect(elm.find('li').length).toBe(elm.scope().carouselBufferSize);
+        expect(elm.find('li')[0].id).toBe('slide-0');
+        expect(elm.scope().carouselIndex).toBe(1);
+        fakeMove(elm, 100);
+        fakeMove(elm, 100);
+        fakeMove(elm, 100);
+        expect(elm.find('li').length).toBe(elm.scope().carouselBufferSize);
+        expect(elm.find('li')[0].id).toBe('slide-0');
+        expect(elm.scope().carouselIndex).toBe(0);
+    });
+  });
+
 
 });

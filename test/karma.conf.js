@@ -16,6 +16,7 @@ files = [
   'components/jquery/jquery.min.js',
   'components/angular/angular.js',
   'lib/angular-mobile.js',
+  'lib/browserTrigger.js',
   'components/angular-mocks/angular-mocks.js',
   'src/*.js',
   'test/unit/*.js'
