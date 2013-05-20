@@ -118,7 +118,7 @@
 
     <h3>Infinite carousel</h3>
     This carousel is buffered and slides are generated on-demand<br>
-    Check the <a href="infinite.html">full screen example for mobile devices</a>.
+    Check the <a href="/demo/infinite.html">full screen example for mobile devices</a>.
     <br><br>
     <ul rn-carousel rn-carousel-buffered rn-carousel-on-end="generateSlides(index)" class="basic">
       <li ng-repeat="page in pages" style="background-color:{{ page.bg }};">
@@ -126,8 +126,10 @@
       </li>
     </ul>
 
-    <br><br><br>
+    <h3>Other examples</h3>
+    <li><a href="/demo/flickr.html">Flickr demo</a></li>
 
+    <br><br><br>
     <script src="//code.angularjs.org/1.0.6/angular.js"></script>
     <script src="./lib/angular-mobile.js"></script>
 
@@ -143,7 +145,7 @@
         $scope.cityImages = [];
         $scope.githubRepos = [];
 
-        $scope.currentSport = 1;
+        $scope.currentSport = 0;
 
         $http.get('https://api.github.com/users/revolunet/repos', {
           params: {

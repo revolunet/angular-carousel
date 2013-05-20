@@ -32,7 +32,7 @@ angular.module('angular-carousel', ['ngMobile'])
         var isBuffered = angular.isDefined(tAttrs['rnCarouselBuffered']);
 
         if (isBuffered) {
-          // update the current ngRepat expression and add a slice for buffered carousel
+          // update the current ngRepeat expression and add a slice for buffered carousel
           var sliceExpression = '|carouselSlice:carouselBufferStart:carouselBufferStart+carouselBufferSize';
           liAttribute.value += sliceExpression;
         }
@@ -53,8 +53,10 @@ angular.module('angular-carousel', ['ngMobile'])
           var carousel = iElement.wrap("<div id='" + carouselId +"' class='rn-carousel-container'></div>"),
               container = carousel.parent();
 
-          scope.carouselItems = [];
-          scope.carouselIndex = 0;
+          scope.carouselItems = [];       // reference to the ngRepeat collection
+          scope.carouselBufferStart = 0;  // index of the buffer start, if any, relative to the whole collection
+          scope.totalIndex = 0;           // index of the active slide, relative to the whole collection
+          scope.activeIndex = 0;          // index of the active slide, relative to the buffered collection (may be buffered)
 
           var updateCarouselPadding = function(offset) {
             // replace DOM elements with padding
@@ -66,8 +68,8 @@ angular.module('angular-carousel', ['ngMobile'])
             // when carousel transition is finished,
             // check if we need to update the DOM (add/remove slides)
             // TODO: prevent overlapping
-            var isLeftEdge = (scope.carouselIndex > 0 && (scope.carouselIndex - scope.carouselBufferStart) === 0),
-                isRightEdge = (scope.carouselIndex < (getSlidesCount() - 1) && (scope.carouselIndex - scope.carouselBufferStart) === carousel.find('li').length - 1);
+            var isLeftEdge = (scope.totalIndex > 0 && (scope.totalIndex - scope.carouselBufferStart) === 0),
+                isRightEdge = (scope.totalIndex < (getSlidesCount() - 1) && (scope.totalIndex - scope.carouselBufferStart) === carousel.find('li').length - 1);
             if (isLeftEdge || isRightEdge) {
               // update the buffer, and add a padding to replace the content
               var direction = isLeftEdge?-1:+1;
@@ -80,7 +82,7 @@ angular.module('angular-carousel', ['ngMobile'])
                 // user set a callback function, when we reach the right edge
                 // call it and send the last known slide index
                 $parse(iAttrs.rnCarouselOnEnd)(scope, {
-                  index: (scope.carouselIndex + 1)
+                  index: (scope.totalIndex + 1)
                 });
               }
             }
@@ -100,43 +102,45 @@ angular.module('angular-carousel', ['ngMobile'])
           // for buffered carousels
           if (isBuffered) {
             scope.carouselBufferSize = 3;
-            scope.carouselBufferStart = 0;
             carousel[0].addEventListener('webkitTransitionEnd', transitionEndCallback, false);  // webkit
             carousel[0].addEventListener('transitionend', transitionEndCallback, false);        // mozilla
+            scope.$watch('carouselBufferStart', function(newValue, oldValue) {
+              updateActiveIndex();
+            });
+          }
 
+          function updateActiveIndex() {
+            // update the activeIndex (visible slide) based on the current collection
+            // useful to compare with $index in your carousel template
+            scope.activeIndex = scope.totalIndex - scope.carouselBufferStart;
           }
 
           function watchLocalIndex() {
-            scope.$watch('carouselIndex', function(newValue, oldValue) {
+            scope.$watch('totalIndex', function(newValue, oldValue) {
               if (newValue!==oldValue) {
                 updateSlidePosition();
               }
+              updateActiveIndex();
             });
           }
 
           // handle rn-carousel-index attribute data binding
           if (iAttrs.rnCarouselIndex) {
-              var activeModel = $parse(iAttrs.rnCarouselIndex);
-              if (angular.isFunction(activeModel.assign)) {
+              var indexModel = $parse(iAttrs.rnCarouselIndex);
+              if (angular.isFunction(indexModel.assign)) {
                 // check if this property is assignable then watch it
-                scope.$watch('carouselIndex', function(newValue) {
-                  activeModel.assign(scope.$parent, newValue);
+                scope.$watch('totalIndex', function(newValue) {
+                  indexModel.assign(scope.$parent, newValue);
                 });
-                scope.$parent.$watch(activeModel, function(newValue, oldValue) {
-                  scope.carouselIndex = newValue;
-                  if (newValue!==oldValue) {
-                    updateSlidePosition();
-                  }
+                scope.$parent.$watch(indexModel, function(newValue, oldValue) {
+                  scope.totalIndex = newValue;
                 });
               } else if (!isNaN(iAttrs.rnCarouselIndex)) {
-                // if user just set an initial number, set it then start watching
-                watchLocalIndex();
-                scope.carouselIndex = parseInt(iAttrs.rnCarouselIndex, 10);
+                // if user just set an initial number, set it
+                scope.totalIndex = parseInt(iAttrs.rnCarouselIndex, 10);
               }
-          } else {
-              // just watch index and update display accordingly
-              watchLocalIndex();
           }
+          watchLocalIndex();
 
           // watch the ngRepeat expression for changes
           scope.$watch(originalCollection, function(newValue, oldValue) {
@@ -157,7 +161,7 @@ angular.module('angular-carousel', ['ngMobile'])
           // enable carousel indicator
           var showIndicator = angular.isDefined(iAttrs.rnCarouselIndicator);
           if (showIndicator) {
-            var indicator = $compile("<div id='" + carouselId +"-indicator' index='carouselIndex' items='carouselItems' data-rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
+            var indicator = $compile("<div id='" + carouselId +"-indicator' index='totalIndex' items='carouselItems' data-rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
             container.append(indicator);
           }
 
@@ -169,23 +173,23 @@ angular.module('angular-carousel', ['ngMobile'])
           var updateSlidePosition = function() {
             var skipAnimation = (initialPosition===true);
             // check we're not out of bounds
-            if (scope.carouselIndex < 0) {
-              scope.carouselIndex=0;
+            if (scope.totalIndex < 0) {
+              scope.totalIndex = 0;
             }
-            if (scope.carouselIndex > getSlidesCount() - 1) {
-              scope.carouselIndex = getSlidesCount() - 1;
+            else if (scope.totalIndex > getSlidesCount() - 1) {
+              scope.totalIndex = getSlidesCount() - 1;
             }
             // check if requested position is out of buffer
             if (isBuffered) {
-              if ((scope.carouselIndex < scope.carouselBufferStart) || (scope.carouselIndex > (scope.carouselBufferStart + scope.carouselBufferSize - 1))) {
-                  scope.carouselBufferStart = scope.carouselIndex - 1;
+              if ((scope.totalIndex < scope.carouselBufferStart) || (scope.totalIndex > (scope.carouselBufferStart + scope.carouselBufferSize - 1))) {
+                  scope.carouselBufferStart = scope.totalIndex - 1;
                   skipAnimation = true;
                   updateCarouselPadding(scope.carouselBufferStart);
               }
               // ensure buffer start never reduces buffer and is never negative
               scope.carouselBufferStart = Math.max(0, Math.min(scope.carouselBufferStart, getSlidesCount() - scope.carouselBufferSize));
             }
-            offset = scope.carouselIndex * -containerWidth;
+            offset = scope.totalIndex * -containerWidth;
             if (skipAnimation===true) {
                 carousel.addClass('rn-carousel-noanimate')
                     .css(getCSSProperty('transform',  'translate3d(' + offset + 'px,0,0)'));
@@ -218,7 +222,7 @@ angular.module('angular-carousel', ['ngMobile'])
                 var slideCount = getSlidesCount();
                 // ratio is used for the 'rubber band' effect
                 var ratio = 1;
-                if ((scope.carouselIndex === 0 && coords.x > startX) || (scope.carouselIndex === slideCount - 1 && coords.x < startX))
+                if ((scope.totalIndex === 0 && coords.x > startX) || (scope.totalIndex === slideCount - 1 && coords.x < startX))
                   ratio = 3;
                 offset = startOffset + deltaX / ratio;
                 carousel.css(getCSSProperty('transform',  'translate3d(' + offset + 'px,0,0)'))
@@ -232,17 +236,17 @@ angular.module('angular-carousel', ['ngMobile'])
                   tmpSlide;
               if (swiping > 0) {
                 swiping = 0;
-                tmpSlide = offset < startOffset ? scope.carouselIndex + 1 : scope.carouselIndex - 1;
+                tmpSlide = offset < startOffset ? scope.totalIndex + 1 : scope.totalIndex - 1;
                 tmpSlide = Math.min(Math.max(tmpSlide, 0), slideCount - 1);
 
                 var delta = coords.x - startX;
                 if (Math.abs(delta) <= containerWidth * minSwipePercentage) {
                   // prevent swipe if not swipped enough
-                  tmpSlide = scope.carouselIndex;
+                  tmpSlide = scope.totalIndex;
                 }
-                var changed = (scope.carouselIndex !== tmpSlide);
+                var changed = (scope.totalIndex !== tmpSlide);
                 scope.$apply(function() {
-                  scope.carouselIndex = tmpSlide;
+                  scope.totalIndex = tmpSlide;
                 });
                 // reset position if same slide (watch not triggered)
                 if (!changed) updateSlidePosition();
