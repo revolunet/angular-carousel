@@ -3,7 +3,7 @@
 "use strict";
 
 /*
-Angular touch carousel with CSS GPU accel
+Angular touch carousel with CSS GPU accel and slide buffering
 http://github.com/revolunet/angular-carousel
 */
 
@@ -13,7 +13,7 @@ angular.module('angular-carousel', ['ngMobile'])
       return arr.slice(start, end);
     };
   })
-  .directive('rnCarousel', ['$document', '$compile', '$parse', '$timeout', '$swipe', function($document, $compile, $parse, $timeout, $swipe) {
+  .directive('rnCarousel', ['$compile', '$parse', '$swipe', function($compile, $parse, $swipe) {
     // track number of carousel instances
     var carousels = 0;
 
@@ -59,7 +59,8 @@ angular.module('angular-carousel', ['ngMobile'])
           scope.activeIndex = 0;          // index of the active slide, relative to the buffered collection (may be buffered)
 
           var updateCarouselPadding = function(offset) {
-            // replace DOM elements with padding
+            // replace removed DOM elements with absolute left positionning
+            // we cannot use padding/margin here as it won't work with percentages based containers
             carousel.addClass('rn-carousel-noanimate').css({
               'left': (offset * containerWidth) + 'px'
             });
@@ -67,7 +68,6 @@ angular.module('angular-carousel', ['ngMobile'])
           var transitionEndCallback = function() {
             // when carousel transition is finished,
             // check if we need to update the DOM (add/remove slides)
-            // TODO: prevent overlapping
             var isLeftEdge = (scope.totalIndex > 0 && (scope.totalIndex - scope.carouselBufferStart) === 0),
                 isRightEdge = (scope.totalIndex < (getSlidesCount() - 1) && (scope.totalIndex - scope.carouselBufferStart) === carousel.find('li').length - 1);
             if (isLeftEdge || isRightEdge) {
@@ -115,15 +115,6 @@ angular.module('angular-carousel', ['ngMobile'])
             scope.activeIndex = scope.totalIndex - scope.carouselBufferStart;
           }
 
-          function watchLocalIndex() {
-            scope.$watch('totalIndex', function(newValue, oldValue) {
-              if (newValue!==oldValue) {
-                updateSlidePosition();
-              }
-              updateActiveIndex();
-            });
-          }
-
           // handle rn-carousel-index attribute data binding
           if (iAttrs.rnCarouselIndex) {
               var indexModel = $parse(iAttrs.rnCarouselIndex);
@@ -140,7 +131,13 @@ angular.module('angular-carousel', ['ngMobile'])
                 scope.totalIndex = parseInt(iAttrs.rnCarouselIndex, 10);
               }
           }
-          watchLocalIndex();
+
+          scope.$watch('totalIndex', function(newValue, oldValue) {
+            if (newValue!==oldValue) {
+              updateSlidePosition();
+            }
+            updateActiveIndex();
+          });
 
           // watch the ngRepeat expression for changes
           scope.$watch(originalCollection, function(newValue, oldValue) {
