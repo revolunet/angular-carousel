@@ -22,6 +22,8 @@ ul.rn-carousel-slides li {
   display: inline-block;
   width: 100%;
   height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 } 
 .rn-carousel-animate {
   -webkit-transition: -webkit-transform .2s ease-out;
