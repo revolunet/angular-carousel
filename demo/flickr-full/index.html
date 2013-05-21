@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link href='./ratchet.css' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+    <style>
+    html, body { 
+      width:100%;
+      height:100%;
+      padding:0;
+      margin:0;
+    }
+    body {
+      margin: 0;
+      background: #333;
+      color:white;
+    }
+    * {
+      font-family: 'Droid Sans', sans-serif;
+    }
+    ul li {
+      list-style-type: none
+    }
+    a {
+      color:white;
+    }
+
+    /* from http://jsfiddle.net/revolunet/Ja6rB/10/ */
+    .page{position:relative;width:100%;height:100%;overflow:hidden}.page > div{float:left;display:inline-block;padding:1px;box-sizing:border-box;-moz-box-sizing:border-box}.page > div i{background-size:cover;background-position:center center;border-radius:1px;display:block;height:100%;position:relative}.page > div div.layer{background:rgba(255, 255, 255, .5);border-bottom-left-radius:1px;border-bottom-right-radius:1px;padding:5px;color:#fff;position:absolute;width:100%;bottom:0;box-sizing:border-box;-moz-box-sizing:border-box}.page1 > div:nth-child(1){width:34%;height:50%}.page1 > div:nth-child(2){width:66%;height:50%}.page1 > div:nth-child(3){width:34%;height:50%}.page1 > div:nth-child(4){width:33%;height:50%}.page1 > div:nth-child(5){width:33%;height:50%}.page2 > div:nth-child(1){width:34%;height:50%}.page2 > div:nth-child(2){width:33%;height:50%}.page2 > div:nth-child(3){width:33%;height:50%}.page2 > div:nth-child(4){width:67%;height:50%}.page2 > div:nth-child(5){width:33%;height:50%}.page3 > div:nth-child(1){width:33%;height:50%}.page3 > div:nth-child(2){width:33%;height:50%}.page3 > div:nth-child(3){width:34%;height:50%}.page3 > div:nth-child(4){width:33%;height:50%}.page3 > div:nth-child(5){width:67%;height:50%}.page4 > div:nth-child(1){width:67%;height:50%}.page4 > div:nth-child(2){width:33%;height:50%}.page4 > div:nth-child(3){width:34%;height:50%}.page4 > div:nth-child(4){width:33%;height:50%}.page4 > div:nth-child(5){width:33%;height:50%}
+  
+    div.layer {
+      font-size:1em;
+      color:black !important;
+    }
+
+    /* carousel customisation */
+    .rn-carousel-container {
+      position:absolute;
+      top:45px;
+      bottom:0px;
+      width:100%;
+    }
+    .rn-carousel-slides {
+      height: 100%;
+    }
+
+
+    </style>
+  </head>
+  <body ng-app="myApp" ng-controller='demoController' ontouchmove="event.preventDefault();">
+    <a href="https://github.com/revolunet/angular-carousel"><img style="z-index:10000;position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+
+      <!--
+        this carousel has multiple images in each page
+        we could use a custom directive but we'll keep a simple template for the demonstration
+        disabled ng-click="page[1].fullscreen=!page[1].fullscreen"  because of swipe+click conflict
+      -->
+
+        <header class="bar-title">
+          <a class="button" href="#">
+            Left
+          </a>
+          <h1 class="title">Flickr galleries</h1>
+        </header>
+
+        <ul rn-carousel rn-carousel-buffered class="image-page"> 
+          <li ng-repeat="page in pages">
+            <div class="page page{{ page.tpl }}" ng-class="{active: ($index == activeIndex) }">
+              <div>
+                <i ng-style="{'background-image': 'url(\'' + page[0].url + '\')'}">
+                  <div class="layer">{{ page[0].title }}</div>
+                </i>
+              </div>
+              <div>
+                <i ng-style="{'background-image': 'url(\'' + page[1].url + '\')'}">
+                  <div class="layer">{{ page[1].title }}</div>
+                </i>
+              </div>
+              <div>
+                <i ng-style="{'background-image': 'url(\'' + page[2].url + '\')'}">
+                  <div class="layer">{{ page[2].title }}</div>
+                </i>
+              </div>
+              <div>
+                <i ng-style="{'background-image': 'url(\'' + page[3].url + '\')'}">
+                  <div class="layer">{{ page[3].title }}</div>
+                </i>
+              </div>
+              <div>
+                <i ng-style="{'background-image': 'url(\'' + page[4].url + '\')'}">
+                  <div class="layer">{{ page[4].title }}</div>
+                </i>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+    <script src="//code.angularjs.org/1.1.4/angular.js"></script>
+    <script src="../../lib/angular-mobile.js"></script>
+
+    <!-- include carousel src -->
+    <script src="../../src/angular-carousel.js"></script>
+    <link href='../../src/angular-carousel.css' rel='stylesheet' type='text/css'>
+
+    <script>
+    /* Flickr API example
+
+       http://www.flickr.com/services/api/misc.urls.html
+
+       TODO :
+        - loader global
+        - paging
+        - tap+zoom
+     */
+
+    function partition(items, size) {
+      var p = [];
+      for (var i=Math.floor(items.length/size); i-->0; ) {
+          p[i]=items.slice(i*size, (i+1)*size);
+      }
+      return p;
+  }
+
+    angular.module('myApp', ['angular-carousel'])
+      .controller('demoController', function($scope, $http) {
+
+        var page = 1,
+            maxPages = 3;
+
+        $scope.pics = [];
+        $scope.pages = [];
+
+        function fetch() {
+          var params = {
+            method: 'flickr.photos.search',
+            api_key: '98a83da50faeef3886249aef8ee3903e',
+            text: 'luxury appartment',
+            per_page: 50,
+            page: page,
+            format: 'json'
+          };
+          $http.jsonp('http://api.flickr.com/services/rest/', {params: params});
+        }
+
+        window.jsonFlickrApi = function(result) {
+          var newPics = [];
+          angular.forEach(result.photos.photo, function(data) {
+            newPics.push({
+              url: "http://farm" + data.farm + ".staticflickr.com/" + data.server + "/" + data.id + "_" + data.secret + "_m.jpg",
+              title: data.title
+            });
+          });
+          // add to existing data
+          $scope.pics = $scope.pics.concat(newPics);
+
+          var newPages = partition(newPics, 5);
+          angular.forEach(newPages, function(page) {
+            page.tpl = Math.floor(Math.random() * 4) + 1;
+          });
+
+          $scope.pages = $scope.pages.concat(newPages);
+
+          if (page < maxPages) {
+            // fetch more pages
+            page += 1;
+            fetch();
+          }
+        }
+
+        fetch();
+
+        // $scope.toggle = function(idx) {
+        //   this.page[idx].fullscreen = !!!this.page[idx].fullscreen;
+        //   console.log(this.page[idx].fullscreen);
+        // }
+
+      });
+
+    </script>
+  </body>
+</html>
