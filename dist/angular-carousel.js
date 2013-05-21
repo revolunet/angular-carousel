@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.6 - 2013-05-21
+ * @version v0.0.7 - 2013-05-21
  * @link http://revolunet.com.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -68,7 +68,7 @@ angular.module('angular-carousel', ['ngMobile'])
           var updateCarouselPadding = function(offset) {
             // replace DOM elements with padding
             carousel.addClass('rn-carousel-noanimate').css({
-              'padding-left': (offset* containerWidth) + 'px'
+              'left': (offset * containerWidth) + 'px'
             });
           };
           var transitionEndCallback = function() {

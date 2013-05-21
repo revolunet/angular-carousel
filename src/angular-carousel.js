@@ -61,7 +61,7 @@ angular.module('angular-carousel', ['ngMobile'])
           var updateCarouselPadding = function(offset) {
             // replace DOM elements with padding
             carousel.addClass('rn-carousel-noanimate').css({
-              'padding-left': (offset* containerWidth) + 'px'
+              'left': (offset * containerWidth) + 'px'
             });
           };
           var transitionEndCallback = function() {

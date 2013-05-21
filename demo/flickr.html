@@ -55,6 +55,9 @@
 
     .page{position:relative;width:600px;height:300px;overflow:hidden}.page div{float:left;display:inline-block;padding:2px;box-sizing:border-box;-moz-box-sizing:border-box}.page i{background-size:cover;background-position:center center;border-radius:5px;display:block;height:100%}.page1 div:nth-child(1){width:34%;height:50%}.page1 div:nth-child(2){width:66%;height:50%}.page1 div:nth-child(3){width:34%;height:50%}.page1 div:nth-child(4){width:33%;height:50%}.page1 div:nth-child(5){width:33%;height:50%}.page2 div:nth-child(1){width:34%;height:50%}.page2 div:nth-child(2){width:33%;height:50%}.page2 div:nth-child(3){width:33%;height:50%}.page2 div:nth-child(4){width:67%;height:50%}.page2 div:nth-child(5){width:33%;height:50%}.page3 div:nth-child(1){width:33%;height:50%}.page3 div:nth-child(2){width:33%;height:50%}.page3 div:nth-child(3){width:34%;height:50%}.page3 div:nth-child(4){width:33%;height:50%}.page3 div:nth-child(5){width:67%;height:50%}.page4 div:nth-child(1){width:67%;height:50%}.page4 div:nth-child(2){width:33%;height:50%}.page4 div:nth-child(3){width:34%;height:50%}.page4 div:nth-child(4){width:33%;height:50%}.page4 div:nth-child(5){width:33%;height:50%}
 
+  /*
+    opacity transitions makes things sloooooow
+
     .page div {
       opacity: 0.3;
       -webkit-transition: opacity .2s ease-in;
@@ -78,7 +81,7 @@
     }
     .page.active div {
       opacity: 1;
-    }
+    }*/
   
     </style>
   </head>
@@ -95,6 +98,7 @@
 
     <h3>Browse gallery pages</h3>
     Simple Flickr gallery browser (buffered)<br><br>
+    Check the <a href="./flickr-full.html">full screen example for mobile devices</a>.
     <ul rn-carousel rn-carousel-buffered class="image-page"> 
       
       <li ng-repeat="page in pages">
