@@ -15,15 +15,15 @@
   .page > div div.img {
     background-size: cover;
     background-position: center center;
-    border-radius: 2px;
+    border-radius: 1px;
     display: block;
     height: 100%;
     position: relative;
     z-index: 1; }
   .page > div div.layer {
     background: rgba(255, 255, 255, 0.5);
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 1px;
+    border-bottom-right-radius: 1px;
     padding: 5px;
     color: white;
     position: absolute;
@@ -119,3 +119,78 @@
   width: 100% !important;
   height: 100% !important;
   z-index: 1000; }
+
+/* various */
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0; }
+
+body {
+  margin: 0;
+  background: #333;
+  color: white; }
+
+* {
+  font-family: 'Droid Sans', sans-serif;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+
+ul li {
+  list-style-type: none; }
+
+a {
+  color: white; }
+
+div.layer {
+  font-size: 1em;
+  color: #333 !important;
+  font-weight: bold; }
+
+/* carousel customisation */
+.rn-carousel-container {
+  position: absolute;
+  top: 45px;
+  bottom: 0px;
+  width: 100% !important; }
+
+.rn-carousel-slides {
+  height: 100%; }
+
+.ng-cloak {
+  display: none; }
+
+div#content {
+  height: 100%; }
+
+div#content > div {
+  background-color: #333; }
+
+ul.list {
+  background-color: #333;
+  font-size: 0.8em;
+  width: 200px !important; }
+
+ul.list li {
+  padding: 15px; }
+
+ul.list li.list-divider {
+  background-color: #555;
+  background-image: -webkit-linear-gradient(top, #444444 0, #555555 100%);
+  background-image: linear-gradient(to bottom, #444444 0, #555555 100%);
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #666;
+  box-shadow: none;
+  text-shadow: none;
+  font-size: 1em;
+  padding: 10px 5px; }
+
+div.loading {
+  width: 100%;
+  height: 100%;
+  background: #333;
+  font-size: 22px; }
+
+div.ngSnap-shelf {
+  overflow-x: hidden; }

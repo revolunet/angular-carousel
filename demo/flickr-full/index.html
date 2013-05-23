@@ -2,118 +2,113 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="viewport" content="width=1024, user-scalable=no">
+    <link href='./loader.css' rel='stylesheet' type='text/css'>
     <link href='./ratchet.css' rel='stylesheet' type='text/css'>
     <link href='./styles.css' rel='stylesheet' type='text/css'>
+    <link href='./angular-snap.min.css' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
-    <style>
-    html, body { 
-      width:100%;
-      height:100%;
-      padding:0;
-      margin:0;
-    }
-    body {
-      margin: 0;
-      background: #333;
-      color:white;
-    }
-    * {
-      font-family: 'Droid Sans', sans-serif;
-      -webkit-user-select: none;
-      -webkit-tap-highlight-color: rgba(0,0,0,0);
-    }
-    ul li {
-      list-style-type: none
-    }
-    a {
-      color:white;
-    }
-
-    div.layer {
-      font-size:1em;
-      color:black !important;
-    }
-
-    /* carousel customisation */
-    .rn-carousel-container {
-      position:absolute;
-      top:45px;
-      bottom:0px;
-      width:100%;
-    }
-    .rn-carousel-slides {
-      height: 100%;
-    }
-
-
-    </style>
   </head>
-  <body ng-app="myApp" ng-controller='demoController' ontouchmove="event.preventDefault();">
-    <a href="https://github.com/revolunet/angular-carousel"><img style="z-index:10000;position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+  <body ng-app="myApp" ng-controller='demoController'>
 
-      <!--
-        this carousel has multiple images in each page
-        we could use a custom directive but we'll keep a simple template for the demonstration
-        disabled ng-click="page[1].fullscreen=!page[1].fullscreen"  because of swipe+click conflict
-      -->
+    <div class="ng-cloak enable_touchmove" snap-shelves="">
+      <div id="shelf-1" snap-shelf="">
+        <ul class="list ">
+            <li class="list-divider">Galleries demos</li>
+            <li><a ng-click="snapper.close()"><img width="50" height="50" src="http://a1.twimg.com/profile_images/1244148446/logo-revolunet-carre2_reasonably_small.jpg" class="avatar"> </a></li>
+            <li class="list-divider">Luxury houses</li>
+            <li><a ng-click="load('luxury house paris');snapper.close()">Paris</a></li>
+            <li><a ng-click="load('luxury house new york');snapper.close()">New York</a></li>
+            <li><a ng-click="load('luxury house miami');snapper.close()">Miami</a></li>
+            <li><a ng-click="load('luxury house san francisco');snapper.close()">San Francisco</a></li>
+            <li class="list-divider">Luxury cars</li>
+            <li><a ng-click="load('luxury car france');snapper.close()">France</a></li>
+            <li><a ng-click="load('luxury car usa');snapper.close()">USA</a></li>
+            <li><a ng-click="load('luxury car italy');snapper.close()">Italy</a></li>
+            <li class="list-divider">Hi-tech</li>
+            <li><a ng-click="load('electric bikes');snapper.close()">Electric bikes</a></li>
+            <li><a ng-click="load('google car');snapper.close()">Google cars</a></li>
+            <li><a ng-click="load('google class');snapper.close()">Google glass</a></li>
+        </ul>
+      </div>
+    </div>
 
-        <header class="bar-title">
-          <a class="button" href="#">
-            Left
-          </a>
-          <h1 class="title">Flickr galleries</h1>
-        </header>
+    <div id="content" snap-content="" class="enable_touchmove" snap-options='{ "maxPosition": 200, "touchToDrag": false }'>
+      <header class="bar-title">
+        <a class="button" href='#' ng-click="snapper.toggle('left')">
+          Menu
+        </a>
+        <h1 class="title">AngularJS Carousel + Flickr demo</h1>
+        <a class="button" href="http://github.com/revolunet/angular-carousel">
+          About
+        </a>
+      </header>
 
-        <ul rn-carousel rn-carousel-buffered class="image-page"> 
-          <li ng-repeat="page in pages">
-            <div class="page page{{ page.tpl }}" ng-class="{active: ($index == activeIndex) }">
-              <div ng-click="toggle(page, 0)" ng-class="page[0].cls">
-                <div class="img" ng-style="{'background-image': 'url(\'' + page[0].url + '\')'}">
-                  <div class="layer">{{ page[0].title }}</div>
-                </div>
-              </div>
-              <div ng-click="toggle(page, 1)" ng-class="page[1].cls">
-                <div class="img" ng-style="{'background-image': 'url(\'' + page[1].url + '\')'}">
-                  <div class="layer">{{ page[1].title }}</div>
-                </div>
-              </div>
-              <div ng-click="toggle(page, 2)" ng-class="page[2].cls">
-                <div class="img" ng-style="{'background-image': 'url(\'' + page[2].url + '\')'}">
-                  <div class="layer">{{ page[2].title }}</div>
-                </div>
-              </div>
-              <div ng-click="toggle(page, 3)" ng-class="page[3].cls">
-                <div class="img" ng-style="{'background-image': 'url(\'' + page[3].url + '\')'}">
-                  <div class="layer">{{ page[3].title }}</div>
-                </div>
-              </div>
-              <div ng-click="toggle(page, 4)" ng-class="page[4].cls">
-                <div class="img" ng-style="{'background-image': 'url(\'' + page[4].url + '\')'}">
-                  <div class="layer">{{ page[4].title }}</div>
-                </div>
+      <div class="loading" ng-hide="!loading">
+        <br><br><br>
+        <div id="floatingCirclesG">
+          <div class="f_circleG" id="frotateG_01"></div>
+          <div class="f_circleG" id="frotateG_02"></div>
+          <div class="f_circleG" id="frotateG_03"></div>
+          <div class="f_circleG" id="frotateG_04"></div>
+          <div class="f_circleG" id="frotateG_05"></div>
+          <div class="f_circleG" id="frotateG_06"></div>
+          <div class="f_circleG" id="frotateG_07"></div>
+          <div class="f_circleG" id="frotateG_08"></div>
+        </div>
+      </div>
+
+      <ul rn-carousel rn-carousel-buffered class="image-page">
+        <li ng-repeat="page in pages">
+          <div class="page page{{ page.tpl }}" ng-class="{active: ($index == activeIndex) }">
+            <div ng-click="toggle(page, 0)" ng-class="page[0].cls">
+              <div class="img" ng-style="{'background-image': 'url(\'' + page[0].url + '\')'}">
+                <div class="layer">{{ page[0].title }}</div>
               </div>
             </div>
-          </li>
-        </ul>
+            <div ng-click="toggle(page, 1)" ng-class="page[1].cls">
+              <div class="img" ng-style="{'background-image': 'url(\'' + page[1].url + '\')'}">
+                <div class="layer">{{ page[1].title }}</div>
+              </div>
+            </div>
+            <div ng-click="toggle(page, 2)" ng-class="page[2].cls">
+              <div class="img" ng-style="{'background-image': 'url(\'' + page[2].url + '\')'}">
+                <div class="layer">{{ page[2].title }}</div>
+              </div>
+            </div>
+            <div ng-click="toggle(page, 3)" ng-class="page[3].cls">
+              <div class="img" ng-style="{'background-image': 'url(\'' + page[3].url + '\')'}">
+                <div class="layer">{{ page[3].title }}</div>
+              </div>
+            </div>
+            <div ng-click="toggle(page, 4)" ng-class="page[4].cls">
+              <div class="img" ng-style="{'background-image': 'url(\'' + page[4].url + '\')'}">
+                <div class="layer">{{ page[4].title }}</div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
 
     <script src="//code.angularjs.org/1.1.4/angular.js"></script>
     <script src="../../lib/angular-mobile.js"></script>
+    <script src="./angular-snap.min.js"></script>
+    <script src="./snap.js"></script>
 
     <!-- include carousel src -->
     <script src="../../src/angular-carousel.js"></script>
     <link href='../../src/angular-carousel.css' rel='stylesheet' type='text/css'>
 
     <script>
-    /* Flickr API example
 
-       http://www.flickr.com/services/api/misc.urls.html
-
-       TODO :
-        - loader global
-        - paging
-        - tap+zoom
-     */
+    document.ontouchmove = function(event) {
+        // provent body move (ipad)
+        var sourceElement = event.target || event.srcElement;
+        if(!angular.element(sourceElement).hasClass('enable_touchmove')) {
+          e.preventDefault();
+        }
+    };
 
     function partition(items, size) {
       var p = [];
@@ -121,22 +116,21 @@
           p[i]=items.slice(i*size, (i+1)*size);
       }
       return p;
-  }
+    }
 
-    angular.module('myApp', ['angular-carousel'])
+    angular.module('myApp', ['angular-carousel', 'snap'])
       .controller('demoController', function($scope, $http) {
 
         var page = 1,
-            maxPages = 3;
-
-        $scope.pics = [];
-        $scope.pages = [];
+            maxPages = 3,
+            term = null;
 
         function fetch() {
+          // fetch a single result page
           var params = {
             method: 'flickr.photos.search',
             api_key: '98a83da50faeef3886249aef8ee3903e',
-            text: 'luxury appartment',
+            text: term,
             per_page: 50,
             page: page,
             format: 'json'
@@ -145,6 +139,7 @@
         }
 
         window.jsonFlickrApi = function(result) {
+          // flickr callback
           var newPics = [];
           angular.forEach(result.photos.photo, function(data) {
             newPics.push({
@@ -153,6 +148,7 @@
               cls: ''
             });
           });
+
           // add to existing data
           $scope.pics = $scope.pics.concat(newPics);
 
@@ -164,21 +160,21 @@
           $scope.pages = $scope.pages.concat(newPages);
 
           if (page < maxPages) {
-            // fetch more pages
+            // fetch some more pages
             page += 1;
             fetch();
+          } else {
+            $scope.loading = false;
           }
         }
 
-        fetch();
-
         function getItemPos(page, idx) {
-          if (idx < 2) return 'top';
-          else if (idx == 2 && page.tpl > 2) return 'top';
+          if (idx < 2 || (idx == 2 && page.tpl > 2)) return 'top';
           return 'bottom';
         }
 
         $scope.toggle = function(page, idx) {
+          // toggle image zoom
           if (page[idx].cls == 'maximize') {
             // restore
             angular.forEach(page, function(item, idx2) {
@@ -194,8 +190,21 @@
           page[idx].cls = 'maximize';
         }
 
+        function load(kwd) {
+          $scope.loading = true;
+          term = kwd;
+          page = 1;
+          $scope.pics = [];
+          $scope.pages = [];
+          fetch();
+        }
+
+        // default search
+        load('luxury house');
+        $scope.load = load;
       });
 
     </script>
   </body>
 </html>
+
