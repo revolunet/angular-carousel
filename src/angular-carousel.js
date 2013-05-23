@@ -98,6 +98,10 @@ angular.module('angular-carousel', ['ngMobile'])
             });
             return css;
           }
+          function translateSlideproperty(offset) {
+            return getCSSProperty('transform', 'translate3d(' + offset + 'px,0,0)');
+            //matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + offset + ', 0, 0, 1)');
+          }
 
           // for buffered carousels
           if (isBuffered) {
@@ -163,7 +167,7 @@ angular.module('angular-carousel', ['ngMobile'])
           }
 
           var getSlidesCount = function() {
-              /* returns the number of items in the carousel */
+              // returns the number of items in the carousel
               return scope.carouselItems.length;
           };
 
@@ -189,11 +193,11 @@ angular.module('angular-carousel', ['ngMobile'])
             offset = scope.totalIndex * -containerWidth;
             if (skipAnimation===true) {
                 carousel.addClass('rn-carousel-noanimate')
-                    .css(getCSSProperty('transform',  'translate3d(' + offset + 'px,0,0)'));
+                    .css(translateSlideproperty(offset));
             } else {
                 carousel.removeClass('rn-carousel-noanimate')
                     .addClass('rn-carousel-animate')
-                    .css(getCSSProperty('transform',  'translate3d(' + offset + 'px,0,0)'));
+                    .css(translateSlideproperty(offset));
             }
             initialPosition = false;
           };
@@ -222,7 +226,7 @@ angular.module('angular-carousel', ['ngMobile'])
                 if ((scope.totalIndex === 0 && coords.x > startX) || (scope.totalIndex === slideCount - 1 && coords.x < startX))
                   ratio = 3;
                 offset = startOffset + deltaX / ratio;
-                carousel.css(getCSSProperty('transform',  'translate3d(' + offset + 'px,0,0)'))
+                carousel.css(translateSlideproperty(offset))
                         .removeClass()
                         .addClass('rn-carousel-noanimate');
               }
