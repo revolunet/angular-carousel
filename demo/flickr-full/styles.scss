@@ -1,0 +1,92 @@
+
+.page {
+    position:relative;
+    width:100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.page > div {
+    float:left;
+    padding:1px;
+    box-sizing:border-box;
+    -moz-box-sizing: border-box;
+    overflow:hidden;
+    div.img {
+        background-size: cover;
+        background-position:center center;
+        border-radius:2px;
+        display:block;
+        height:100%;
+        position:relative;
+        z-index:1;
+    }
+    div.layer {
+        background: rgba(255, 255, 255, 0.5);
+        border-bottom-left-radius:5px;
+        border-bottom-right-radius:5px;
+        padding:5px;
+        color:white;
+        position:absolute;      // WTF
+        width: 100%;
+        bottom:0px;
+        box-sizing:border-box;
+        -moz-box-sizing:border-box;
+        z-index:2;
+    }
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}
+
+// generates a 5 items page with one big item somewhere
+@mixin fullpage5($bigIndex:1) {
+    @for $i from 1 through 5 {
+        $width: 33.33%;
+        &:nth-child(#{$i}) {
+            @if ($i==$bigIndex) {
+                $width: 66.66%;
+            };
+            width: $width;
+            height: 50%;
+        }
+    }
+}
+
+// 4 simple combinations
+.page1 > div {
+    @include  fullpage5(1);
+}
+.page2 > div {
+    @include  fullpage5(2);
+}
+.page3 > div {
+    @include  fullpage5(4);
+}
+.page4 > div {
+    @include  fullpage5(5);
+}
+
+// modifiers for the hide animations
+.hide-top-from-bottom {
+    height:0 !important;
+    padding:0 !important;
+}
+.hide-top-from-top {
+    height: 100% !important;
+    width: 0 !important;
+    padding:0 !important;
+}
+.hide-bottom-from-top {
+    height: 0 !important;
+    padding:0 !important;
+}
+.hide-bottom-from-bottom {
+    height: 100% !important;
+    width:0 !important;
+    padding:0 !important;
+}
+.maximize {
+    width: 100% !important;
+    height: 100% !important;
+    z-index:1000;
+}
