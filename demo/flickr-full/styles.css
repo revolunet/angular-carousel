@@ -1,9 +1,34 @@
+/* line 5, scss/base.scss */
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* line 11, scss/base.scss */
+body {
+  margin: 0;
+  background: #333;
+  color: white;
+}
+
+/* line 16, scss/base.scss */
+* {
+  font-family: 'Droid Sans', sans-serif;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* line 26, scss/base.scss */
 .page {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
+/* line 33, scss/base.scss */
 .page > div {
   float: left;
   padding: 1px;
@@ -11,186 +36,894 @@
   -moz-box-sizing: border-box;
   overflow: hidden;
   -webkit-transition: all 0.3s ease-out;
-  transition: all 0.3s ease-out; }
-  .page > div div.img {
-    background-size: cover;
-    background-position: center center;
-    border-radius: 1px;
-    display: block;
-    height: 100%;
-    position: relative;
-    z-index: 1; }
-  .page > div div.layer {
-    background: rgba(255, 255, 255, 0.5);
-    border-bottom-left-radius: 1px;
-    border-bottom-right-radius: 1px;
-    padding: 5px;
-    color: white;
-    position: absolute;
-    width: 100%;
-    bottom: 0px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    z-index: 2; }
+  transition: all 0.3s ease-out;
+}
+/* line 39, scss/base.scss */
+.page > div .img {
+  background-size: cover;
+  background-position: center center;
+  border-radius: 1px;
+  display: block;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+/* line 48, scss/base.scss */
+.page > div .layer {
+  background: rgba(224, 224, 224, 0.62);
+  border-top: 1px solid white;
+  font-size: 1.3em;
+  padding: 5px;
+  line-height: 1.5em;
+  color: #111;
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  z-index: 2;
+}
 
+/* line 70, scss/base.scss */
 .page1 > div:nth-child(1) {
   width: 66.66%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page1 > div:nth-child(2) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page1 > div:nth-child(3) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page1 > div:nth-child(4) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page1 > div:nth-child(5) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
 
+/* line 70, scss/base.scss */
 .page2 > div:nth-child(1) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page2 > div:nth-child(2) {
   width: 66.66%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page2 > div:nth-child(3) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page2 > div:nth-child(4) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page2 > div:nth-child(5) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
 
+/* line 70, scss/base.scss */
 .page3 > div:nth-child(1) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page3 > div:nth-child(2) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page3 > div:nth-child(3) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page3 > div:nth-child(4) {
   width: 66.66%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page3 > div:nth-child(5) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
 
+/* line 70, scss/base.scss */
 .page4 > div:nth-child(1) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page4 > div:nth-child(2) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page4 > div:nth-child(3) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page4 > div:nth-child(4) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 70, scss/base.scss */
 .page4 > div:nth-child(5) {
   width: 66.66%;
-  height: 50%; }
+  height: 50%;
+}
 
+/* line 95, scss/base.scss */
 .hide-top-from-bottom {
   height: 0 !important;
-  padding: 0 !important; }
+  padding: 0 !important;
+}
 
+/* line 99, scss/base.scss */
 .hide-top-from-top {
   height: 100% !important;
   width: 0 !important;
-  padding: 0 !important; }
+  padding: 0 !important;
+}
 
+/* line 104, scss/base.scss */
 .hide-bottom-from-top {
   height: 0 !important;
-  padding: 0 !important; }
+  padding: 0 !important;
+}
 
+/* line 108, scss/base.scss */
 .hide-bottom-from-bottom {
   height: 100% !important;
   width: 0 !important;
-  padding: 0 !important; }
+  padding: 0 !important;
+}
 
+/* line 113, scss/base.scss */
 .maximize {
   width: 100% !important;
   height: 100% !important;
-  z-index: 1000; }
+  z-index: 1000;
+}
 
-/* various */
-html, body {
+/* line 125, scss/base.scss */
+.ngSnap.ngSnap-content,
+.ngSnap.ngSnap-shelves,
+.ngSnap .ngSnap-shelf {
+  position: absolute;
   width: 100%;
   height: 100%;
-  padding: 0;
-  margin: 0; }
+}
 
-body {
-  margin: 0;
-  background: #333;
-  color: white; }
+/* line 130, scss/base.scss */
+.ngSnap .ngSnap-shelf {
+  overflow-y: auto;
+  -webkit-transition: top 0.2s linear;
+  -moz-transition: top 0.2s linear;
+  -o-transition: top 0.2s linear;
+  transition: top 0.2s linear;
+  -webkit-transition: bottom 0.2s linear;
+  -moz-transition: bottom 0.2s linear;
+  -o-transition: bottom 0.2s linear;
+  transition: bottom 0.2s linear;
+  -webkit-overflow-scrolling: touch;
+  -moz-overflow-scrolling: touch;
+  -o-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}
 
-* {
-  font-family: 'Droid Sans', sans-serif;
-  -webkit-user-select: none;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+/* line 145, scss/base.scss */
+.ngSnap .ngSnap-shelf.right {
+  right: 0;
+}
 
-ul li {
-  list-style-type: none; }
-
-a {
-  color: white; }
-
-div.layer {
-  font-size: 1em;
-  color: #333 !important;
-  font-weight: bold; }
-
-/* carousel customisation */
+/* line 155, scss/base.scss */
 .rn-carousel-container {
   position: absolute;
   top: 45px;
   bottom: 0px;
-  width: 100% !important; }
+  width: 100% !important;
+}
 
+/* line 161, scss/base.scss */
 .rn-carousel-slides {
-  height: 100%; }
+  height: 100%;
+}
 
+/* line 164, scss/base.scss */
 .ng-cloak {
-  display: none; }
+  display: none;
+}
 
-div#content {
-  height: 100%; }
+/* line 167, scss/base.scss */
+#content {
+  height: 100%;
+}
 
-div#content > div {
-  background-color: #333; }
+/* line 170, scss/base.scss */
+#content > div {
+  background-color: #333;
+  -webkit-box-shadow: 4px 0px 40px black;
+  -moz-box-shadow: 4px 0px 40px black;
+  box-shadow: 4px 0px 40px black;
+}
 
+/* line 176, scss/base.scss */
 ul.list {
   background-color: #333;
   font-size: 0.8em;
-  width: 200px !important; }
+  margin-left: -40px;
+  margin-top: 0;
+  width: 200px !important;
+}
 
+/* line 183, scss/base.scss */
 ul.list li {
-  padding: 15px; }
+  padding: 15px;
+  background-color: #ececec;
+  border-bottom: 1px solid #dcdcdc;
+  border-top: 1px solid #fff;
+  color: #727272;
+}
 
+/* line 191, scss/base.scss */
 ul.list li.list-divider {
-  background-color: #555;
-  background-image: -webkit-linear-gradient(top, #444444 0, #555555 100%);
-  background-image: linear-gradient(to bottom, #444444 0, #555555 100%);
-  border-top: 1px solid #666;
-  border-bottom: 1px solid #666;
-  box-shadow: none;
-  text-shadow: none;
-  font-size: 1em;
-  padding: 10px 5px; }
+  background: #386292;
+  -webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+  box-shadow: 0 8px 6px -6px black;
+  font-size: 1.3em;
+  color: white;
+  text-transform: uppercase;
+  padding: 12px 5px;
+}
 
-div.loading {
+/* line 201, scss/base.scss */
+.loading {
   width: 100%;
   height: 100%;
   background: #333;
-  font-size: 22px; }
+  font-size: 22px;
+}
 
-div.ngSnap-shelf {
-  overflow-x: hidden; }
+/* line 207, scss/base.scss */
+.ngSnap-shelf {
+  overflow-x: hidden;
+}
+
+/* line 2, scss/assets/ratchet.scss */
+[class*="bar-"] {
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 10;
+  height: 44px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+/* Generic bar for wrapping buttons, segmented controllers, etc. */
+/* line 23, scss/assets/ratchet.scss */
+.bar-standard {
+  background-color: #f2f2f2;
+  background-image: -webkit-linear-gradient(top, #f2f2f2 0, #e5e5e5 100%);
+  background-image: linear-gradient(to bottom, #f2f2f2 0%, #e5e5e5 100%);
+  border-bottom: 1px solid #aaa;
+  box-shadow: inset 0 1px 1px -1px #fff;
+}
+
+/* Flip border position to top for footer bars */
+/* line 33, scss/assets/ratchet.scss */
+.bar-footer.bar-standard,
+.bar-footer-secondary.bar-standard {
+  border-top: 1px solid #aaa;
+  border-bottom-width: 0;
+}
+
+/* Title bar
+-------------------------------------------------- */
+/* Bar docked to top of viewport for showing page title and actions */
+/* line 42, scss/assets/ratchet.scss */
+.bar-title {
+  top: 0;
+  display: -webkit-box;
+  display: box;
+  background: #4d7fb8;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #4d7fb8 0%, #4572a5 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4d7fb8), color-stop(100%, #4572a5));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #4d7fb8 0%, #4572a5 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #4d7fb8 0%, #4572a5 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #4d7fb8 0%, #4572a5 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #4d7fb8 0%, #4572a5 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4d7fb8', endColorstr='#4572a5',GradientType=0 );
+  /* IE6-9 */
+  box-shadow: inset 0 1px 1px -1px rgba(255, 255, 255, 0.8);
+  -webkit-box-orient: horizontal;
+  box-orient: horizontal;
+}
+
+/* Centered text in the .bar-title */
+/* line 60, scss/assets/ratchet.scss */
+.bar-title .title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 16px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}
+
+/* line 75, scss/assets/ratchet.scss */
+.bar-title > a:not([class*="button"]) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Retain specified title color */
+/* line 82, scss/assets/ratchet.scss */
+.bar-title .title a {
+  color: inherit;
+}
+
+/* Tab bar
+-------------------------------------------------- */
+/* Bar docked to bottom used for primary app navigation */
+/* line 90, scss/assets/ratchet.scss */
+.bar-tab {
+  bottom: 0;
+  height: 50px;
+  padding: 0;
+  background-color: #393939;
+  background-image: -webkit-linear-gradient(top, #393939 0, #2b2b2b 100%);
+  background-image: linear-gradient(to bottom, #393939 0%, #2b2b2b 100%);
+  border-top: 1px solid #000;
+  border-bottom-width: 0;
+  box-shadow: inset 0 1px 1px -1px rgba(255, 255, 255, 0.6);
+}
+
+/* Wrapper for individual tab */
+/* line 103, scss/assets/ratchet.scss */
+.tab-inner {
+  display: -webkit-box;
+  display: box;
+  height: 100%;
+  list-style: none;
+  -webkit-box-orient: horizontal;
+  box-orient: horizontal;
+}
+
+/* Navigational tab */
+/* line 113, scss/assets/ratchet.scss */
+.tab-item {
+  height: 100%;
+  padding-top: 9px;
+  text-align: center;
+  box-sizing: border-box;
+  -webkit-box-flex: 1;
+  box-flex: 1;
+}
+
+/* Active state for tab */
+/* line 123, scss/assets/ratchet.scss */
+.tab-item.active {
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Icon for tab  */
+/* line 128, scss/assets/ratchet.scss */
+.tab-icon {
+  display: block;
+  height: 18px;
+  margin: 0 auto;
+}
+
+/* Label for tab */
+/* line 135, scss/assets/ratchet.scss */
+.tab-label {
+  margin-top: 1px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+}
+
+/* Buttons in title bars
+-------------------------------------------------- */
+/* Generic style for all buttons in .bar-title */
+/* line 147, scss/assets/ratchet.scss */
+.bar-title [class*="button"] {
+  position: relative;
+  z-index: 10;
+  /* Places buttons over full width title */
+  font-size: 12px;
+  line-height: 23px;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+  background-color: #1eb0e9;
+  background-image: -webkit-linear-gradient(top, #1eb0e9 0, #0984c6 100%);
+  background-image: linear-gradient(to bottom, #1eb0e9 0%, #0984c6 100%);
+  border: 1px solid #0e5895;
+  box-shadow: 0 1px rgba(255, 255, 255, 0.25);
+  -webkit-box-flex: 0;
+  box-flex: 0;
+}
+
+/* Hacky way to right align buttons outside of flex-box system
+   Note: is only absolutely positioned button, would be better if flex-box had an "align right" option */
+/* line 168, scss/assets/ratchet.scss */
+.bar-title .title + [class*="button"]:last-child,
+.bar-title .button + [class*="button"]:last-child,
+.bar-title [class*="button"].pull-right {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+/* Override standard button active states */
+/* line 175, scss/assets/ratchet.scss */
+.bar-title .button:active {
+  color: #fff;
+  background-color: #0876b1;
+}
+
+/* Directional buttons in title bars (thanks to @GregorAdams for solution - http://cssnerd.com/2011/11/30/the-best-pure-css3-ios-style-arrow-back-button/)
+-------------------------------------------------- */
+/* Add relative positioning so :before content is positioned properly */
+/* Block buttons in any bar
+-------------------------------------------------- */
+/* Add proper padding and replace buttons normal dropshadow with a shine from bar */
+/* line 257, scss/assets/ratchet.scss */
+[class*="bar"] .button-block {
+  padding: 7px 0;
+  margin-bottom: 0;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 1px rgba(255, 255, 255, 0.8);
+}
+
+/* Override standard padding changes for .button-blocks */
+/* line 264, scss/assets/ratchet.scss */
+[class*="bar"] .button-block:active {
+  padding: 7px 0;
+}
+
+/* Segmented controller in any bar
+-------------------------------------------------- */
+/* Remove standard segmented bottom margin */
+/* line 272, scss/assets/ratchet.scss */
+[class*="bar-"] .segmented-controller {
+  margin-bottom: 0;
+}
+
+/* Add margins between segmented controllers and buttons */
+/* line 278, scss/assets/ratchet.scss */
+[class*="bar-"] .segmented-controller + [class*="button"],
+[class*="bar-"] [class*="button"] + .segmented-controller {
+  margin-left: 5px;
+}
+
+/* Segmented controller in a title bar
+-------------------------------------------------- */
+/* line 285, scss/assets/ratchet.scss */
+.bar-title .segmented-controller {
+  line-height: 18px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+  background-color: #1eb0e9;
+  background-image: -webkit-linear-gradient(top, #1eb0e9 0, #0984c6 100%);
+  background-image: linear-gradient(to bottom, #1eb0e9 0%, #0984c6 100%);
+  border: 1px solid #0e5895;
+  border-radius: 3px;
+  box-shadow: 0 1px rgba(255, 255, 255, 0.25);
+  -webkit-box-flex: 1;
+  box-flex: 1;
+}
+
+/* Set color for tab border and highlight */
+/* line 299, scss/assets/ratchet.scss */
+.bar-title .segmented-controller li {
+  border-left: 1px solid #0e5895;
+  box-shadow: inset 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Remove inset shadow from first tab or one to the right of the active tab  */
+/* line 306, scss/assets/ratchet.scss */
+.bar-title .segmented-controller .active + li,
+.bar-title .segmented-controller li:first-child {
+  box-shadow: none;
+}
+
+/* Remove left-hand border from first tab */
+/* line 311, scss/assets/ratchet.scss */
+.bar-title .segmented-controller li:first-child {
+  border-left-width: 0;
+}
+
+/* Depressed state (active) */
+/* line 316, scss/assets/ratchet.scss */
+.bar-title .segmented-controller li.active {
+  background-color: #0082c4;
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Set color of links to white */
+/* line 322, scss/assets/ratchet.scss */
+.bar-title .segmented-controller li > a {
+  color: #fff;
+}
+
+/* Search forms in standard bar
+-------------------------------------------------- */
+/* Position/size search bar within the bar */
+/* line 331, scss/assets/ratchet.scss */
+.bar-standard input[type=search] {
+  height: 32px;
+  margin: 0;
+}
+
+/* Lists
+-------------------------------------------------- */
+/* Remove usual bullet styles from list */
+/* line 341, scss/assets/ratchet.scss */
+.list {
+  margin-bottom: 10px;
+  list-style: none;
+  background-color: #fff;
+}
+
+/* Pad each list item and add dividers */
+/* line 348, scss/assets/ratchet.scss */
+.list li {
+  position: relative;
+  padding: 20px 60px 20px 10px;
+  /* Given extra right padding to accomodate counts, chevrons or buttons */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Give top border to first list items */
+/* line 355, scss/assets/ratchet.scss */
+.list li:first-child {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* If a list of links, make sure the child <a> takes up full list item tap area (want to avoid selecting child buttons though) */
+/* line 360, scss/assets/ratchet.scss */
+.list li > a:not([class*="button"]) {
+  position: relative;
+  display: block;
+  padding: inherit;
+  margin: -20px -60px -20px -10px;
+  color: inherit;
+}
+
+/* Inset list
+-------------------------------------------------- */
+/* line 371, scss/assets/ratchet.scss */
+.list.inset {
+  width: auto;
+  margin-right: 10px;
+  margin-left: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* Remove border from first/last standard list items to avoid double border at top/bottom of lists */
+/* line 381, scss/assets/ratchet.scss */
+.list.inset li:first-child {
+  border-top-width: 0;
+}
+
+/* line 384, scss/assets/ratchet.scss */
+.list.inset li:last-child {
+  border-bottom-width: 0;
+}
+
+/* List dividers
+-------------------------------------------------- */
+/* Rounding first divider on inset lists and remove border on the top */
+/* line 410, scss/assets/ratchet.scss */
+.list.inset .list-divider:first-child {
+  top: 0;
+  border-top-width: 0;
+  border-radius: 6px 6px 0 0;
+}
+
+/* Rounding last divider on inset lists */
+/* line 417, scss/assets/ratchet.scss */
+.list.inset .list-divider:last-child {
+  border-radius: 0 0 6px 6px;
+}
+
+/* Input groups (cluster multiple inputs together into a single group)
+-------------------------------------------------- */
+/* Reset from initial form setup styles */
+/* line 544, scss/assets/ratchet.scss */
+[class*="button"] {
+  position: relative;
+  display: inline-block;
+  padding: 4px 12px;
+  margin: 0;
+  font-weight: bold;
+  line-height: 18px;
+  color: #333;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  vertical-align: top;
+  cursor: pointer;
+  background-color: #f8f8f8;
+  background-image: -webkit-linear-gradient(top, #f8f8f8 0, #d4d4d4 100%);
+  background-image: linear-gradient(to bottom, #f8f8f8 0%, #d4d4d4 100%);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Active */
+/* line 565, scss/assets/ratchet.scss */
+[class*="button"]:active {
+  padding-top: 5px;
+  padding-bottom: 3px;
+  color: #333;
+  background-color: #ccc;
+  background-image: none;
+  box-shadow: inset 0 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Button modifiers
+-------------------------------------------------- */
+/* line 664, scss/assets/ratchet.scss */
+.chevron {
+  display: block;
+  height: 20px;
+}
+
+/* Base styles for both 1/2's of the chevron */
+/* line 671, scss/assets/ratchet.scss */
+.chevron:before,
+.chevron:after {
+  position: relative;
+  display: block;
+  width: 12px;
+  height: 4px;
+  background-color: #999;
+  content: '';
+}
+
+/* Position and rotate respective 1/2's of the chevron */
+/* line 681, scss/assets/ratchet.scss */
+.chevron:before {
+  top: 5px;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* line 686, scss/assets/ratchet.scss */
+.chevron:after {
+  top: 7px;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+ /* General count styles
+-------------------------------------------------- */
+/* loader */
+/* line 2, scss/assets/loader.scss */
+#floatingCirclesG {
+  margin: auto;
+  position: relative;
+  width: 128px;
+  height: 128px;
+  -moz-transform: scale(0.6);
+  -webkit-transform: scale(0.6);
+  -ms-transform: scale(0.6);
+  -o-transform: scale(0.6);
+  transform: scale(0.6);
+}
+
+/* line 14, scss/assets/loader.scss */
+.f_circleG {
+  position: absolute;
+  background-color: #FFFFFF;
+  height: 23px;
+  width: 23px;
+  -moz-border-radius: 12px;
+  -moz-animation-name: f_fadeG;
+  -moz-animation-duration: 1.04s;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-direction: linear;
+  -webkit-border-radius: 12px;
+  -webkit-animation-name: f_fadeG;
+  -webkit-animation-duration: 1.04s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-direction: linear;
+  -ms-border-radius: 12px;
+  -ms-animation-name: f_fadeG;
+  -ms-animation-duration: 1.04s;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-direction: linear;
+  -o-border-radius: 12px;
+  -o-animation-name: f_fadeG;
+  -o-animation-duration: 1.04s;
+  -o-animation-iteration-count: infinite;
+  -o-animation-direction: linear;
+  border-radius: 12px;
+  animation-name: f_fadeG;
+  animation-duration: 1.04s;
+  animation-iteration-count: infinite;
+  animation-direction: linear;
+}
+
+/* line 46, scss/assets/loader.scss */
+#frotateG_01 {
+  left: 0;
+  top: 52px;
+  -moz-animation-delay: 0.39s;
+  -webkit-animation-delay: 0.39s;
+  -ms-animation-delay: 0.39s;
+  -o-animation-delay: 0.39s;
+  animation-delay: 0.39s;
+}
+
+/* line 56, scss/assets/loader.scss */
+#frotateG_02 {
+  left: 15px;
+  top: 15px;
+  -moz-animation-delay: 0.52s;
+  -webkit-animation-delay: 0.52s;
+  -ms-animation-delay: 0.52s;
+  -o-animation-delay: 0.52s;
+  animation-delay: 0.52s;
+}
+
+/* line 66, scss/assets/loader.scss */
+#frotateG_03 {
+  left: 52px;
+  top: 0;
+  -moz-animation-delay: 0.65s;
+  -webkit-animation-delay: 0.65s;
+  -ms-animation-delay: 0.65s;
+  -o-animation-delay: 0.65s;
+  animation-delay: 0.65s;
+}
+
+/* line 76, scss/assets/loader.scss */
+#frotateG_04 {
+  right: 15px;
+  top: 15px;
+  -moz-animation-delay: 0.78s;
+  -webkit-animation-delay: 0.78s;
+  -ms-animation-delay: 0.78s;
+  -o-animation-delay: 0.78s;
+  animation-delay: 0.78s;
+}
+
+/* line 86, scss/assets/loader.scss */
+#frotateG_05 {
+  right: 0;
+  top: 52px;
+  -moz-animation-delay: 0.91s;
+  -webkit-animation-delay: 0.91s;
+  -ms-animation-delay: 0.91s;
+  -o-animation-delay: 0.91s;
+  animation-delay: 0.91s;
+}
+
+/* line 96, scss/assets/loader.scss */
+#frotateG_06 {
+  right: 15px;
+  bottom: 15px;
+  -moz-animation-delay: 1.04s;
+  -webkit-animation-delay: 1.04s;
+  -ms-animation-delay: 1.04s;
+  -o-animation-delay: 1.04s;
+  animation-delay: 1.04s;
+}
+
+/* line 106, scss/assets/loader.scss */
+#frotateG_07 {
+  left: 52px;
+  bottom: 0;
+  -moz-animation-delay: 1.17s;
+  -webkit-animation-delay: 1.17s;
+  -ms-animation-delay: 1.17s;
+  -o-animation-delay: 1.17s;
+  animation-delay: 1.17s;
+}
+
+/* line 116, scss/assets/loader.scss */
+#frotateG_08 {
+  left: 15px;
+  bottom: 15px;
+  -moz-animation-delay: 1.3s;
+  -webkit-animation-delay: 1.3s;
+  -ms-animation-delay: 1.3s;
+  -o-animation-delay: 1.3s;
+  animation-delay: 1.3s;
+}
+
+@-moz-keyframes f_fadeG {
+  /* line 127, scss/assets/loader.scss */
+  0% {
+    background-color: #000000;
+  }
+
+  /* line 130, scss/assets/loader.scss */
+  100% {
+    background-color: #FFFFFF;
+  }
+}
+
+@-webkit-keyframes f_fadeG {
+  /* line 136, scss/assets/loader.scss */
+  0% {
+    background-color: #000000;
+  }
+
+  /* line 139, scss/assets/loader.scss */
+  100% {
+    background-color: #FFFFFF;
+  }
+}
+
+@-ms-keyframes f_fadeG {
+  /* line 145, scss/assets/loader.scss */
+  0% {
+    background-color: #000000;
+  }
+
+  /* line 148, scss/assets/loader.scss */
+  100% {
+    background-color: #FFFFFF;
+  }
+}
+
+@-o-keyframes f_fadeG {
+  /* line 154, scss/assets/loader.scss */
+  0% {
+    background-color: #000000;
+  }
+
+  /* line 157, scss/assets/loader.scss */
+  100% {
+    background-color: #FFFFFF;
+  }
+}
+
+@keyframes f_fadeG {
+  /* line 163, scss/assets/loader.scss */
+  0% {
+    background-color: #000000;
+  }
+
+  /* line 166, scss/assets/loader.scss */
+  100% {
+    background-color: #FFFFFF;
+  }
+}
