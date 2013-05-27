@@ -10,6 +10,7 @@
 }
 .rn-carousel-slides {
   height: 100%;
+  transition: -webkit-filter 0.3s ease-in !important;
 }
 .ng-cloak {
   display:none;

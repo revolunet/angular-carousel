@@ -13,32 +13,6 @@
   box-sizing: border-box;
 }
 
-///* Modifier class to dock any bar below .bar-title */
-//.bar-header-secondary {
-//  top: 45px;
-//}
-//
-///* Modifier class to dock any bar to bottom of viewport */
-//.bar-footer {
-//  bottom: 0;
-//}
-//
-/* Generic bar for wrapping buttons, segmented controllers, etc. */
-.bar-standard {
-  background-color: #f2f2f2;
-  background-image: -webkit-linear-gradient(top, #f2f2f2 0, #e5e5e5 100%);
-  background-image: linear-gradient(to bottom, #f2f2f2 0, #e5e5e5 100%);
-  border-bottom: 1px solid #aaa;
-  box-shadow: inset 0 1px 1px -1px #fff;
-}
-
-/* Flip border position to top for footer bars */
-.bar-footer.bar-standard,
-.bar-footer-secondary.bar-standard {
-  border-top: 1px solid #aaa;
-  border-bottom-width: 0;
-}
-
 /* Title bar
 -------------------------------------------------- */
 

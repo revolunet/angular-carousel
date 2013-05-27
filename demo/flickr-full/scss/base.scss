@@ -13,6 +13,7 @@ body {
   background: $body-background-color;
   color:white;
   font-family: $main-font;
+  overflow-y:hidden;
 }
 * {
   -webkit-user-select: none;
@@ -86,7 +87,7 @@ body {
     .img {
         background-size: cover;
         background-position:center;
-        background: url(#{$imgUrl}placeholder-img.png) no-repeat cover;
+        
         padding-right: 2px;
         display:block;
         height:100%;
@@ -107,9 +108,14 @@ body {
         -moz-box-sizing:border-box;
         z-index:2;
     }
-    -webkit-transition: all 0.3s ease-out;
-    transition: all 0.3s ease-out;
 }
+
+
+.blurred {
+    -webkit-filter: blur(10px);
+}
+
+// page templates
 
 // generates a 5 items page with one big item somewhere
 @mixin fullpage5($bigIndex:1) {
@@ -137,29 +143,4 @@ body {
 }
 .page4 > div {
     @include  fullpage5(5);
-}
-
-// modifiers for the hide animations
-.hide-top-from-bottom {
-    height:0 !important;
-    padding:0 !important;
-}
-.hide-top-from-top {
-    height: 100% !important;
-    width: 0 !important;
-    padding:0 !important;
-}
-.hide-bottom-from-top {
-    height: 0 !important;
-    padding:0 !important;
-}
-.hide-bottom-from-bottom {
-    height: 100% !important;
-    width:0 !important;
-    padding:0 !important;
-}
-.maximize {
-    width: 100% !important;
-    height: 100% !important;
-    z-index:1000;
 }

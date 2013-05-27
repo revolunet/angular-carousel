@@ -15,10 +15,12 @@ $body-background-color: #ececec;
 $icon-color: #fff;
 $icon-size: 28px;
 
+$base-color:  #2980b9;
+
 // BAR-TITLE :
 $bar-title-height: 49px;
 $bar-title-padding: 5px;
-$bar-title-color: #2980b9;
+$bar-title-color: $base-color;
 $bar-title-font-color: #fff;
 
 //NAVIGATION :
@@ -26,7 +28,7 @@ $list-divider-background-color: #558ead;
 $items-background-color: $body-background-color;
 
 $list-divider-font-color: #fff;
-$items-font-color: rgb(22, 131, 109);
+$items-font-color: $base-color;
 
 // BORDER
 //$items-border-top-color: #fff;
@@ -41,3 +43,4 @@ $items-border-bottom-color: lighten($items-background-color, 4%);
 @import "scss/assets/navigation";
 @import "scss/assets/carousel";
 @import "scss/assets/loader";
+@import "scss/assets/modal";
