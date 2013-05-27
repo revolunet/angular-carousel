@@ -1,5 +1,43 @@
+// ======================================================
+//                    VARIABLES
+//     Change the variables here to set your own theme
+// ======================================================
+
+$fontUrl: '../flickr-full/font/';
+$imgUrl: '../flickr-full/img/';
+
+// FONTS
+$main-font: 'Andika', sans-serif;
+$alt-font: 'Arvo', sans-serif;
+
+$body-background-color: #ececec;
+
+$icon-color: #fff;
+$icon-size: 28px;
+
+// BAR-TITLE :
+$bar-title-height: 49px;
+$bar-title-padding: 5px;
+$bar-title-color: #2980b9;
+$bar-title-font-color: #fff;
+
+//NAVIGATION :
+$list-divider-background-color: #558ead;
+$items-background-color: $body-background-color;
+
+$list-divider-font-color: #fff;
+$items-font-color: rgb(22, 131, 109);
+
+// BORDER
+//$items-border-top-color: #fff;
+$items-border-bottom-color: lighten($items-background-color, 4%);
+
+// =================================
+//             FILES
+// =================================
+
 @import "scss/base";
-@import "scss/assets/ratchet";
+@import "scss/assets/title-bar";
+@import "scss/assets/navigation";
+@import "scss/assets/carousel";
 @import "scss/assets/loader";
-
-

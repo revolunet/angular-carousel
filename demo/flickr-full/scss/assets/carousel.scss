@@ -1,0 +1,25 @@
+// ===========================
+//    CAROUSEL
+// ===========================
+
+.rn-carousel-container {
+  position:absolute;
+  top:45px;
+  bottom:0px;
+  width:100% !important;
+}
+.rn-carousel-slides {
+  height: 100%;
+}
+.ng-cloak {
+  display:none;
+}
+#content {
+  height: 100%;
+}
+#content > div {
+  background-color: $body-background-color;
+  -webkit-box-shadow: 0px 0px 10px black;
+  -moz-box-shadow: 0px 0px 10px black;
+  box-shadow: 0px 0px 10px black;
+}

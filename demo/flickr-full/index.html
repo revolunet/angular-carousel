@@ -3,38 +3,38 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1024, user-scalable=no">
-    <link href='./loader.css' rel='stylesheet' type='text/css'>
     <link href='./styles.css' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=Andika&subset=latin" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
   </head>
   <body ng-app="myApp" ng-controller='demoController'>
 
     <div class="ng-cloak enable_touchmove" snap-shelves="">
       <div id="shelf-1" snap-shelf="">
         <ul class="list ">
-            <li class="list-divider">Galleries demos</li>
-            <li><a ng-click="snapper.close()"><img width="50" height="50" src="http://a1.twimg.com/profile_images/1244148446/logo-revolunet-carre2_reasonably_small.jpg" class="avatar"> </a></li>
+            <!-- <li class="list-divider">Galleries demos</li> -->
+            <li class="close"> <span ng-click="snapper.close()" aria-hidden="true" class="icon-cancel"></span></li>
             <li class="list-divider">Luxury houses</li>
-            <li><a ng-click="load('luxury house paris');snapper.close()">Paris</a></li>
-            <li><a ng-click="load('luxury house new york');snapper.close()">New York</a></li>
-            <li><a ng-click="load('luxury house miami');snapper.close()">Miami</a></li>
-            <li><a ng-click="load('luxury house san francisco');snapper.close()">San Francisco</a></li>
+            <li ng-click="load('luxury house paris');snapper.close()">Paris</li>
+            <li ng-click="load('luxury house new york');snapper.close()">New York</li>
+            <li ng-click="load('luxury house miami');snapper.close()">Miami</li>
+            <li ng-click="load('luxury house san francisco');snapper.close()">San Francisco</li>
             <li class="list-divider">Luxury cars</li>
-            <li><a ng-click="load('luxury car france');snapper.close()">France</a></li>
-            <li><a ng-click="load('luxury car usa');snapper.close()">USA</a></li>
-            <li><a ng-click="load('luxury car italy');snapper.close()">Italy</a></li>
+            <li ng-click="load('luxury car france');snapper.close()">France</li>
+            <li ng-click="load('luxury car usa');snapper.close()">USA</li>
+            <li ng-click="load('luxury car italy');snapper.close()">Italy</li>
             <li class="list-divider">Hi-tech</li>
-            <li><a ng-click="load('electric bikes');snapper.close()">Electric bikes</a></li>
-            <li><a ng-click="load('google car');snapper.close()">Google cars</a></li>
-            <li><a ng-click="load('google class');snapper.close()">Google glass</a></li>
+            <li ng-click="load('electric bikes');snapper.close()">Electric bikes</li>
+            <li ng-click="load('google car');snapper.close()">Google cars</li>
+            <li ng-click="load('google class');snapper.close()">Google glass</li>
         </ul>
       </div>
     </div>
 
     <div id="content" snap-content="" class="enable_touchmove" snap-options='{ "maxPosition": 200, "touchToDrag": false }'>
       <header class="bar-title">
-        <a class="button" href='#' ng-click="snapper.toggle('left')">
-          Menu
+        <a class="button nav" href='#' ng-click="snapper.toggle('left')">
+          <span aria-hidden="true" class="icon-menu"></span>
         </a>
         <h1 class="title">AngularJS Carousel + Flickr demo</h1>
         <a class="button" href="http://github.com/revolunet/angular-carousel">
