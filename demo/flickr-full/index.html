@@ -56,7 +56,35 @@
         </div>
       </div>
 
-      <ul rn-carousel rn-carousel-buffered class="image-page">
+      <style>
+        .image-page {
+          transition: -webkit-filter 0.3s ease-in !important;
+        }
+        .blurred {
+          -webkit-filter: blur(10px);
+        }
+        #modal {
+          opacity:0;
+          transition: all 0.3s ease-out !important;
+          -webkit-transition: all 0.3s ease-out !important;
+          position:absolute;
+          box-sizing:border-box;
+          background:rgba(255,255,255,0.95);
+          border:2px solid silver;
+          box-shadow: 2px 5px 5px rgba(50,50,50,0.5);
+          border-radius:5px;
+          color:black;
+          padding:5%;
+          margin:5%;
+          width:90%;
+          height:90%;
+        }
+        #modal.open{
+          opacity:1;
+        }
+      </style>
+
+      <ul rn-carousel rn-carousel-buffered class="image-page" ng-class="{blurred: blurred}">
         <li ng-repeat="page in pages">
           <div class="page page{{ page.tpl }}" ng-class="{active: ($index == activeIndex) }">
             <div ng-click="toggle(page, 0)" ng-class="page[0].cls">
@@ -87,6 +115,13 @@
           </div>
         </li>
       </ul>
+
+      <div id="modal" ng-show="showModal" ng-class="modalCls">
+          <h1>{{ current.title }}</h1>
+          <br><br>
+          <button ng-click="closeModal()">close</button>
+      </div>
+ 
     </div>
 
     <script src="//code.angularjs.org/1.1.4/angular.js"></script>
@@ -117,7 +152,7 @@
     }
 
     angular.module('myApp', ['angular-carousel', 'snap'])
-      .controller('demoController', function($scope, $http) {
+      .controller('demoController', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
 
         var page = 1,
             maxPages = 3,
@@ -171,7 +206,7 @@
           return 'bottom';
         }
 
-        $scope.toggle = function(page, idx) {
+        $scope.toggle1 = function(page, idx) {
           // toggle image zoom
           if (page[idx].cls == 'maximize') {
             // restore
@@ -188,6 +223,23 @@
           page[idx].cls = 'maximize';
         }
 
+        $scope.toggle = function(page, idx) {
+          $scope.current = page[idx];
+          $scope.modalCls = '';
+          $scope.showModal = true;
+          $scope.blurred = true;
+          $timeout(function() {
+            $scope.modalCls = 'open';
+          }, 0);
+        }
+        $scope.closeModal = function() {
+          $scope.modalCls = '';
+          $scope.blurred = false;
+          $timeout(function() {
+            $scope.showModal = false;
+          }, 200);
+        }
+
         function load(kwd) {
           $scope.loading = true;
           term = kwd;
@@ -200,7 +252,7 @@
         // default search
         load('luxury house');
         $scope.load = load;
-      });
+      }]);
 
     </script>
   </body>
