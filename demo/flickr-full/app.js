@@ -20,7 +20,8 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate'])
 
     var page = 1,
         maxPages = 3,
-        term = null;
+        term = null,
+        tmpPages = [];
 
     function fetch() {
       // fetch a single result page
@@ -55,15 +56,18 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate'])
         page.tpl = 'page-' + 5 + '-' + parseInt(Math.floor(Math.random() * 4) + 1, 0);
       });
 
-      $scope.pages = $scope.pages.concat(newPages);
+
+      tmpPages = tmpPages.concat(newPages);
 
       if (page < maxPages) {
         // enable display then fetch some more pages
-        $scope.loading = false;
         page += 1;
         fetch();
+      } else {
+        $scope.pages = tmpPages;
+        $scope.loading = false;
       }
-    }
+    };
 
     $scope.toggle = function(item) {
       $scope.current = item;
@@ -73,16 +77,17 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate'])
       $timeout(function() {
         $scope.modalCls = 'open';
       }, 0);
-    }
+    };
     $scope.closeModal = function() {
       $scope.modalCls = '';
       $scope.blurred = false;
       $timeout(function() {
         $scope.showModal = false;
       }, 200);
-    }
+    };
 
     function load(kwd) {
+      tmpPages = [];
       $scope.loading = true;
       term = kwd;
       page = 1;

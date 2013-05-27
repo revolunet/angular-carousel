@@ -296,19 +296,17 @@ ul.list li.list-divider {
   display: none; }
 
 #content {
-  height: 100%; }
+  height: 100%;
+  width: 100% !important; }
 
 #content > div {
-  background-color: #ececec;
-  -webkit-box-shadow: 0px 0px 10px black;
-  -moz-box-shadow: 0px 0px 10px black;
-  box-shadow: 0px 0px 10px black; }
+  background-color: #ececec; }
 
 .loading {
-  padding-top: 20%;
-  width: 100%;
   text-align: center;
   background-color: #ececec; }
+  .loading .spacer {
+    height: 20%; }
 
 .ouro {
   position: relative;
@@ -331,19 +329,7 @@ ul.list li.list-divider {
   background: none repeat scroll 0 0 #2980b9;
   border-radius: 50%; }
 
-.ouro > span {
-  position: absolute;
-  height: 100%;
-  width: 50%;
-  overflow: hidden; }
-
-.left {
-  left: 0; }
-
-.right {
-  left: 50%; }
-
-.anim {
+.ouro .anim {
   position: absolute;
   left: 100%;
   top: 0;
@@ -356,16 +342,24 @@ ul.list li.list-divider {
   -webkit-transform-origin: 0 50% 0;
   transform-origin: 0 50% 0; }
 
-.left .anim {
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0; }
-
-.right .anim {
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  left: -100%;
-  -webkit-transform-origin: 100% 50% 0;
-  transform-origin: 100% 50% 0; }
+.ouro > span {
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  overflow: hidden; }
+  .ouro > span.left {
+    left: 0; }
+    .ouro > span.left .anim {
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0; }
+  .ouro > span.right {
+    left: 50%; }
+    .ouro > span.right .anim {
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+      left: -100%;
+      -webkit-transform-origin: 100% 50% 0;
+      transform-origin: 100% 50% 0; }
 
 @keyframes ui-spinner-rotate-right {
   0% {

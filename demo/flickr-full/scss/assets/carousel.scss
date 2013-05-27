@@ -17,10 +17,8 @@
 }
 #content {
   height: 100%;
+  width: 100% !important;
 }
 #content > div {
   background-color: $body-background-color;
-  -webkit-box-shadow: 0px 0px 10px black;
-  -moz-box-shadow: 0px 0px 10px black;
-  box-shadow: 0px 0px 10px black;
 }
