@@ -42,7 +42,7 @@ body {
     font-weight: normal;
     font-variant: normal;
     text-transform: none;
-    line-height: 1;
+    //line-height: 1;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -55,7 +55,7 @@ body {
     font-weight: normal;
     font-variant: normal;
     text-transform: none;
-    line-height: 1;
+    //line-height: 1;
     -webkit-font-smoothing: antialiased;
 }
 .icon-menu:before {
@@ -86,6 +86,7 @@ body {
     .img {
         background-size: cover;
         background-position:center;
+        background-image: url(#{$imgUrl}placeholder-img.png) no-repeat center;
         padding-right: 2px;
         display:block;
         height:100%;

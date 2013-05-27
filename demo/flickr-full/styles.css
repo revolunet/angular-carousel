@@ -36,7 +36,6 @@ body {
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
-  line-height: 1;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -50,7 +49,6 @@ body {
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
-  line-height: 1;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -86,13 +84,14 @@ body {
 .page > div .img {
   background-size: cover;
   background-position: center;
+  background-image: url(../flickr-full/img/placeholder-img.png) no-repeat center;
   padding-right: 2px;
   display: block;
   height: 100%;
   position: relative;
   z-index: 1;
 }
-/* line 95, scss/base.scss */
+/* line 96, scss/base.scss */
 .page > div .layer {
   background: rgba(224, 224, 224, 0.62);
   font-size: 1em;
@@ -107,137 +106,137 @@ body {
   z-index: 2;
 }
 
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page1 > div:nth-child(1) {
   width: 66.66%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page1 > div:nth-child(2) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page1 > div:nth-child(3) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page1 > div:nth-child(4) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page1 > div:nth-child(5) {
   width: 33.33%;
   height: 50%;
 }
 
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page2 > div:nth-child(1) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page2 > div:nth-child(2) {
   width: 66.66%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page2 > div:nth-child(3) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page2 > div:nth-child(4) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page2 > div:nth-child(5) {
   width: 33.33%;
   height: 50%;
 }
 
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page3 > div:nth-child(1) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page3 > div:nth-child(2) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page3 > div:nth-child(3) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page3 > div:nth-child(4) {
   width: 66.66%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page3 > div:nth-child(5) {
   width: 33.33%;
   height: 50%;
 }
 
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page4 > div:nth-child(1) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page4 > div:nth-child(2) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page4 > div:nth-child(3) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page4 > div:nth-child(4) {
   width: 33.33%;
   height: 50%;
 }
-/* line 117, scss/base.scss */
+/* line 118, scss/base.scss */
 .page4 > div:nth-child(5) {
   width: 66.66%;
   height: 50%;
 }
 
-/* line 142, scss/base.scss */
+/* line 143, scss/base.scss */
 .hide-top-from-bottom {
   height: 0 !important;
   padding: 0 !important;
 }
 
-/* line 146, scss/base.scss */
+/* line 147, scss/base.scss */
 .hide-top-from-top {
   height: 100% !important;
   width: 0 !important;
   padding: 0 !important;
 }
 
-/* line 151, scss/base.scss */
+/* line 152, scss/base.scss */
 .hide-bottom-from-top {
   height: 0 !important;
   padding: 0 !important;
 }
 
-/* line 155, scss/base.scss */
+/* line 156, scss/base.scss */
 .hide-bottom-from-bottom {
   height: 100% !important;
   width: 0 !important;
   padding: 0 !important;
 }
 
-/* line 160, scss/base.scss */
+/* line 161, scss/base.scss */
 .maximize {
   width: 100% !important;
   height: 100% !important;
@@ -402,12 +401,13 @@ ul.list li {
 ul.list li.close {
   text-align: center;
   height: 49px;
-  padding: 49px;
+  line-height: 49px;
+  padding: 0;
   border-bottom: none;
   background-color: #2980b9;
 }
 
-/* line 53, scss/assets/navigation.scss */
+/* line 54, scss/assets/navigation.scss */
 ul.list li.list-divider {
   font-family: "Andika", sans-serif;
   background: #558ead;
@@ -420,7 +420,7 @@ ul.list li.list-divider {
   padding: 12px 5px;
 }
 
-/* line 64, scss/assets/navigation.scss */
+/* line 65, scss/assets/navigation.scss */
 .loading {
   width: 100%;
   height: 100%;
@@ -428,7 +428,7 @@ ul.list li.list-divider {
   font-size: 22px;
 }
 
-/* line 70, scss/assets/navigation.scss */
+/* line 71, scss/assets/navigation.scss */
 .ngSnap-shelf {
   overflow-x: hidden;
 }
@@ -464,197 +464,130 @@ ul.list li.list-divider {
   box-shadow: 0px 0px 10px black;
 }
 
-/* loader */
-/* line 2, scss/assets/loader.scss */
-#floatingCirclesG {
-  margin: auto;
+/* line 8, scss/assets/loader.scss */
+.loading {
+  padding-top: 20%;
+  text-align: center;
+  background-color: #ececec;
+}
+
+/* line 13, scss/assets/loader.scss */
+.ouro {
   position: relative;
-  width: 128px;
-  height: 128px;
-  -moz-transform: scale(0.6);
-  -webkit-transform: scale(0.6);
-  -ms-transform: scale(0.6);
-  -o-transform: scale(0.6);
-  transform: scale(0.6);
+  display: inline-block;
+  height: 96px;
+  width: 96px;
+  margin: 1em;
+  border-radius: 50%;
+  background: none repeat scroll 0 0 #fff;
+  overflow: hidden;
 }
 
-/* line 14, scss/assets/loader.scss */
-.f_circleG {
+/* line 25, scss/assets/loader.scss */
+.ouro:after {
+  content: "";
   position: absolute;
-  background-color: #FFFFFF;
-  height: 23px;
-  width: 23px;
-  -moz-border-radius: 12px;
-  -moz-animation-name: f_fadeG;
-  -moz-animation-duration: 1.04s;
-  -moz-animation-iteration-count: infinite;
-  -moz-animation-direction: linear;
-  -webkit-border-radius: 12px;
-  -webkit-animation-name: f_fadeG;
-  -webkit-animation-duration: 1.04s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-direction: linear;
-  -ms-border-radius: 12px;
-  -ms-animation-name: f_fadeG;
-  -ms-animation-duration: 1.04s;
-  -ms-animation-iteration-count: infinite;
-  -ms-animation-direction: linear;
-  -o-border-radius: 12px;
-  -o-animation-name: f_fadeG;
-  -o-animation-duration: 1.04s;
-  -o-animation-iteration-count: infinite;
-  -o-animation-direction: linear;
-  border-radius: 12px;
-  animation-name: f_fadeG;
-  animation-duration: 1.04s;
-  animation-iteration-count: infinite;
-  animation-direction: linear;
+  top: 20px;
+  left: 20px;
+  display: block;
+  height: 56px;
+  width: 56px;
+  background: none repeat scroll 0 0 #2980b9;
+  border-radius: 50%;
 }
 
-/* line 46, scss/assets/loader.scss */
-#frotateG_01 {
+/* line 35, scss/assets/loader.scss */
+.ouro > span {
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  overflow: hidden;
+}
+
+/* line 40, scss/assets/loader.scss */
+.left {
   left: 0;
-  top: 52px;
-  -moz-animation-delay: 0.39s;
-  -webkit-animation-delay: 0.39s;
-  -ms-animation-delay: 0.39s;
-  -o-animation-delay: 0.39s;
-  animation-delay: 0.39s;
 }
 
-/* line 56, scss/assets/loader.scss */
-#frotateG_02 {
-  left: 15px;
-  top: 15px;
-  -moz-animation-delay: 0.52s;
-  -webkit-animation-delay: 0.52s;
-  -ms-animation-delay: 0.52s;
-  -o-animation-delay: 0.52s;
-  animation-delay: 0.52s;
+/* line 41, scss/assets/loader.scss */
+.right {
+  left: 50%;
 }
 
-/* line 66, scss/assets/loader.scss */
-#frotateG_03 {
-  left: 52px;
+/* line 43, scss/assets/loader.scss */
+.anim {
+  position: absolute;
+  left: 100%;
   top: 0;
-  -moz-animation-delay: 0.65s;
-  -webkit-animation-delay: 0.65s;
-  -ms-animation-delay: 0.65s;
-  -o-animation-delay: 0.65s;
-  animation-delay: 0.65s;
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  background: none repeat scroll 0 0 #94c6e7;
+  -webkit-animation: ui-spinner-rotate-left 2s infinite;
+  animation: ui-spinner-rotate-left 2s infinite;
+  -webkit-transform-origin: 0 50% 0;
+  transform-origin: 0 50% 0;
 }
 
-/* line 76, scss/assets/loader.scss */
-#frotateG_04 {
-  right: 15px;
-  top: 15px;
-  -moz-animation-delay: 0.78s;
-  -webkit-animation-delay: 0.78s;
-  -ms-animation-delay: 0.78s;
-  -o-animation-delay: 0.78s;
-  animation-delay: 0.78s;
+/* line 55, scss/assets/loader.scss */
+.left .anim {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
 }
 
-/* line 86, scss/assets/loader.scss */
-#frotateG_05 {
-  right: 0;
-  top: 52px;
-  -moz-animation-delay: 0.91s;
-  -webkit-animation-delay: 0.91s;
-  -ms-animation-delay: 0.91s;
-  -o-animation-delay: 0.91s;
-  animation-delay: 0.91s;
+/* line 59, scss/assets/loader.scss */
+.right .anim {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  left: -100%;
+  -webkit-transform-origin: 100% 50% 0;
+  transform-origin: 100% 50% 0;
 }
 
-/* line 96, scss/assets/loader.scss */
-#frotateG_06 {
-  right: 15px;
-  bottom: 15px;
-  -moz-animation-delay: 1.04s;
-  -webkit-animation-delay: 1.04s;
-  -ms-animation-delay: 1.04s;
-  -o-animation-delay: 1.04s;
-  animation-delay: 1.04s;
-}
-
-/* line 106, scss/assets/loader.scss */
-#frotateG_07 {
-  left: 52px;
-  bottom: 0;
-  -moz-animation-delay: 1.17s;
-  -webkit-animation-delay: 1.17s;
-  -ms-animation-delay: 1.17s;
-  -o-animation-delay: 1.17s;
-  animation-delay: 1.17s;
-}
-
-/* line 116, scss/assets/loader.scss */
-#frotateG_08 {
-  left: 15px;
-  bottom: 15px;
-  -moz-animation-delay: 1.3s;
-  -webkit-animation-delay: 1.3s;
-  -ms-animation-delay: 1.3s;
-  -o-animation-delay: 1.3s;
-  animation-delay: 1.3s;
-}
-
-@-moz-keyframes f_fadeG {
-  /* line 127, scss/assets/loader.scss */
+@keyframes ui-spinner-rotate-right {
+  /* line 69, scss/assets/loader.scss */
   0% {
-    background-color: #000000;
+    transform: rotate(0deg);
   }
 
-  /* line 130, scss/assets/loader.scss */
+  /* line 73, scss/assets/loader.scss */
   100% {
-    background-color: #FFFFFF;
+    transform: rotate(360deg);
   }
 }
 
-@-webkit-keyframes f_fadeG {
-  /* line 136, scss/assets/loader.scss */
+@keyframes ui-spinner-rotate-left {
+  /* line 76, scss/assets/loader.scss */
   0% {
-    background-color: #000000;
+    transform: rotate(0deg);
   }
 
-  /* line 139, scss/assets/loader.scss */
+  /* line 80, scss/assets/loader.scss */
   100% {
-    background-color: #FFFFFF;
+    transform: rotate(360deg);
   }
 }
 
-@-ms-keyframes f_fadeG {
-  /* line 145, scss/assets/loader.scss */
+@-webkit-keyframes ui-spinner-rotate-right {
+  /* line 84, scss/assets/loader.scss */
   0% {
-    background-color: #000000;
+    -webkit-transform: rotate(0deg);
   }
 
-  /* line 148, scss/assets/loader.scss */
+  /* line 88, scss/assets/loader.scss */
   100% {
-    background-color: #FFFFFF;
+    -webkit-transform: rotate(360deg);
   }
 }
 
-@-o-keyframes f_fadeG {
-  /* line 154, scss/assets/loader.scss */
+@-webkit-keyframes ui-spinner-rotate-left {
+  /* line 91, scss/assets/loader.scss */
   0% {
-    background-color: #000000;
+    -webkit-transform: rotate(0deg);
   }
 
-  /* line 157, scss/assets/loader.scss */
+  /* line 95, scss/assets/loader.scss */
   100% {
-    background-color: #FFFFFF;
-  }
-}
-
-@keyframes f_fadeG {
-  /* line 163, scss/assets/loader.scss */
-  0% {
-    background-color: #000000;
-  }
-
-  /* line 166, scss/assets/loader.scss */
-  100% {
-    background-color: #FFFFFF;
+    -webkit-transform: rotate(360deg);
   }
 }

@@ -45,7 +45,8 @@ ul.list li {
       &.close {
         text-align: center;
         height: $bar-title-height;
-        padding: $bar-title-height;
+        line-height: $bar-title-height;
+        padding: 0;
         border-bottom: none;
         background-color: $bar-title-color;
       }

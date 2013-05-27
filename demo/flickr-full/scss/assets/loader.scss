@@ -1,169 +1,96 @@
-    /* loader */
-    #floatingCirclesG{
-      margin:auto;
-    position:relative;
-    width:128px;
-    height:128px;
-    -moz-transform:scale(0.6);
-    -webkit-transform:scale(0.6);
-    -ms-transform:scale(0.6);
-    -o-transform:scale(0.6);
-    transform:scale(0.6);
-    }
+// ======================================================
+//                    CSS LOADER
+//             COURTESY OF @geoffrey_crofte
+//       http://codepen.io/CreativeJuiz/pen/vFBIh
+// ======================================================
 
-    .f_circleG{
-    position:absolute;
-    background-color:#FFFFFF;
-    height:23px;
-    width:23px;
-    -moz-border-radius:12px;
-    -moz-animation-name:f_fadeG;
-    -moz-animation-duration:1.04s;
-    -moz-animation-iteration-count:infinite;
-    -moz-animation-direction:linear;
-    -webkit-border-radius:12px;
-    -webkit-animation-name:f_fadeG;
-    -webkit-animation-duration:1.04s;
-    -webkit-animation-iteration-count:infinite;
-    -webkit-animation-direction:linear;
-    -ms-border-radius:12px;
-    -ms-animation-name:f_fadeG;
-    -ms-animation-duration:1.04s;
-    -ms-animation-iteration-count:infinite;
-    -ms-animation-direction:linear;
-    -o-border-radius:12px;
-    -o-animation-name:f_fadeG;
-    -o-animation-duration:1.04s;
-    -o-animation-iteration-count:infinite;
-    -o-animation-direction:linear;
-    border-radius:12px;
-    animation-name:f_fadeG;
-    animation-duration:1.04s;
-    animation-iteration-count:infinite;
-    animation-direction:linear;
-    }
 
-    #frotateG_01{
-    left:0;
-    top:52px;
-    -moz-animation-delay:0.39s;
-    -webkit-animation-delay:0.39s;
-    -ms-animation-delay:0.39s;
-    -o-animation-delay:0.39s;
-    animation-delay:0.39s;
-    }
+.loading {
+    padding-top: 20%;
+    text-align: center;
+    background-color: $body-background-color;
+}
+.ouro {
+    position: relative;
+    display:inline-block;
+    height: 96px;
+    width: 96px;
+    margin: 1em;
+    border-radius: 50%;
+    background: none repeat scroll 0 0 #fff;
+    overflow:hidden;
+    //box-shadow: 0 0 10px rgba(0,0,0,.1) inset, 0 0 25px rgba(0,0,255,0.075);
+}
 
-    #frotateG_02{
-    left:15px;
-    top:15px;
-    -moz-animation-delay:0.52s;
-    -webkit-animation-delay:0.52s;
-    -ms-animation-delay:0.52s;
-    -o-animation-delay:0.52s;
-    animation-delay:0.52s;
-    }
+.ouro:after {
+    content: "";
+    position: absolute;
+    top: 20px; left: 20px;
+    display: block;
+    height: 56px; width: 56px;
+    background: none repeat scroll 0 0 $bar-title-color;
+    border-radius: 50%;
+    //box-shadow: 0 0 5px rgba(0,0,0,.6);
+}
+.ouro > span {
+    position: absolute;
+    height: 100%; width: 50%;
+    overflow: hidden;
+}
+.left  { left:0   }
+.right { left:50% }
 
-    #frotateG_03{
-    left:52px;
-    top:0;
-    -moz-animation-delay:0.65s;
-    -webkit-animation-delay:0.65s;
-    -ms-animation-delay:0.65s;
-    -o-animation-delay:0.65s;
-    animation-delay:0.65s;
-    }
+.anim {
+    position: absolute;
+    left: 100%; top: 0;
+    height: 100%; width: 100%;
+    border-radius: 999px;
+    background: none repeat scroll 0 0 lighten($bar-title-color, 30%);
+    //opacity: 0.8;
+    -webkit-animation: ui-spinner-rotate-left 2s infinite;
+    animation: ui-spinner-rotate-left 2s infinite;
+    -webkit-transform-origin: 0 50% 0;
+    transform-origin: 0 50% 0;
+}
+.left .anim {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
+.right .anim {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    left: -100%;
+    -webkit-transform-origin: 100% 50% 0;
+    transform-origin: 100% 50% 0;
+}
 
-    #frotateG_04{
-    right:15px;
-    top:15px;
-    -moz-animation-delay:0.78s;
-    -webkit-animation-delay:0.78s;
-    -ms-animation-delay:0.78s;
-    -o-animation-delay:0.78s;
-    animation-delay:0.78s;
-    }
 
-    #frotateG_05{
-    right:0;
-    top:52px;
-    -moz-animation-delay:0.91s;
-    -webkit-animation-delay:0.91s;
-    -ms-animation-delay:0.91s;
-    -o-animation-delay:0.91s;
-    animation-delay:0.91s;
-    }
+@keyframes ui-spinner-rotate-right{
+  0%{transform:rotate(0deg)}
+  //25%{transform:rotate(180deg)}
+  //50%{transform:rotate(180deg)}
+  //75%{transform:rotate(360deg)}
+  100%{transform:rotate(360deg)}
+}
+@keyframes ui-spinner-rotate-left{
+  0%{transform:rotate(0deg)}
+  //25%{transform:rotate(0deg)}
+  //50%{transform:rotate(180deg)}
+  //75%{transform:rotate(180deg)}
+  100%{transform:rotate(360deg)}
+}
 
-    #frotateG_06{
-    right:15px;
-    bottom:15px;
-    -moz-animation-delay:1.04s;
-    -webkit-animation-delay:1.04s;
-    -ms-animation-delay:1.04s;
-    -o-animation-delay:1.04s;
-    animation-delay:1.04s;
-    }
-
-    #frotateG_07{
-    left:52px;
-    bottom:0;
-    -moz-animation-delay:1.17s;
-    -webkit-animation-delay:1.17s;
-    -ms-animation-delay:1.17s;
-    -o-animation-delay:1.17s;
-    animation-delay:1.17s;
-    }
-
-    #frotateG_08{
-    left:15px;
-    bottom:15px;
-    -moz-animation-delay:1.3s;
-    -webkit-animation-delay:1.3s;
-    -ms-animation-delay:1.3s;
-    -o-animation-delay:1.3s;
-    animation-delay:1.3s;
-    }
-
-    @-moz-keyframes f_fadeG{
-    0%{
-    background-color:#000000}
-
-    100%{
-    background-color:#FFFFFF}
-
-    }
-
-    @-webkit-keyframes f_fadeG{
-    0%{
-    background-color:#000000}
-
-    100%{
-    background-color:#FFFFFF}
-
-    }
-
-    @-ms-keyframes f_fadeG{
-    0%{
-    background-color:#000000}
-
-    100%{
-    background-color:#FFFFFF}
-
-    }
-
-    @-o-keyframes f_fadeG{
-    0%{
-    background-color:#000000}
-
-    100%{
-    background-color:#FFFFFF}
-
-    }
-
-    @keyframes f_fadeG{
-    0%{
-    background-color:#000000}
-
-    100%{
-    background-color:#FFFFFF}
-
-    }
+@-webkit-keyframes ui-spinner-rotate-right{
+  0%{-webkit-transform:rotate(0deg)}
+  //25%{-webkit-transform:rotate(180deg)}
+  //50%{-webkit-transform:rotate(180deg)}
+  //75%{-webkit-transform:rotate(360deg)}
+  100%{-webkit-transform:rotate(360deg)}
+}
+@-webkit-keyframes ui-spinner-rotate-left{
+  0%{-webkit-transform:rotate(0deg)}
+  //25%{-webkit-transform:rotate(0deg)}
+  //50%{-webkit-transform:rotate(180deg)}
+  //75%{-webkit-transform:rotate(180deg)}
+  100%{-webkit-transform:rotate(360deg)}
+}
