@@ -84,7 +84,7 @@ body {
 .page > div .img {
   background-size: cover;
   background-position: center;
-  background-image: url(../flickr-full/img/placeholder-img.png) no-repeat center;
+  background: url(../flickr-full/img/placeholder-img.png) no-repeat cover;
   padding-right: 2px;
   display: block;
   height: 100%;
@@ -454,10 +454,9 @@ ul.list li.list-divider {
 /* line 17, scss/assets/carousel.scss */
 #content {
   height: 100%;
-  width: 100%;
 }
 
-/* line 21, scss/assets/carousel.scss */
+/* line 20, scss/assets/carousel.scss */
 #content > div {
   background-color: #ececec;
   -webkit-box-shadow: 0px 0px 10px black;

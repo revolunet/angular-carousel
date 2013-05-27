@@ -86,7 +86,7 @@ body {
     .img {
         background-size: cover;
         background-position:center;
-        background-image: url(#{$imgUrl}placeholder-img.png) no-repeat center;
+        background: url(#{$imgUrl}placeholder-img.png) no-repeat cover;
         padding-right: 2px;
         display:block;
         height:100%;
