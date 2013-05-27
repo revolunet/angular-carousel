@@ -49,9 +49,10 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate'])
       // add to existing data
       $scope.pics = $scope.pics.concat(newPics);
 
+      // distribute pages with 2, 3, 4, 5 items and choose tp accordingly
       var newPages = partition(newPics, 5);
       angular.forEach(newPages, function(page) {
-        page.tpl = Math.floor(Math.random() * 4) + 1;
+        page.tpl = 'page-' + 5 + '-' + parseInt(Math.floor(Math.random() * 4) + 1, 0);
       });
 
       $scope.pages = $scope.pages.concat(newPages);

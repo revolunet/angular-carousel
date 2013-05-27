@@ -132,15 +132,15 @@ body {
 }
 
 // 4 simple combinations
-.page1 > div {
+.page-5-1 > div {
     @include  fullpage5(1);
 }
-.page2 > div {
+.page-5-2 > div {
     @include  fullpage5(2);
 }
-.page3 > div {
+.page-5-3 > div {
     @include  fullpage5(4);
 }
-.page4 > div {
+.page-5-4 > div {
     @include  fullpage5(5);
 }

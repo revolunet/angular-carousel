@@ -6,6 +6,9 @@
     <link href='./styles.css' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Andika&subset=latin" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="revo gallery">
+    <title>revolunet Flickr Gallery</title>
   </head>
   <body ng-app="myApp" ng-controller='demoController'>
 
@@ -37,7 +40,7 @@
         </a>
         <h1 class="title">AngularJS Carousel + Flickr demo</h1>
         <a class="button" href="http://github.com/revolunet/angular-carousel">
-          <span aria-hidden="true" class="icon-help"></span>
+          <span aria-hidden="true" class="icon-help">?</span>
         </a>
       </header>
 
@@ -50,7 +53,7 @@
 
       <ul rn-carousel rn-carousel-buffered class="page-container" ng-class="{blurred: blurred}">
         <li ng-repeat="page in pages">
-          <div class="page page{{ page.tpl }}" ng-class="{active: ($index == activeIndex) }">
+          <div class="page {{ page.tpl }}" ng-class="{active: ($index == activeIndex) }">
             <div ng-repeat="item in page" ng-click="toggle(item)" ng-class="item.cls">
               <div class="img" ng-style="{'background-image': 'url(\'' + item.image + '_n.jpg\')'}">
                 <div class="layer">{{ item.title|words:10 }}</div>
@@ -60,7 +63,7 @@
         </li>
       </ul>
 
-      <div id="modal" ng-show="showModal" class="ng-cloak" ng-class="modalCls" ng-style="{'background-image': 'url(\'' + current.image + '_b.jpg\')'}">
+      <div id="modal" ng-show="showModal" class="ng-cloak" ng-class="modalCls" ng-style="{'background-image': 'url(\'' + current.image + '_c.jpg\')'}">
           <div class="closebtn" ng-click="closeModal()">X</div>
           <div class="title">{{ current.title }}</div>
       </div>
