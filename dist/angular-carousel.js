@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.8 - 2013-05-25
+ * @version v0.0.8 - 2013-05-27
  * @link http://revolunet.com.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -204,14 +204,14 @@ angular.module('angular-carousel', ['ngMobile'])
               /* ensure buffer start never reduces buffer and is never negative */
               scope.carouselBufferStart = Math.max(0, Math.min(scope.carouselBufferStart, slidesCount - scope.carouselBufferSize));
             }
-            var carouselOffset = scope.totalIndex * -containerWidth;
+            offset = scope.totalIndex * -containerWidth;
             if (skipAnimation===true) {
                 carousel.addClass('rn-carousel-noanimate')
-                    .css(translateSlideproperty(carouselOffset));
+                    .css(translateSlideproperty(offset));
             } else {
                 carousel.removeClass('rn-carousel-noanimate')
                     .addClass('rn-carousel-animate')
-                    .css(translateSlideproperty(carouselOffset));
+                    .css(translateSlideproperty(offset));
             }
             initialPosition = false;
           };

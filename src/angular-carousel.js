@@ -197,14 +197,14 @@ angular.module('angular-carousel', ['ngMobile'])
               /* ensure buffer start never reduces buffer and is never negative */
               scope.carouselBufferStart = Math.max(0, Math.min(scope.carouselBufferStart, slidesCount - scope.carouselBufferSize));
             }
-            var carouselOffset = scope.totalIndex * -containerWidth;
+            offset = scope.totalIndex * -containerWidth;
             if (skipAnimation===true) {
                 carousel.addClass('rn-carousel-noanimate')
-                    .css(translateSlideproperty(carouselOffset));
+                    .css(translateSlideproperty(offset));
             } else {
                 carousel.removeClass('rn-carousel-noanimate')
                     .addClass('rn-carousel-animate')
-                    .css(translateSlideproperty(carouselOffset));
+                    .css(translateSlideproperty(offset));
             }
             initialPosition = false;
           };
