@@ -18,11 +18,6 @@ function partition(items, size) {
 angular.module('myApp', ['angular-carousel', 'snap', 'truncate'])
   .controller('demoController', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
 
-    // use object so we dont have the infamous duplicate property with inherited scopes
-    $scope.carouselData = {
-      index: 0
-    };
-
     var page = 1,
         maxPages = 3,
         term = null,
@@ -92,14 +87,13 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate'])
     };
 
     function load(kwd) {
+      if ($scope.showModal) $scope.closeModal();
       tmpPages = [];
       $scope.loading = true;
       term = kwd;
       page = 1;
       $scope.pics = [];
       $scope.pages = [];
-      // restore carousel position
-      $scope.carouselData.index = 0;
       fetch();
     }
 

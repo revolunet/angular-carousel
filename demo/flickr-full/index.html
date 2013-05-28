@@ -52,7 +52,7 @@
           </span>
       </div>
 
-      <ul rn-carousel rn-carousel-index="carouselData.index" rn-carousel-buffered class="page-container" ng-class="{blurred: blurred}">
+      <ul rn-carousel rn-carousel-buffered class="page-container" ng-class="{blurred: blurred}">
         <li ng-repeat="page in pages">
           <div class="page {{ page.tpl }}" ng-class="{active: ($index == activeIndex) }">
             <div ng-repeat="item in page" ng-click="toggle(item)" ng-class="item.cls">
