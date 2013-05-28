@@ -9,18 +9,13 @@ html, body {
 /* line 12, scss/base.scss */
 body {
   margin: 0;
-  background: #ececec;
+  background: #ecf0f1;
   color: white;
   font-family: "Andika", sans-serif;
   overflow-y: hidden;
 }
 
 /* line 19, scss/base.scss */
-p {
-  margin: 0;
-}
-
-/* line 22, scss/base.scss */
 * {
   -webkit-user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -34,7 +29,7 @@ p {
   font-style: normal;
 }
 
-/* line 43, scss/base.scss */
+/* line 40, scss/base.scss */
 [data-icon]:before {
   font-family: 'icomoon';
   content: attr(data-icon);
@@ -45,7 +40,7 @@ p {
   -webkit-font-smoothing: antialiased;
 }
 
-/* line 54, scss/base.scss */
+/* line 51, scss/base.scss */
 .icon-menu, .icon-cancel {
   font-family: 'icomoon';
   color: white;
@@ -58,25 +53,25 @@ p {
   -webkit-font-smoothing: antialiased;
 }
 
-/* line 66, scss/base.scss */
+/* line 63, scss/base.scss */
 .icon-menu:before {
   display: inline-block;
   content: "\e000";
 }
 
-/* line 70, scss/base.scss */
+/* line 67, scss/base.scss */
 .icon-cancel:before {
   content: "\e001";
 }
 
-/* line 74, scss/base.scss */
+/* line 71, scss/base.scss */
 .icon-help {
   font-size: 1.3em;
   display: inline-block;
   margin-right: 20px;
 }
 
-/* line 85, scss/base.scss */
+/* line 82, scss/base.scss */
 .page {
   position: relative;
   width: 100%;
@@ -84,30 +79,31 @@ p {
   overflow: hidden;
 }
 
-/* line 92, scss/base.scss */
+/* line 89, scss/base.scss */
 .page > div {
   float: left;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   overflow: hidden;
 }
-/* line 97, scss/base.scss */
+/* line 94, scss/base.scss */
 .page > div .img {
   background-size: cover;
   background-position: center;
+  background-image: url(../flickr-full/img/placeholder-img.svg);
   padding-right: 2px;
   display: block;
   height: 100%;
   position: relative;
   z-index: 1;
 }
-/* line 107, scss/base.scss */
-.page > div .layer {
+/* line 104, scss/base.scss */
+.page > div .caption {
   background: rgba(224, 224, 224, 0.62);
   font-size: 1em;
   padding: 5px;
   line-height: 1.3em;
-  color: #111;
+  color: #111111;
   position: absolute;
   width: 100%;
   bottom: 0px;
@@ -116,110 +112,110 @@ p {
   z-index: 2;
 }
 
-/* line 124, scss/base.scss */
+/* line 120, scss/base.scss */
 .blurred {
   -webkit-filter: blur(10px);
 }
 
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-1 > div:nth-child(1) {
   width: 66.66%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-1 > div:nth-child(2) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-1 > div:nth-child(3) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-1 > div:nth-child(4) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-1 > div:nth-child(5) {
   width: 33.33%;
   height: 50%;
 }
 
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-2 > div:nth-child(1) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-2 > div:nth-child(2) {
   width: 66.66%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-2 > div:nth-child(3) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-2 > div:nth-child(4) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-2 > div:nth-child(5) {
   width: 33.33%;
   height: 50%;
 }
 
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-3 > div:nth-child(1) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-3 > div:nth-child(2) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-3 > div:nth-child(3) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-3 > div:nth-child(4) {
   width: 66.66%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-3 > div:nth-child(5) {
   width: 33.33%;
   height: 50%;
 }
 
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-4 > div:nth-child(1) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-4 > div:nth-child(2) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-4 > div:nth-child(3) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-4 > div:nth-child(4) {
   width: 33.33%;
   height: 50%;
 }
-/* line 134, scss/base.scss */
+/* line 130, scss/base.scss */
 .page-5-4 > div:nth-child(5) {
   width: 66.66%;
   height: 50%;
@@ -344,7 +340,7 @@ p {
   right: 0;
 }
 
-/* line 31, scss/assets/navigation.scss */
+/* line 30, scss/assets/navigation.scss */
 ul.list {
   background-color: #333;
   font-size: 0.8em;
@@ -353,38 +349,38 @@ ul.list {
   width: 200px !important;
 }
 
-/* line 38, scss/assets/navigation.scss */
+/* line 37, scss/assets/navigation.scss */
 ul.list li {
   font-family: "Arvo", sans-serif;
   padding: 15px;
-  background-color: #ececec;
-  border-bottom: 1px solid #f6f6f6;
-  color: #2980b9;
+  background-color: #ecf0f1;
+  border-bottom: 1px solid #f8f9fa;
+  color: #111111;
 }
-/* line 45, scss/assets/navigation.scss */
+/* line 44, scss/assets/navigation.scss */
 ul.list li.close {
   text-align: center;
   height: 49px;
   line-height: 49px;
+  background-color: #2980b9;
   padding: 0;
   border-bottom: none;
-  background-color: #2980b9;
 }
 
-/* line 54, scss/assets/navigation.scss */
+/* line 53, scss/assets/navigation.scss */
 ul.list li.list-divider {
   font-family: "Andika", sans-serif;
-  background: #558ead;
+  background: #236fa0;
+  color: white;
+  font-size: 1.3em;
+  padding: 8px 5px;
+  text-transform: uppercase;
   -webkit-box-shadow: 0 8px 6px -6px black;
   -moz-box-shadow: 0 8px 6px -6px black;
   box-shadow: 0 8px 6px -6px black;
-  font-size: 1.3em;
-  color: white;
-  text-transform: uppercase;
-  padding: 12px 5px;
 }
 
-/* line 65, scss/assets/navigation.scss */
+/* line 64, scss/assets/navigation.scss */
 .loading {
   width: 100%;
   height: 100%;
@@ -392,12 +388,83 @@ ul.list li.list-divider {
   font-size: 22px;
 }
 
-/* line 71, scss/assets/navigation.scss */
+/* line 70, scss/assets/navigation.scss */
 .ngSnap-shelf {
   overflow-x: hidden;
 }
 
+/*
+generic styles applied to any carousel
+must be ul/li
+*/
 /* line 5, scss/assets/carousel.scss */
+.rn-carousel-container {
+  overflow: hidden;
+}
+
+/* line 8, scss/assets/carousel.scss */
+ul.rn-carousel-slides {
+  position: relative;
+  white-space: nowrap;
+  overflow: visible;
+  -webkit-transform: translate3d(0px, 0, 0);
+  -moz-transform: translate3d(0px, 0, 0);
+  transform: translate3d(0px, 0, 0);
+  padding: 0;
+  margin: 0;
+}
+
+/* line 18, scss/assets/carousel.scss */
+ul.rn-carousel-slides li {
+  white-space: normal;
+  vertical-align: top;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* line 27, scss/assets/carousel.scss */
+.rn-carousel-animate {
+  -webkit-transition: -webkit-transform .2s ease-out;
+  -moz-transition: -moz-transform .2s ease-out;
+  transition: transform .2s ease-out;
+}
+
+/* line 32, scss/assets/carousel.scss */
+.rn-carousel-noanimate {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+
+/* line 39, scss/assets/carousel.scss */
+.rn-carousel-indicator {
+  width: 100%;
+  text-align: center;
+  position: relative;
+  bottom: 20px;
+  height: 20px;
+  background-color: black;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* line 48, scss/assets/carousel.scss */
+.rn-carousel-indicator span {
+  padding: 0 5px;
+  color: #333;
+  transition: color .2s ease-out;
+}
+
+/* line 53, scss/assets/carousel.scss */
+.rn-carousel-indicator span.active {
+  color: white;
+}
+
+/* line 62, scss/assets/carousel.scss */
 .rn-carousel-container {
   position: absolute;
   top: 45px;
@@ -405,32 +472,32 @@ ul.list li.list-divider {
   width: 100% !important;
 }
 
-/* line 11, scss/assets/carousel.scss */
+/* line 68, scss/assets/carousel.scss */
 .rn-carousel-slides {
   height: 100%;
   transition: -webkit-filter 0.3s ease-in !important;
 }
 
-/* line 15, scss/assets/carousel.scss */
+/* line 72, scss/assets/carousel.scss */
 .ng-cloak {
   display: none;
 }
 
-/* line 18, scss/assets/carousel.scss */
+/* line 75, scss/assets/carousel.scss */
 #content {
   height: 100%;
   width: 100% !important;
 }
 
-/* line 22, scss/assets/carousel.scss */
+/* line 79, scss/assets/carousel.scss */
 #content > div {
-  background-color: #ececec;
+  background-color: #ecf0f1;
 }
 
 /* line 8, scss/assets/loader.scss */
 .loading {
   text-align: center;
-  background-color: #ececec;
+  background-color: #ecf0f1;
 }
 /* line 11, scss/assets/loader.scss */
 .loading .spacer {

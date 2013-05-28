@@ -16,9 +16,6 @@ body {
   font-family: $main-font;
   overflow-y:hidden;
 }
-p {
-    margin: 0;
-}
 * {
   -webkit-user-select: none;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -97,20 +94,19 @@ p {
     .img {
         background-size: cover;
         background-position:center;
-
+        background-image: url(#{$imgUrl}placeholder-img.svg);
         padding-right: 2px;
         display:block;
         height:100%;
         position:relative;
         z-index:1;
     }
-    .layer {
-        background: rgba(224, 224, 224, 0.62);
-        //border-top: 1px solid $bar-title-color;
+    .caption {
+        background:$img-caption-background-color;
         font-size: 1em;
         padding:5px;
         line-height: 1.3em;
-        color:#111;
+        color:$img-caption-color;
         position:absolute;
         width: 100%;
         bottom:0px;

@@ -57,7 +57,7 @@
           <div class="page {{ page.tpl }}" ng-class="{active: ($index == activeIndex) }">
             <div ng-repeat="item in page" ng-click="toggle(item)" ng-class="item.cls">
               <div class="img" ng-style="{'background-image': 'url(\'' + item.image + '_n.jpg\')'}">
-                <div class="layer">{{ item.title|words:10 }}</div>
+                <div class="caption">{{ item.title|words:10 }}</div>
               </div>
             </div>
           </div>
@@ -80,7 +80,6 @@
     <script src="./snap.js"></script>
 
     <script src="../../src/angular-carousel.js"></script>
-    <link href='../../src/angular-carousel.css' rel='stylesheet' type='text/css'>
 
     <script src="./app.js"></script>
 

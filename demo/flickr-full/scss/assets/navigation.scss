@@ -27,7 +27,6 @@
 .ngSnap .ngSnap-shelf.right {
   right: 0;
 }
-
 ul.list {
   background-color: #333;
   font-size: 0.8em;
@@ -36,38 +35,38 @@ ul.list {
   width:200px !important;
 }
 ul.list li {
-      font-family: $alt-font;
-      padding:15px;
-      background-color: $items-background-color;
-      border-bottom: 1px solid $items-border-bottom-color;
-      // border-top: 1px solid $lists-border-top-color;
-      color: $items-font-color;
-      &.close {
-        text-align: center;
-        height: $bar-title-height;
-        line-height: $bar-title-height;
-        padding: 0;
-        border-bottom: none;
-        background-color: $bar-title-color;
-      }
-    }
-    ul.list li.list-divider {
-      font-family: $main-font;
-      background: $list-divider-background-color;
-      -webkit-box-shadow: 0 8px 6px -6px black;
-      -moz-box-shadow: 0 8px 6px -6px black;
-      box-shadow: 0 8px 6px -6px black;
-      font-size: 1.3em;
-      color: $list-divider-font-color;
-      text-transform: uppercase;
-      padding:12px 5px;
-    }
-    .loading {
-      width:100%;
-      height:100%;
-      background: #333;
-      font-size:22px;
-    }
-    .ngSnap-shelf {
-      overflow-x: hidden;
-    }
+  font-family: $alt-font;
+  padding:$items-padding;
+  background-color: $items-background-color;
+  border-bottom: 1px solid $items-border-bottom-color;
+  // border-top: 1px solid $lists-border-top-color;
+  color: $items-font-color;
+  &.close {
+    text-align: center;
+    height: $bar-title-height;
+    line-height: $bar-title-height;
+    background-color: $bar-title-color;
+    padding: 0;
+    border-bottom: none;
+  }
+}
+ul.list li.list-divider {
+  font-family: $main-font;
+  background: $list-divider-background-color;
+  color: $list-divider-font-color;
+  font-size: $list-divider-font-size;
+  padding:$list-divider-padding;
+  text-transform: uppercase;
+  -webkit-box-shadow: 0 8px 6px -6px black;
+    -moz-box-shadow: 0 8px 6px -6px black;
+    box-shadow: 0 8px 6px -6px black;
+}
+.loading {
+  width:100%;
+  height:100%;
+  background: #333;
+  font-size:22px;
+}
+.ngSnap-shelf {
+  overflow-x: hidden;
+}
