@@ -86,7 +86,7 @@
 .bar-title [class*="button"].pull-right {
   position: absolute;
   top: 5px;
-  right: 5px;
+  right: $bar-title-padding;
 }
 
 /* Override standard button active states */

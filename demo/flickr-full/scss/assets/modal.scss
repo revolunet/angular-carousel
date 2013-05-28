@@ -3,7 +3,7 @@
     transition: all 0.5s ease-out;
     -webkit-transition: all 0.5s ease-out;
     position:absolute;
-    top:45px;
+    top:$bar-title-height;
     bottom:0px;
     box-sizing:border-box;
     background-color:rgba(255,255,255,0.8);
@@ -14,26 +14,40 @@
     box-shadow: 5px 5px 5px rgba(50,50,50,0.5);
     color:black;
     padding:0;
-    margin:auto 5%;
-    width:90%;
-    height:80%;
+    //margin:auto 5%;
+    margin:0 auto;
+    width:100%;
+    height:90%;
+    p {
+        margin: 0;
+        width: 90%;       // avoid linebreak
+        height: 100%;     // on long description
+        overflow: hidden; // -------------------
+        float: left;
+        font-size: .8em;
+    }
     .closebtn {
-        text-align:center;
-        position:absolute;
-        right:0px;
-        width:50px;
-        font-size:2.5em;
-        color: lighten($base-color, 0);
+        float:right;
+        //position:absolute;
+        //right:0px;
+        //width:50px;
+        font-weight: bold;
+        font-size:1.3em;
+        color: darken($base-color, 20%);
+        &:hover {
+            cursor: pointer;
+        };
     }
     .title {
-        background:rgba(255,255,255,0.8);
-        padding: 10px;
+        background:rgba(255,255,255,0.9);
+        height: $bar-title-height - 10;
+        line-height: $bar-title-height - 10;
         color: #333;
-        font-size: 1.5em;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 1em;
         font-weight: bold;
         border-bottom:1px solid #ddd;
-        padding-bottom:10px;
-        padding-right:40px;
         box-sizing:border-box;
     }
     &.open {

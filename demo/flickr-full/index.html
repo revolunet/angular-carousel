@@ -65,8 +65,10 @@
       </ul>
 
       <div id="modal" ng-show="showModal" class="ng-cloak" ng-class="modalCls" ng-style="{'background-image': 'url(\'' + current.image + '_c.jpg\')'}">
-          <div class="closebtn" ng-click="closeModal()">X</div>
-          <div class="title">{{ current.title }}</div>
+          <div class="title">
+            <p>{{ current.title }}</p>
+            <span class="closebtn" ng-click="closeModal()">X</span>
+          </div>
       </div>
 
     </div>

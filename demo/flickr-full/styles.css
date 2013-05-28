@@ -1,27 +1,40 @@
+/* line 6, scss/base.scss */
 html, body {
   width: 100%;
   height: 100%;
   padding: 0;
-  margin: 0; }
+  margin: 0;
+}
 
+/* line 12, scss/base.scss */
 body {
   margin: 0;
   background: #ececec;
   color: white;
-  font-family: 'Andika', sans-serif;
-  overflow-y: hidden; }
+  font-family: "Andika", sans-serif;
+  overflow-y: hidden;
+}
 
+/* line 19, scss/base.scss */
+p {
+  margin: 0;
+}
+
+/* line 22, scss/base.scss */
 * {
   -webkit-user-select: none;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
 
 @font-face {
   font-family: 'icomoon';
   src: url(../flickr-full/font/icomoon.eot);
-  src: url(#{$fontUrl}icomoon.eot?#iefix) format('embedded-opentype'), url(../flickr-full/font/icomoon.woff) format('woff'), url(../flickr-full/font/icomoon.ttf) format('truetype'), url(#{$fontUrl}icomoon.svg#icomoon) format('svg');
+  src: url(../flickr-full/font/icomoon.eot?#iefix) format("embedded-opentype"), url(../flickr-full/font/icomoon.woff) format("woff"), url(../flickr-full/font/icomoon.ttf) format("truetype"), url(../flickr-full/font/icomoon.svg#icomoon) format("svg");
   font-weight: normal;
-  font-style: normal; }
+  font-style: normal;
+}
 
+/* line 43, scss/base.scss */
 [data-icon]:before {
   font-family: 'icomoon';
   content: attr(data-icon);
@@ -29,8 +42,10 @@ body {
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
-  -webkit-font-smoothing: antialiased; }
+  -webkit-font-smoothing: antialiased;
+}
 
+/* line 54, scss/base.scss */
 .icon-menu, .icon-cancel {
   font-family: 'icomoon';
   color: white;
@@ -40,114 +55,177 @@ body {
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
-  -webkit-font-smoothing: antialiased; }
+  -webkit-font-smoothing: antialiased;
+}
 
+/* line 66, scss/base.scss */
 .icon-menu:before {
   display: inline-block;
-  content: "\e000"; }
+  content: "\e000";
+}
 
+/* line 70, scss/base.scss */
 .icon-cancel:before {
-  content: "\e001"; }
+  content: "\e001";
+}
 
+/* line 74, scss/base.scss */
+.icon-help {
+  font-size: 1.3em;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+/* line 85, scss/base.scss */
 .page {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
+/* line 92, scss/base.scss */
 .page > div {
   float: left;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
-  overflow: hidden; }
-  .page > div .img {
-    background-size: cover;
-    background-position: center;
-    padding-right: 2px;
-    display: block;
-    height: 100%;
-    position: relative;
-    z-index: 1; }
-  .page > div .layer {
-    background: rgba(224, 224, 224, 0.62);
-    font-size: 1em;
-    padding: 5px;
-    line-height: 1.3em;
-    color: #111;
-    position: absolute;
-    width: 100%;
-    bottom: 0px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    z-index: 2; }
+  overflow: hidden;
+}
+/* line 97, scss/base.scss */
+.page > div .img {
+  background-size: cover;
+  background-position: center;
+  padding-right: 2px;
+  display: block;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+/* line 107, scss/base.scss */
+.page > div .layer {
+  background: rgba(224, 224, 224, 0.62);
+  font-size: 1em;
+  padding: 5px;
+  line-height: 1.3em;
+  color: #111;
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  z-index: 2;
+}
 
+/* line 124, scss/base.scss */
 .blurred {
-  -webkit-filter: blur(10px); }
+  -webkit-filter: blur(10px);
+}
 
+/* line 134, scss/base.scss */
 .page-5-1 > div:nth-child(1) {
   width: 66.66%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-1 > div:nth-child(2) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-1 > div:nth-child(3) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-1 > div:nth-child(4) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-1 > div:nth-child(5) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
 
+/* line 134, scss/base.scss */
 .page-5-2 > div:nth-child(1) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-2 > div:nth-child(2) {
   width: 66.66%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-2 > div:nth-child(3) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-2 > div:nth-child(4) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-2 > div:nth-child(5) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
 
+/* line 134, scss/base.scss */
 .page-5-3 > div:nth-child(1) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-3 > div:nth-child(2) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-3 > div:nth-child(3) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-3 > div:nth-child(4) {
   width: 66.66%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-3 > div:nth-child(5) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
 
+/* line 134, scss/base.scss */
 .page-5-4 > div:nth-child(1) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-4 > div:nth-child(2) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-4 > div:nth-child(3) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-4 > div:nth-child(4) {
   width: 33.33%;
-  height: 50%; }
+  height: 50%;
+}
+/* line 134, scss/base.scss */
 .page-5-4 > div:nth-child(5) {
   width: 66.66%;
-  height: 50%; }
+  height: 50%;
+}
 
+/* line 6, scss/assets/title-bar.scss */
 [class*="bar-"] {
   position: fixed;
   right: 0;
@@ -155,11 +233,13 @@ body {
   z-index: 10;
   height: 49px;
   padding: 5px;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 /* Title bar
 -------------------------------------------------- */
 /* Bar docked to top of viewport for showing page title and actions */
+/* line 20, scss/assets/title-bar.scss */
 .bar-title {
   top: 0;
   display: -webkit-box;
@@ -168,9 +248,11 @@ body {
   background: #2980b9;
   box-shadow: inset 0 1px 1px -1px rgba(255, 255, 255, 0.8);
   -webkit-box-orient: horizontal;
-  box-orient: horizontal; }
+  box-orient: horizontal;
+}
 
 /* Centered text in the .bar-title */
+/* line 32, scss/assets/title-bar.scss */
 .bar-title .title {
   position: absolute;
   top: 0;
@@ -182,18 +264,24 @@ body {
   line-height: 24.5px;
   color: white;
   text-align: center;
-  white-space: nowrap; }
+  white-space: nowrap;
+}
 
+/* line 51, scss/assets/title-bar.scss */
 .bar-title > a:not([class*="button"]) {
   display: block;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+}
 
 /* Retain specified title color */
+/* line 58, scss/assets/title-bar.scss */
 .bar-title .title a {
-  color: inherit; }
+  color: inherit;
+}
 
 /* Generic style for all buttons in .bar-title */
+/* line 63, scss/assets/title-bar.scss */
 .bar-title [class*="button"] {
   position: relative;
   text-decoration: none;
@@ -204,25 +292,37 @@ body {
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
   -webkit-box-flex: 0;
-  box-flex: 0; }
+  box-flex: 0;
+}
 
 /* Hacky way to right align buttons outside of flex-box system
    Note: is only absolutely positioned button, would be better if flex-box had an "align right" option */
-.bar-title .title + [class*="button"]:last-child, .bar-title .button + [class*="button"]:last-child, .bar-title [class*="button"].pull-right {
+/* line 86, scss/assets/title-bar.scss */
+.bar-title .title + [class*="button"]:last-child,
+.bar-title .button + [class*="button"]:last-child,
+.bar-title [class*="button"].pull-right {
   position: absolute;
   top: 5px;
-  right: 5px; }
+  right: 5px;
+}
 
 /* Override standard button active states */
+/* line 93, scss/assets/title-bar.scss */
 .bar-title .button:active {
   color: #fff;
-  background-color: #0876b1; }
+  background-color: #0876b1;
+}
 
-.ngSnap.ngSnap-content, .ngSnap.ngSnap-shelves, .ngSnap .ngSnap-shelf {
+/* line 7, scss/assets/navigation.scss */
+.ngSnap.ngSnap-content,
+.ngSnap.ngSnap-shelves,
+.ngSnap .ngSnap-shelf {
   position: absolute;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+}
 
+/* line 12, scss/assets/navigation.scss */
 .ngSnap .ngSnap-shelf {
   overflow-y: auto;
   -webkit-transition: top 0.2s linear;
@@ -236,34 +336,44 @@ body {
   -webkit-overflow-scrolling: touch;
   -moz-overflow-scrolling: touch;
   -o-overflow-scrolling: touch;
-  overflow-scrolling: touch; }
+  overflow-scrolling: touch;
+}
 
+/* line 27, scss/assets/navigation.scss */
 .ngSnap .ngSnap-shelf.right {
-  right: 0; }
+  right: 0;
+}
 
+/* line 31, scss/assets/navigation.scss */
 ul.list {
   background-color: #333;
   font-size: 0.8em;
   margin-left: -40px;
   margin-top: 0;
-  width: 200px !important; }
+  width: 200px !important;
+}
 
+/* line 38, scss/assets/navigation.scss */
 ul.list li {
-  font-family: 'Arvo', sans-serif;
+  font-family: "Arvo", sans-serif;
   padding: 15px;
   background-color: #ececec;
   border-bottom: 1px solid #f6f6f6;
-  color: #2980b9; }
-  ul.list li.close {
-    text-align: center;
-    height: 49px;
-    line-height: 49px;
-    padding: 0;
-    border-bottom: none;
-    background-color: #2980b9; }
+  color: #2980b9;
+}
+/* line 45, scss/assets/navigation.scss */
+ul.list li.close {
+  text-align: center;
+  height: 49px;
+  line-height: 49px;
+  padding: 0;
+  border-bottom: none;
+  background-color: #2980b9;
+}
 
+/* line 54, scss/assets/navigation.scss */
 ul.list li.list-divider {
-  font-family: 'Andika', sans-serif;
+  font-family: "Andika", sans-serif;
   background: #558ead;
   -webkit-box-shadow: 0 8px 6px -6px black;
   -moz-box-shadow: 0 8px 6px -6px black;
@@ -271,43 +381,63 @@ ul.list li.list-divider {
   font-size: 1.3em;
   color: white;
   text-transform: uppercase;
-  padding: 12px 5px; }
+  padding: 12px 5px;
+}
 
+/* line 65, scss/assets/navigation.scss */
 .loading {
   width: 100%;
   height: 100%;
   background: #333;
-  font-size: 22px; }
+  font-size: 22px;
+}
 
+/* line 71, scss/assets/navigation.scss */
 .ngSnap-shelf {
-  overflow-x: hidden; }
+  overflow-x: hidden;
+}
 
+/* line 5, scss/assets/carousel.scss */
 .rn-carousel-container {
   position: absolute;
   top: 45px;
   bottom: 0px;
-  width: 100% !important; }
+  width: 100% !important;
+}
 
+/* line 11, scss/assets/carousel.scss */
 .rn-carousel-slides {
   height: 100%;
-  transition: -webkit-filter 0.3s ease-in !important; }
+  transition: -webkit-filter 0.3s ease-in !important;
+}
 
+/* line 15, scss/assets/carousel.scss */
 .ng-cloak {
-  display: none; }
+  display: none;
+}
 
+/* line 18, scss/assets/carousel.scss */
 #content {
   height: 100%;
-  width: 100% !important; }
+  width: 100% !important;
+}
 
+/* line 22, scss/assets/carousel.scss */
 #content > div {
-  background-color: #ececec; }
+  background-color: #ececec;
+}
 
+/* line 8, scss/assets/loader.scss */
 .loading {
   text-align: center;
-  background-color: #ececec; }
-  .loading .spacer {
-    height: 20%; }
+  background-color: #ececec;
+}
+/* line 11, scss/assets/loader.scss */
+.loading .spacer {
+  height: 20%;
+}
 
+/* line 15, scss/assets/loader.scss */
 .ouro {
   position: relative;
   display: inline-block;
@@ -316,8 +446,10 @@ ul.list li.list-divider {
   margin: 1em;
   border-radius: 50%;
   background: none repeat scroll 0 0 #fff;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
+/* line 27, scss/assets/loader.scss */
 .ouro:after {
   content: "";
   position: absolute;
@@ -327,8 +459,10 @@ ul.list li.list-divider {
   height: 56px;
   width: 56px;
   background: none repeat scroll 0 0 #2980b9;
-  border-radius: 50%; }
+  border-radius: 50%;
+}
 
+/* line 38, scss/assets/loader.scss */
 .ouro .anim {
   position: absolute;
   left: 100%;
@@ -336,65 +470,97 @@ ul.list li.list-divider {
   height: 100%;
   width: 100%;
   border-radius: 999px;
-  background: none repeat scroll 0 0 #94c7e7;
+  background: none repeat scroll 0 0 #94c6e7;
   -webkit-animation: ui-spinner-rotate-left 2s infinite;
   animation: ui-spinner-rotate-left 2s infinite;
   -webkit-transform-origin: 0 50% 0;
-  transform-origin: 0 50% 0; }
+  transform-origin: 0 50% 0;
+}
 
+/* line 51, scss/assets/loader.scss */
 .ouro > span {
   position: absolute;
   height: 100%;
   width: 50%;
-  overflow: hidden; }
-  .ouro > span.left {
-    left: 0; }
-    .ouro > span.left .anim {
-      border-bottom-left-radius: 0;
-      border-top-left-radius: 0; }
-  .ouro > span.right {
-    left: 50%; }
-    .ouro > span.right .anim {
-      border-bottom-right-radius: 0;
-      border-top-right-radius: 0;
-      left: -100%;
-      -webkit-transform-origin: 100% 50% 0;
-      transform-origin: 100% 50% 0; }
+  overflow: hidden;
+}
+/* line 55, scss/assets/loader.scss */
+.ouro > span.left {
+  left: 0;
+}
+/* line 57, scss/assets/loader.scss */
+.ouro > span.left .anim {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+/* line 62, scss/assets/loader.scss */
+.ouro > span.right {
+  left: 50%;
+}
+/* line 64, scss/assets/loader.scss */
+.ouro > span.right .anim {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  left: -100%;
+  -webkit-transform-origin: 100% 50% 0;
+  transform-origin: 100% 50% 0;
+}
 
 @keyframes ui-spinner-rotate-right {
+  /* line 78, scss/assets/loader.scss */
   0% {
-    transform: rotate(0deg); }
+    transform: rotate(0deg);
+  }
 
+  /* line 82, scss/assets/loader.scss */
   100% {
-    transform: rotate(360deg); } }
+    transform: rotate(360deg);
+  }
+}
 
 @keyframes ui-spinner-rotate-left {
+  /* line 85, scss/assets/loader.scss */
   0% {
-    transform: rotate(0deg); }
+    transform: rotate(0deg);
+  }
 
+  /* line 89, scss/assets/loader.scss */
   100% {
-    transform: rotate(360deg); } }
+    transform: rotate(360deg);
+  }
+}
 
 @-webkit-keyframes ui-spinner-rotate-right {
+  /* line 93, scss/assets/loader.scss */
   0% {
-    -webkit-transform: rotate(0deg); }
+    -webkit-transform: rotate(0deg);
+  }
 
+  /* line 97, scss/assets/loader.scss */
   100% {
-    -webkit-transform: rotate(360deg); } }
+    -webkit-transform: rotate(360deg);
+  }
+}
 
 @-webkit-keyframes ui-spinner-rotate-left {
+  /* line 100, scss/assets/loader.scss */
   0% {
-    -webkit-transform: rotate(0deg); }
+    -webkit-transform: rotate(0deg);
+  }
 
+  /* line 104, scss/assets/loader.scss */
   100% {
-    -webkit-transform: rotate(360deg); } }
+    -webkit-transform: rotate(360deg);
+  }
+}
 
+/* line 1, scss/assets/modal.scss */
 #modal {
   opacity: 0;
   transition: all 0.5s ease-out;
   -webkit-transition: all 0.5s ease-out;
   position: absolute;
-  top: 45px;
+  top: 49px;
   bottom: 0px;
   box-sizing: border-box;
   background-color: rgba(255, 255, 255, 0.8);
@@ -405,25 +571,44 @@ ul.list li.list-divider {
   box-shadow: 5px 5px 5px rgba(50, 50, 50, 0.5);
   color: black;
   padding: 0;
-  margin: auto 5%;
+  margin: 0 auto;
+  width: 100%;
+  height: 90%;
+}
+/* line 21, scss/assets/modal.scss */
+#modal p {
+  margin: 0;
   width: 90%;
-  height: 80%; }
-  #modal .closebtn {
-    text-align: center;
-    position: absolute;
-    right: 0px;
-    width: 50px;
-    font-size: 2.5em;
-    color: #2982b9; }
-  #modal .title {
-    background: rgba(255, 255, 255, 0.8);
-    padding: 10px;
-    color: #333;
-    font-size: 1.5em;
-    font-weight: bold;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    padding-right: 40px;
-    box-sizing: border-box; }
-  #modal.open {
-    opacity: 1; }
+  height: 100%;
+  overflow: hidden;
+  float: left;
+  font-size: .8em;
+}
+/* line 29, scss/assets/modal.scss */
+#modal .closebtn {
+  float: right;
+  font-weight: bold;
+  font-size: 1.3em;
+  color: #164666;
+}
+/* line 37, scss/assets/modal.scss */
+#modal .closebtn:hover {
+  cursor: pointer;
+}
+/* line 41, scss/assets/modal.scss */
+#modal .title {
+  background: rgba(255, 255, 255, 0.9);
+  height: 39px;
+  line-height: 39px;
+  color: #333;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 1em;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
+}
+/* line 53, scss/assets/modal.scss */
+#modal.open {
+  opacity: 1;
+}

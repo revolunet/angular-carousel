@@ -1,3 +1,4 @@
+
 // ===========================
 //    RESET
 // ===========================
@@ -14,6 +15,9 @@ body {
   color:white;
   font-family: $main-font;
   overflow-y:hidden;
+}
+p {
+    margin: 0;
 }
 * {
   -webkit-user-select: none;
@@ -67,6 +71,12 @@ body {
     content: "\e001";
 }
 
+.icon-help {
+    font-size: 1.3em;
+    display: inline-block;
+    margin-right: 20px;
+
+}
 
 // ===========================
 //    LAYOUT
@@ -87,7 +97,7 @@ body {
     .img {
         background-size: cover;
         background-position:center;
-        
+
         padding-right: 2px;
         display:block;
         height:100%;
