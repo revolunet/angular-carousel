@@ -6,7 +6,13 @@
 
 
 .loading {
-    text-align: center;
+    width: 96px;
+    height: 96px;
+    position: absolute;
+    top: 50%;
+    margin-top: -48px;
+    left: 50%;
+    margin-left: -48px;
     background-color: $body-background-color;
     .spacer {
       height:20%;

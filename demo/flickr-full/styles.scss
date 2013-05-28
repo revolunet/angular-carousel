@@ -23,7 +23,7 @@ $icon-color: #fff;
 $icon-size: 28px;
 
 // BAR-TITLE :
-$bar-title-height: 49px;
+$bar-title-height: 45px;
 $bar-title-padding: 5px;
 $bar-title-color: $base-color;
 $bar-title-font-color: #fff;
@@ -32,11 +32,11 @@ $bar-title-font-color: #fff;
   //category
 $list-divider-background-color: darken($base-color, 6);
 $list-divider-font-color: #fff;
-$list-divider-font-size: 1.3em;
+$list-divider-font-size: 1em;
 $list-divider-padding: 8px 5px;
   // items
-$items-font-size: 1.3em;
-$items-padding: 15px;
+$items-font-size: 0.8em;
+$items-padding: 10px;
 $items-font-color: #111;
 
 $items-background-color: $body-background-color;

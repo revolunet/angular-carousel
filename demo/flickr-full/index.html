@@ -16,19 +16,18 @@
       <div id="shelf-1" snap-shelf="">
         <ul class="list ">
             <li class="close"> <span ng-click="snapper.close()" aria-hidden="true" class="icon-cancel"></span></li>
-            <li class="list-divider">Luxury houses</li>
-            <li ng-click="load('luxury house paris');snapper.close()">Paris</li>
-            <li ng-click="load('luxury house new york');snapper.close()">New York</li>
-            <li ng-click="load('luxury house miami');snapper.close()">Miami</li>
-            <li ng-click="load('luxury house san francisco');snapper.close()">San Francisco</li>
-            <li class="list-divider">Luxury cars</li>
-            <li ng-click="load('luxury car france');snapper.close()">France</li>
-            <li ng-click="load('luxury car usa');snapper.close()">USA</li>
-            <li ng-click="load('luxury car italy');snapper.close()">Italy</li>
-            <li class="list-divider">Hi-tech</li>
-            <li ng-click="load('electric bikes');snapper.close()">Electric bikes</li>
-            <li ng-click="load('google car');snapper.close()">Google cars</li>
-            <li ng-click="load('google class');snapper.close()">Google glass</li>
+            <li class="list-divider">PHOTOGRAPHY</li>
+              <li ng-click="load('fashion fine art black white photography');snapper.close()">Fashion</li>
+              <li ng-click="load('portrait black white fine arts photography');snapper.close()">Portrait</li>
+              <li ng-click="load('black white architecture arts photography');snapper.close()">Architecture</li>
+              <li ng-click="load('black white fine art photography');snapper.close()">Fine Arts</li>
+            <li class="list-divider">GRAPHIC DESIGN</li>
+              <li ng-click="load('illustration design');snapper.close()">Illustration</li>
+              <li ng-click="load('typography lettering design');snapper.close()">Typography</li>
+              <li ng-click="load('poster design');snapper.close()">Posters</li>
+            <li class="list-divider">FLYERS</li>
+              <li ng-click="load('flyer concert');snapper.close()">Concerts</li>
+              <li ng-click="load('cinema poster');snapper.close()">Cinema</li>
         </ul>
       </div>
     </div>
@@ -45,7 +44,6 @@
       </header>
 
       <div class="loading" ng-show="loading">
-          <div class="spacer"></div>
           <span class="ouro">
             <span class="left"><span class="anim"></span></span>
             <span class="right"><span class="anim"></span></span>

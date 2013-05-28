@@ -75,6 +75,7 @@ ul.rn-carousel-slides li {
 #content {
   height: 100%;
   width: 100% !important;
+  box-shadow: -2px 0px 5px rgba(0,0,0,0.5);
 }
 #content > div {
   background-color: $body-background-color;
