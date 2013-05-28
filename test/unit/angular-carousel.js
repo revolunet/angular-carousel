@@ -254,6 +254,29 @@ describe('carousel', function () {
     });
   });
 
+  describe('collection update', function () {
+     it('standard carousel should display first slide when we reset the collection', function () {
+        var elm = compileTpl({useIndex: 'localIndex'});
+        scope.localIndex = 5;
+        scope.$digest();
+        scope.items = [{id:1}, {id:2}];
+        scope.$digest();
+        expect(elm.position().left).toBe(0);
+        expect(elm.css('left')).toBe('auto');
+        expect(elm.scope().activeIndex).toBe(0);
+    });
+    it('buffered carousel should display first slide when we reset the collection', function () {
+        var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
+        scope.localIndex = 5;
+        scope.$digest();
+        scope.items = [{id:1}, {id:2}];
+        scope.$digest();
+        expect(elm.position().left).toBe(0);
+        expect(elm.css('left')).toBe('0px');
+        expect(elm.scope().activeIndex).toBe(0);
+    });
+  });
+
   function fakeMove(elm, distance) {
     // trigger a carousel swipe movement
     var startX = 10,
