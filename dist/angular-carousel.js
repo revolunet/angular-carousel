@@ -1,7 +1,7 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.8 - 2013-05-27
- * @link http://revolunet.com.github.com/angular-carousel
+ * @version v0.0.8 - 2013-05-28
+ * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -197,7 +197,7 @@ angular.module('angular-carousel', ['ngMobile'])
             /* check if requested position is out of buffer */
             if (isBuffered) {
               if ((scope.totalIndex < scope.carouselBufferStart) || (scope.totalIndex > (scope.carouselBufferStart + scope.carouselBufferSize - 1))) {
-                  scope.carouselBufferStart = scope.totalIndex - 1;
+                  scope.carouselBufferStart = Math.max(0, scope.totalIndex - 1);
                   skipAnimation = true;
                   updateCarouselPadding(scope.carouselBufferStart);
               }

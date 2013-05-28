@@ -12,6 +12,11 @@ describe('carousel', function () {
   beforeEach(inject(function ($rootScope, _$compile_) {
       scope = $rootScope;
       $compile = _$compile_;
+      $('body').css({
+        padding: 0,
+        margin:0
+      });
+      $('head').prepend('<style>ul, li{padding:0,margin:0}</style>');
       $sandbox = $('<div id="sandbox"></div>').appendTo($('body'));
   }));
 
@@ -237,6 +242,15 @@ describe('carousel', function () {
         scope.localIndex = 100;
         scope.$digest();
         expect(elm.scope().activeIndex).toBe(elm.scope().carouselBufferSize - 1);
+    });
+    it('should display first slide when reset local index to 0', function () {
+        var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
+        scope.localIndex = 5;
+        scope.$digest();
+        scope.localIndex = 0;
+        scope.$digest();
+        expect(elm.position().left).toBe(0);
+        expect(elm.css('left')).toBe('0px');
     });
   });
 

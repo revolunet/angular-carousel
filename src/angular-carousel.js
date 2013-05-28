@@ -190,7 +190,7 @@ angular.module('angular-carousel', ['ngMobile'])
             /* check if requested position is out of buffer */
             if (isBuffered) {
               if ((scope.totalIndex < scope.carouselBufferStart) || (scope.totalIndex > (scope.carouselBufferStart + scope.carouselBufferSize - 1))) {
-                  scope.carouselBufferStart = scope.totalIndex - 1;
+                  scope.carouselBufferStart = Math.max(0, scope.totalIndex - 1);
                   skipAnimation = true;
                   updateCarouselPadding(scope.carouselBufferStart);
               }
