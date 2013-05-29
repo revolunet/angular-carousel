@@ -18,6 +18,26 @@ function partition(items, size) {
 angular.module('myApp', ['angular-carousel', 'snap', 'truncate', 'angular-lazy'])
   .controller('demoController', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
 
+    var modalOpened = null;
+    function simpleModal() {
+      // modals helper
+      this.visible = false;
+      this.open = function() {
+        if (modalOpened) modalOpened.close();
+        this.visible = true;
+        $scope.blurred = true;
+        modalOpened = this;
+      }
+      this.close = function() {
+        this.visible = false;
+        $scope.blurred = false;
+        modalOpened = null;
+      }
+    }
+
+    $scope.aboutModal = new simpleModal();
+    $scope.previewModal = new simpleModal();
+
     var page = 1,
         maxPages = 3,
         term = null,
@@ -56,7 +76,6 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate', 'angular-lazy']
         page.tpl = 'page-' + 5 + '-' + parseInt(Math.floor(Math.random() * 4) + 1, 0);
       });
 
-
       tmpPages = tmpPages.concat(newPages);
 
       if (page < maxPages) {
@@ -71,20 +90,8 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate', 'angular-lazy']
 
     $scope.toggle = function(item) {
       $scope.current = item;
-      $scope.modalCls = '';
-      $scope.showModal = true;
-      $scope.blurred = true;
-      $timeout(function() {
-        $scope.modalCls = 'open';
-      }, 0);
-    };
-    $scope.closeModal = function() {
-      $scope.modalCls = '';
-      $scope.blurred = false;
-      $timeout(function() {
-        $scope.showModal = false;
-      }, 200);
-    };
+      $scope.previewModal.open();
+    }
 
     function load(kwd) {
       if ($scope.showModal) $scope.closeModal();
@@ -101,11 +108,6 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate', 'angular-lazy']
     load('luxury appartment');
     $scope.load = load;
 
-    $scope.openAbout = function() {
-      $scope.closeModal();
-      console.log('coucou');
-      $scope.showAbout = true;
-    }
 
   }]);
 
