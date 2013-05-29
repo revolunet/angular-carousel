@@ -336,7 +336,7 @@ ul.rn-carousel-slides li {
   position: absolute;
   top: 45px;
   bottom: 0px;
-  width: 100% !important; }
+  width: 101% !important; }
 
 .rn-carousel-slides {
   height: 100%;
