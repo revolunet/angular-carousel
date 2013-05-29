@@ -1,4 +1,4 @@
-#modal {
+#modal, #infos {
     opacity:0;
     transition: all 0.5s ease-out;
     -webkit-transition: all 0.5s ease-out;
@@ -10,7 +10,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
-    xborder:2px solid white;
+    border:2px solid white;
     box-shadow: 5px 5px 5px rgba(50,50,50,0.5);
     color:black;
     padding:0;
@@ -55,3 +55,26 @@
     }
 }
 
+#infos {
+    width: 40%;
+    height: 50%;
+    margin: 15% 30%;
+    text-align: center;
+    h2 {
+        margin: 0;
+        padding: 10px 0;
+        display: block;
+        background: white;
+    }
+    a {
+        display: block;
+    }
+    img {
+        margin-top: 10px;
+    }
+    .git {
+        margin-top: 20px;
+        color: black;
+        text-decoration: none;
+    }
+}

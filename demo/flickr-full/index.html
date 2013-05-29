@@ -63,10 +63,14 @@
       </ul>
 
       <div id="modal" ng-show="showModal" class="ng-cloak" ng-class="modalCls" ng-style="{'background-image': 'url(\'' + current.image + '_c.jpg\')'}"  ng-click="closeModal()">
-          <span class="ouro">
-            <span class="left"><span class="anim"></span></span>
-            <span class="right"><span class="anim"></span></span>
-          </span>
+      </div>
+
+      <div id="infos" ng-show="showModal" class="ng-cloak" ng-class="modalCls">
+        <h2>Created by :</h2>
+        <a href="http://www.revolunet.com">
+          <img src="./img/revolunetcom.png" alt="" title="" width="162" height="196">
+        </a>
+        <a class="git" href="https://github.com/revolunet/angular-carousel">Github Project</a>
       </div>
 
     </div>
