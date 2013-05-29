@@ -48,8 +48,8 @@
         <a class="button nav" href='#' ng-click="snapper.toggle('left')">
           <span aria-hidden="true" class="icon-menu"></span>
         </a>
-        <h1 class="title">AngularJS Carousel + Flickr demo</h1>
-        <a class="button info" href="#" ng-click="openAbout();">
+        <h1 class="title">Gallery web application</h1>
+        <a class="button info" href="#" ng-click="aboutModal.open();" style='width:30px;text-align:center'>
           <span aria-hidden="true" class="icon-info-sign"></span>
         </a>
       </header>
@@ -72,14 +72,15 @@
           </div>
         </li>
       </ul>
-      <div id="modal" ng-show="showModal" class="ng-cloak" ng-class="modalCls" ng-click="closeModal()" lazy-loader="#lazySpinner" lazy-background="current.image + '_c.jpg'"></div>
 
-      <div id="infos" ng-show="showAbout" class="ng-cloak" ng-class="modalCls">
+      <div id="modal" ng-show="previewModal.visible" class="ng-cloak" ng-class="{'open': previewModal.visible}" ng-click="previewModal.close()" lazy-loader="#lazySpinner" lazy-background="current.image + '_c.jpg'"></div>
+
+      <div id="infos" ng-show="aboutModal.visible" class="ng-cloak" ng-click="aboutModal.close()" ng-class="{'open': aboutModal.visible}">
         <h2>Created by :</h2>
         <a href="http://www.revolunet.com">
           <img src="./img/revolunetcom.png" alt="" title="" width="162" height="196">
         </a>
-        <a class="git" href="https://github.com/revolunet/angular-carousel">Github Project</a>
+        <a class="git" target="_blank" href="https://github.com/revolunet/angular-carousel">Github Project</a>
       </div>
 
     </div>

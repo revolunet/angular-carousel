@@ -113,10 +113,6 @@ body {
     }
 }
 
-#modal {
-    background-image: url(#{$imgUrl}placeholder-img.svg) no-repeat cover;
-}
-
 
 .blurred {
     -webkit-filter: blur(10px);
