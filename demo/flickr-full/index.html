@@ -12,6 +12,17 @@
   </head>
   <body ng-app="myApp" ng-controller='demoController'>
 
+    <div style="display:none">
+      <div id="lazySpinner">
+        <div class="loading" ng-show="loading">
+          <span class="ouro">
+            <span class="left"><span class="anim"></span></span>
+            <span class="right"><span class="anim"></span></span>
+          </span>
+        </div>
+      </div>
+    </div>
+
     <div class="ng-cloak enable_touchmove" snap-shelves="">
       <div id="shelf-1" snap-shelf="">
         <ul class="list ">
@@ -62,11 +73,8 @@
         </li>
       </ul>
 
-      <div id="modal" ng-show="showModal" class="ng-cloak" ng-class="modalCls" ng-style="{'background-image': 'url(\'' + current.image + '_c.jpg\')'}"  ng-click="closeModal()">
-          <span class="ouro">
-            <span class="left"><span class="anim"></span></span>
-            <span class="right"><span class="anim"></span></span>
-          </span>
+      <div id="modal" ng-show="showModal" class="ng-cloak" ng-class="modalCls" ng-click="closeModal()" lazy-loader="#lazySpinner" lazy-background="current.image + '_c.jpg'">
+
       </div>
 
     </div>
@@ -76,6 +84,7 @@
     <script src="./angular-snap.min.js"></script>
     <script src="./truncate.js"></script>
     <script src="./snap.js"></script>
+    <script src="./lazy.js"></script>
 
     <script src="../../src/angular-carousel.js"></script>
 
