@@ -687,27 +687,28 @@ ul.rn-carousel-slides li {
 
 /* line 58, scss/assets/modal.scss */
 #infos {
+  top: 50%;
   width: 40%;
-  height: 50%;
-  margin: 15% 30%;
+  height: 330px;
+  margin: -165px 30% 0;
   text-align: center;
 }
-/* line 63, scss/assets/modal.scss */
+/* line 64, scss/assets/modal.scss */
 #infos h2 {
   margin: 0;
   padding: 10px 0;
   display: block;
   background: white;
 }
-/* line 69, scss/assets/modal.scss */
+/* line 70, scss/assets/modal.scss */
 #infos a {
   display: block;
 }
-/* line 72, scss/assets/modal.scss */
+/* line 73, scss/assets/modal.scss */
 #infos img {
   margin-top: 10px;
 }
-/* line 75, scss/assets/modal.scss */
+/* line 76, scss/assets/modal.scss */
 #infos .git {
   margin-top: 20px;
   color: black;
