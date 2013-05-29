@@ -100,5 +100,12 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate', 'angular-lazy']
     // default search
     load('luxury appartment');
     $scope.load = load;
+
+    $scope.openAbout = function() {
+      $scope.closeModal();
+      console.log('coucou');
+      $scope.showAbout = true;
+    }
+
   }]);
 

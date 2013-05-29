@@ -49,7 +49,7 @@
           <span aria-hidden="true" class="icon-menu"></span>
         </a>
         <h1 class="title">AngularJS Carousel + Flickr demo</h1>
-        <a class="info" href="http://github.com/revolunet/angular-carousel">
+        <a class="button info" href="#" ng-click="openAbout();">
           <span aria-hidden="true" class="icon-info-sign"></span>
         </a>
       </header>
@@ -72,9 +72,9 @@
           </div>
         </li>
       </ul>
-      <div id="modal" ng-show="showModal" class="ng-cloak" ng-class="modalCls" ng-click="closeModal()" lazy-loader="#lazySpinner" lazy-background="current.image + '_c.jpg'">
+      <div id="modal" ng-show="showModal" class="ng-cloak" ng-class="modalCls" ng-click="closeModal()" lazy-loader="#lazySpinner" lazy-background="current.image + '_c.jpg'"></div>
 
-      <div id="infos" ng-show="showModal" class="ng-cloak" ng-class="modalCls">
+      <div id="infos" ng-show="showAbout" class="ng-cloak" ng-class="modalCls">
         <h2>Created by :</h2>
         <a href="http://www.revolunet.com">
           <img src="./img/revolunetcom.png" alt="" title="" width="162" height="196">
