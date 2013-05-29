@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="viewport" content="width=device-height, user-scalable=no">
     <link href='./styles.css' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Andika&subset=latin" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
@@ -38,8 +38,8 @@
           <span aria-hidden="true" class="icon-menu"></span>
         </a>
         <h1 class="title">AngularJS Carousel + Flickr demo</h1>
-        <a class="button" href="http://github.com/revolunet/angular-carousel">
-          <span aria-hidden="true" class="icon-help">?</span>
+        <a class="info" href="http://github.com/revolunet/angular-carousel">
+          <span aria-hidden="true" class="icon-info-sign"></span>
         </a>
       </header>
 
@@ -63,6 +63,10 @@
       </ul>
 
       <div id="modal" ng-show="showModal" class="ng-cloak" ng-class="modalCls" ng-style="{'background-image': 'url(\'' + current.image + '_c.jpg\')'}"  ng-click="closeModal()">
+          <span class="ouro">
+            <span class="left"><span class="anim"></span></span>
+            <span class="right"><span class="anim"></span></span>
+          </span>
       </div>
 
     </div>

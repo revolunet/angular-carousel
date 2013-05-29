@@ -1,18 +1,16 @@
-// ======================================================
-//                    CSS LOADER
-//             COURTESY OF @geoffrey_crofte
-//       http://codepen.io/CreativeJuiz/pen/vFBIh
-// ======================================================
-
+/*
+======================================================
+       CSS LOADER COURTESY OF @geoffrey_crofte
+       http://codepen.io/CreativeJuiz/pen/vFBIh
+======================================================
+ */
 
 .loading {
     width: 96px;
     height: 96px;
     position: absolute;
     top: 50%;
-    margin-top: -48px;
     left: 50%;
-    margin-left: -48px;
     background-color: $body-background-color;
     .spacer {
       height:20%;
@@ -23,7 +21,8 @@
     display:inline-block;
     height: 96px;
     width: 96px;
-    margin: 1em;
+    margin: -48px 0 0 -48px;
+    //margin: 1em;
     border-radius: 50%;
     background: none repeat scroll 0 0 #fff;
     overflow:hidden;

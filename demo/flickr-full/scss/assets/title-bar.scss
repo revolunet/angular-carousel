@@ -19,18 +19,23 @@
 /* Bar docked to top of viewport for showing page title and actions */
 .bar-title {
   top: 0;
-  display: -webkit-box;
-  display: box;
+//display: -webkit-box;
+//display: box;
   line-height: $bar-title-height;
   background: $bar-title-color;
-  box-shadow: inset 0 1px 1px -1px rgba(255, 255, 255, .8);
-  -webkit-box-orient: horizontal;
-          box-orient: horizontal;
+  line-height: $bar-title-height - ($bar-title-padding * 2);
+  //box-shadow: inset 0 1px 1px -1px rgba(255, 255, 255, .8);
+//-webkit-box-orient: horizontal;
+//box-orient: horizontal;
+  .info {
+    float: right;
+  }
 }
 
 /* Centered text in the .bar-title */
 .bar-title .title {
   position: absolute;
+  line-height: $bar-title-height;
   top: 0;
   left: 0;
   display: block;
@@ -38,21 +43,14 @@
   font-size: 17px;
   //font-weight: bold;
   text-transform: uppercase;
-  line-height: $bar-title-height / 2;
   color: $bar-title-font-color;
   text-align: center;
   //text-shadow: 0 -1px rgba(0, 0, 0, .5);
   white-space: nowrap;
-  h1 {
-    margin: 0;
-  }
+  margin: 0;
+
 }
 
-.bar-title > a:not([class*="button"]) {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
 
 /* Retain specified title color */
 .bar-title .title a {
@@ -67,14 +65,8 @@
   font-size: 16px;
   line-height: $bar-title-height - ($bar-title-padding * 2);
   color: #fff;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-  //background-color: #1eb0e9;
-  //background-image: -webkit-linear-gradient(top, #1eb0e9 0, #0984c6 100%);
-  //background-image: linear-gradient(to bottom, #1eb0e9 0, #0984c6 100%);
-  //border: 1px solid #0e5895;
-  //box-shadow: 0 1px rgba(255, 255, 255, .25);
-  -webkit-box-flex: 0;
-          box-flex: 0;
+//  -webkit-box-flex: 0;
+//          box-flex: 0;
 }
 
 

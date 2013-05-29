@@ -98,7 +98,7 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate'])
     }
 
     // default search
-    load('portrait black white fine art');
+    load('luxury appartment');
     $scope.load = load;
   }]);
 
