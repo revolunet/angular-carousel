@@ -76,7 +76,7 @@
         <li ng-repeat="page in pages">
           <div class="page {{ page.tpl }}" ng-class="{active: ($index == activeIndex) }">
             <div ng-repeat="item in page" ng-click="toggle(item)" ng-class="item.cls">
-              <div class="img" ng-style="{'background-image': 'url(\'' + item.image + '_n.jpg\')'}">
+              <div class="img loading" lazy-loading-class="loading"  lazy-loaded-class="loaded" lazy-background="item.image + '.jpg'">
                 <div class="caption">{{ item.title|words:10 }}</div>
               </div>
             </div>

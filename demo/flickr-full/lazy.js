@@ -4,13 +4,15 @@ directive('lazyBackground', ['$document', '$parse', function($document, $parse) 
         restrict: 'A',
         link: function(scope, iElement, iAttrs) {
             function setLoading(elm) {
-                elm.html('');
-                elm.append(loader);
-                elm.css({
-                    'background-image': null
-                });
+                if (loader) {
+                    elm.html('');
+                    elm.append(loader);
+                    elm.css({
+                        'background-image': null
+                    });
+                }
             }
-            var loader = angular.element('<div>...</div>');
+            var loader = null;
             if (angular.isDefined(iAttrs.lazyLoader)) {
                 loader = angular.element($document[0].querySelector(iAttrs.lazyLoader)).clone();
             }
@@ -20,9 +22,12 @@ directive('lazyBackground', ['$document', '$parse', function($document, $parse) 
                 var src = bgModel(scope);
                 var img = document.createElement('img');
                 img.onload = function() {
-                    loader.remove();
-                    if (angular.isDefined(iAttrs.lazyClass)) {
-                        iElement.addClass(iAttrs.lazyClass);
+                    if (loader) loader.remove();
+                    if (angular.isDefined(iAttrs.lazyLoadingClass)) {
+                        iElement.removeClass(iAttrs.lazyLoadedClass);
+                    }
+                    if (angular.isDefined(iAttrs.lazyLoadedClass)) {
+                        iElement.addClass(iAttrs.lazyLoadedClass);
                     }
                     iElement.css({
                         'background-image': 'url(' + this.src + ')'
