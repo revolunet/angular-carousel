@@ -22,42 +22,61 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate', 'angular-lazy']
     function simpleModal() {
       // modals helper
       this.visible = false;
-      this.open = function() {
-        if (modalOpened) modalOpened.close();
+      this.cls = '';
+      this.open = function(force) {
+        if (modalOpened) {
+          modalOpened.close();
+          if (!force) return;
+        }
         this.visible = true;
         $scope.blurred = true;
         modalOpened = this;
-      }
+        var me = this;
+        $timeout(function() {
+          me.cls = 'open';
+        }, 100);
+      };
       this.close = function() {
-        this.visible = false;
+        this.cls = '';
         $scope.blurred = false;
         modalOpened = null;
-      }
-    }
+        var me = this;
+        $timeout(function() {
+          me.visible = false;
+        }, 300);
+      };
+    };
 
     $scope.aboutModal = new simpleModal();
     $scope.previewModal = new simpleModal();
 
     var page = 1,
-        maxPages = 3,
-        term = null,
+        maxPages = 1,
+        query = {},
         tmpPages = [];
 
     function fetch() {
       // fetch a single result page
       var params = {
-        method: 'flickr.photos.search',
+        method: 'flickr.groups.pools.getPhotos',
         api_key: '98a83da50faeef3886249aef8ee3903e',
-        text: term,
-        per_page: 50,
+        per_page: 200,
         page: page,
-        format: 'json'
+        format: 'json',
+        media: 'photos',
+        extras: ['url_o']
       };
+      angular.extend(params, query);
       $http.jsonp('http://api.flickr.com/services/rest/', {params: params});
     }
 
     window.jsonFlickrApi = function(result) {
       // flickr callback
+      if (!result.photos) {
+        $scope.pages = tmpPages;
+        $scope.loading = false;
+        return;
+      }
       var newPics = [];
       angular.forEach(result.photos.photo, function(data) {
         newPics.push({
@@ -89,25 +108,38 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate', 'angular-lazy']
     };
 
     $scope.toggle = function(item) {
+      if ($scope.previewModal.visible) {
+        $scope.previewModal.close();
+        return;
+      }
       $scope.current = item;
       $scope.previewModal.open();
     }
 
-    function load(kwd) {
-      if ($scope.showModal) $scope.closeModal();
+    function load(args) {
+      if ($scope.previewModal.visible) {
+        $scope.previewModal.close();
+      }
+      if ($scope.aboutModal.visible) {
+        $scope.aboutModal.close();
+      }
       tmpPages = [];
       $scope.loading = true;
-      term = kwd;
+      query = args;
       page = 1;
       $scope.pics = [];
       $scope.pages = [];
       fetch();
     }
 
-    // default search
-    load('luxury appartment');
-    $scope.load = load;
+    $scope.loadGroup = function(grp) {
+      load({
+        group_id: grp
+      });
+    };
 
+    // default search
+    $scope.loadGroup('1580643@N23');
 
   }]);
 
