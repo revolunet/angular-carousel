@@ -24,7 +24,7 @@ directive('lazyBackground', ['$document', '$parse', function($document, $parse) 
                 img.onload = function() {
                     if (loader) loader.remove();
                     if (angular.isDefined(iAttrs.lazyLoadingClass)) {
-                        iElement.removeClass(iAttrs.lazyLoadedClass);
+                        iElement.removeClass(iAttrs.lazyLoadingClass);
                     }
                     if (angular.isDefined(iAttrs.lazyLoadedClass)) {
                         iElement.addClass(iAttrs.lazyLoadedClass);

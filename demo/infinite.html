@@ -40,14 +40,20 @@
   <body ng-app="myApp" ng-controller='demoController'>
     <a href="https://github.com/revolunet/angular-carousel"><img style="z-index:100;position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 
-    <ul rn-carousel rn-carousel-buffered rn-carousel-on-end="generateSlides(index)" class="basic">
+    <ul rn-carousel rn-carousel-index="page" rn-carousel-buffered rn-carousel-next="getSlide(index, item, 1)" rn-carousel-prev="getSlide(index, item, -1)" class="basic">
       <li ng-repeat="page in pages" style="background-color:{{ page.bg }};">
         Infinite angular-carousel demo<br><br>
-        <h3>{{page.date|date}}</h3>
+        <h3 ng-bind="page.date|date"></h3>
+        <br><br><br>
+        <h5 ng-bind="'activeIndex: ' + activeIndex"></h5>
+        <h5 ng-bind="'totalIndex: ' + totalIndex"></h5>
+        <h5 ng-bind="'#items: ' + carouselItems.length"></h5>
+        <h5 ng-bind="'carouselBufferStart: ' + carouselBufferStart"></h5>
+
       </li>
     </ul>
 
-    <script src="//code.angularjs.org/1.1.4/angular.js"></script>
+    <script src="//code.angularjs.org/1.1.4/angular.min.js"></script>
     <script src="../lib/angular-mobile.js"></script>
 
     <!-- include carousel src -->
@@ -57,36 +63,63 @@
     <script>
     /* demo page code */
     angular.module('myApp', ['angular-carousel'])
-      .controller('demoController', function($scope, $http) {
+      .controller('demoController', function($scope, $http, $q, $timeout) {
        
         // infinite carousel stuff
         var currentDay = (new Date()),
-            colors = ['#339966', '#336699', '#cc9933', '#cc6633', '#cc3366', '#66cc33'];
+            colors = ['#339966', '#336699', '#cc9933', '#cc6633', '#cc3366', '#66cc33'],
+            colorIndex = 0;
+
+        function getColor() {
+          return colors[colorIndex++ % colors.length];
+        }
 
         function addPage() {
           // generate a single page, with color and a new date
-          var colorIndex = $scope.pages.length % colors.length;
-          $scope.pages.push({
-            bg: colors[colorIndex],
+          currentDay = new Date(currentDay.getTime() + 86400000);
+          return {
+            bg: getColor(),
             date: currentDay
-          })
-          currentDay = new Date(currentDay.getTime() + 60*60*24*1000);
+          };
+          
         }
 
         // add some initial pages
         $scope.pages = [];
-        addPage();
-        addPage();
-        addPage();
-        addPage();
-        addPage();
+        $scope.pages.push(addPage());
+        $scope.pages.push(addPage());
+        $scope.pages.push(addPage());
+        $scope.pages.push(addPage());
+        $scope.pages.push(addPage());
 
-        $scope.generateSlides = function() {
-          // callback called when carousel reach the penultimate slide
-          // add some slides (could be one)
-          addPage();
-          addPage();
-          addPage();
+        $scope.page = 4;
+
+        $scope.getSlide = function(index, item, direction) {
+          // generate n new slides
+          // we can send one or more items
+          // with promises, or not
+         //return null;
+          var itemCount = 3;
+          var items = [];
+          for (var i = 0; i < itemCount; i++) {
+            var nextDate = new Date();
+            nextDate.setTime(item.date.getTime() + (direction*(i+1)*86400000));
+            items.push({
+              bg: getColor(),
+              date: nextDate
+            });
+          };
+          if (direction < 0) items.reverse();
+
+          return items;
+
+          // sample promise
+          var defer = $q.defer();
+
+          $timeout(function() {
+              defer.resolve(items);
+          }, 2000);
+          return defer;
         };
 
       })
