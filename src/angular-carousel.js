@@ -89,14 +89,18 @@ angular.module('angular-carousel', ['ngMobile'])
           }
 
           var collectionModifiers = {
-            /* add slided before/after for the bufferef carousel */
+            /* add slided before/after for the buffered carousel */
             add: function(action, items) {
               /* action is append or prepend */
               if (items) {
-                /* add returned slides at the end of the collection */
+                /* add returned slides or promise result at the end of the collection */
                 if (angular.isObject(items.promise)) {
                   items.promise.then(function(items) {
-                    collectionModifiers[action](items);
+                    if (items) collectionModifiers[action](items);
+                  });
+                } else if (angular.isFunction(items.then)) {
+                  items.then(function(items) {
+                    if (items) collectionModifiers[action](items);
                   });
                 } else {
                   collectionModifiers[action](items);

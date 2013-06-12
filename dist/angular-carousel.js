@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.8 - 2013-06-11
+ * @version v0.0.8 - 2013-06-12
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ angular.module('angular-carousel', ['ngMobile'])
       return arr.slice(start, end);
     };
   })
-  .directive('rnCarousel', ['$compile', '$parse', '$swipe', '$timeout', function($compile, $parse, $swipe, $timeout) {
+  .directive('rnCarousel', ['$compile', '$parse', '$swipe', function($compile, $parse, $swipe) {
     /* track number of carousel instances */
     var carousels = 0;
 
@@ -96,20 +96,23 @@ angular.module('angular-carousel', ['ngMobile'])
           }
 
           var collectionModifiers = {
-            /* add slided before/after for the bufferef carousel */
+            /* add slided before/after for the buffered carousel */
             add: function(action, items) {
               /* action is append or prepend */
               if (items) {
-                /* add returned slides at the end of the collection */
+                /* add returned slides or promise result at the end of the collection */
                 if (angular.isObject(items.promise)) {
                   items.promise.then(function(items) {
-                    collectionModifiers[action](items);
+                    if (items) collectionModifiers[action](items);
+                  });
+                } else if (angular.isFunction(items.then)) {
+                  items.then(function(items) {
+                    if (items) collectionModifiers[action](items);
                   });
                 } else {
                   collectionModifiers[action](items);
                 }
               }
-              
             },
             append: function(items) {
               /* append items to the current collection */
@@ -137,13 +140,13 @@ angular.module('angular-carousel', ['ngMobile'])
               if(!scope.$$phase) {
                 updateSlidePosition();
               }
-              
+
             }
           };
 
           function transitionEndCallback() {
             /* when slide transition finished, update buffer */
-            console.log('transitionEndCallback');
+            //console.log('transitionEndCallback');
             if (isBuffered) scope.$apply(function() {
               reAdjustBufferStart();
               reFillBuffer();
@@ -154,7 +157,7 @@ angular.module('angular-carousel', ['ngMobile'])
             /* readjust the buffer start position */
             if (!isBuffered) return;
             var start = scope.totalIndex - 1;
-            var maxIndex =  (getSlidesCount()>0)?(getSlidesCount() - scope.carouselBufferSize):Number.MAX_VALUE,
+            var maxIndex =  (getSlidesCount() > 0)?(getSlidesCount() - scope.carouselBufferSize):Number.MAX_VALUE,
                 oldIndex = scope.carouselBufferStart;
             scope.carouselBufferStart = Math.max(0, Math.min(start, maxIndex));
           }
@@ -163,7 +166,7 @@ angular.module('angular-carousel', ['ngMobile'])
             /* update start buffer index and ensures its not out of bounds */
             // if no index given, just to validation
             if (index===null) index = scope.totalIndex;
-            var maxIndex = (containerWidth===null)?Number.MAX_VALUE:getSlidesCount()-1;
+            var maxIndex = (containerWidth === null)?Number.MAX_VALUE:getSlidesCount()-1;
             scope.totalIndex = Math.max(0, Math.min(maxIndex, index));
           }
 
