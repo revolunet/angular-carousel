@@ -37,16 +37,18 @@ angular.module('angular-carousel', ['ngMobile'])
 
            TODO: handle various ng-repeat syntaxes, see sources regexps
         */
+
         var liAttribute = tElement.find('li')[0].attributes['ng-repeat'],
-            exprMatch = liAttribute.value.match( /^([^\s]+) in (.+)$/i ),
+            exprMatch = liAttribute.value.match(/^\s*(.+)\s+in\s+(.*?)\s*(\s+track\s+by\s+(.+)\s*)?$/),
             originalItem = exprMatch[1],
             originalCollection = exprMatch[2],
+            trackProperty = exprMatch[3] || '',
             isBuffered = angular.isDefined(tAttrs['rnCarouselBuffered']);
 
         if (isBuffered) {
           /* update the current ngRepeat expression and add a slice operator */
           var sliceExpression = '|carouselSlice:carouselBufferStart:carouselBufferStart+carouselBufferSize';
-          liAttribute.value = originalItem + ' in carouselItems' + sliceExpression;
+          liAttribute.value = originalItem + ' in carouselItems' + sliceExpression + trackProperty ;
         }
 
         return function(scope, iElement, iAttrs, controller) {
@@ -137,9 +139,9 @@ angular.module('angular-carousel', ['ngMobile'])
               setTotalIndex(scope.totalIndex + itemsOffset);
 
               // this should be called only if we're NOT inside an digest cycle
-              if(!scope.$$phase) {
-                updateSlidePosition();
-              }
+              // if(!scope.$$phase) {
+              //   updateSlidePosition();
+              // }
 
             }
           };
