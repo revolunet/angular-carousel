@@ -10,9 +10,21 @@ Proudly brought to you by the [@revolunet](http://twitter.com/revolunet) team.
 
 ## Usage :
 
-Add a dependency to `angular-carousel` module in your application.
+ 1. Add `angular-carousel.js` (from this repo) and `angular-mobile.js` (from AngularJs distribution) to your code.
 
-Then, just add a `rn-carousel` attribute to your `<ul>` block and your `<li>`'s become magically swipable ;)
+```html
+<link href="lib/angular-carousel.css" rel="stylesheet" type="text/css" />
+<script src="lib/angular.js"></script>
+<script src="lib/angular-mobile.js"></script>
+<script src="lib/angular-carousel.js"></script>
+```
+ 2. Add a dependency to `angular-carousel` module in your application.
+
+```js
+angular.module('MyApp', ['angular-carousel']);
+```
+
+ 3. Add a `rn-carousel` attribute to your `<ul>` block and your `<li>`'s become magically swipable ;)
 
 ```html
 <h3>Discover sports</h3>
@@ -22,8 +34,6 @@ Then, just add a `rn-carousel` attribute to your `<ul>` block and your `<li>`'s 
   </li>
 </ul>
 ```
-
-Of course, include `angular-carousel.js` and `angular-carousel.css` in your project.
 
 ## Features :
 
