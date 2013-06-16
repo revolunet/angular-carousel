@@ -360,7 +360,7 @@ angular.module('angular-carousel', ['ngMobile'])
                 /* follow cursor movement */
                 offset = startOffset + deltaX / ratio;
                 carousel.css(translateSlideproperty(offset))
-                        .removeClass()
+                        .removeClass('rn-carousel-animate')
                         .addClass('rn-carousel-noanimate');
               }
             },
