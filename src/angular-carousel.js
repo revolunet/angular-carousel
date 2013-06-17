@@ -256,18 +256,19 @@ angular.module('angular-carousel', ['ngMobile'])
             /* when the *whole* original collection change
                 - reset the carousel index and position
             */
+            scope.carouselItems = newValue;
             if (newValue!==oldValue) {
               setTotalIndex(0);
               scope.carouselBufferStart = 0;
             }
           });
 
-          scope.$watch(originalCollection, function(newValue, oldValue) {
+          var sizeWatcher = scope.$watch(originalCollection, function(newValue, oldValue) {
             /* when the original collection content change,
                 - update local list reference
                 - update container width based on first item width
+                - remove $watch
             */
-            scope.carouselItems = newValue;
             if (containerWidth === null) {
               var slides = carousel.find('li');
               if (slides.length === 0) {
@@ -276,6 +277,7 @@ angular.module('angular-carousel', ['ngMobile'])
                 containerWidth = slides[0].getBoundingClientRect().width;
               }
               container.css('width', containerWidth + 'px');
+              sizeWatcher();
             }
           }, true);
 
