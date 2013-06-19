@@ -104,7 +104,7 @@
     <h3>Forever carousel</h3>
     A carousel that cycles forever<br><br>
     <ul rn-carousel rn-carousel-cycle class="image">
-      <li ng-repeat="image in cityImages2" style="background-image:url({{ image }});">
+      <li data-ng-repeat="image in cityImages2" style="background-image:url({{ image }});">
         <div class="layer" ng-bind-html-unsafe="image"></div>
       </li>
     </ul>

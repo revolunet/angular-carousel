@@ -17,7 +17,7 @@
    - OK transitionCb bug
    - cycle + no initial index ? (is -1)
    - cycle + indicator
-   - ngRepeat collections
+   - OK ngRepeat collections
   */
 
   angular.module('angular-carousel', ['ngMobile'])
@@ -43,16 +43,21 @@
 
              TODO: handle various ng-repeat syntaxes, see sources regexps
           */
-
-          var liAttribute = tElement.find('li')[0].attributes['ng-repeat'],
-              exprMatch = liAttribute.value.match(/^\s*(.+)\s+in\s+(.*?)\s*(\s+track\s+by\s+(.+)\s*)?$/),
+          var liAttributes = tElement.find('li')[0].attributes,
+              repeatAttribute = liAttributes['ng-repeat'];
+          if (!repeatAttribute) repeatAttribute = liAttributes['data-ng-repeat'];
+          if (!repeatAttribute) repeatAttribute = liAttributes['x-ng-repeat'];
+          if (!repeatAttribute) {
+            throw new Error("carousel: cannot find the ngRepeat attribute");
+          }
+          var exprMatch = repeatAttribute.value.match(/^\s*(.+)\s+in\s+(.*?)\s*(\s+track\s+by\s+(.+)\s*)?$/),
               originalItem = exprMatch[1],
               originalCollection = exprMatch[2],
               trackProperty = exprMatch[3] || '',
               isBuffered = angular.isDefined(tAttrs['rnCarouselBuffered']);
 
             /* update the current ngRepeat expression and add a slice operator */
-            liAttribute.value = originalItem + ' in carouselCollection.cards' + trackProperty ;
+            repeatAttribute.value = originalItem + ' in carouselCollection.cards' + trackProperty ;
 
           return function(scope, iElement, iAttrs, controller) {
 
