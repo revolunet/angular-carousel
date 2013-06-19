@@ -100,6 +100,7 @@ angular.module('angular-carousel')
               event.propertyName === '-webkit-transform' ||
               event.propertyName === '-moz-transform')
           ) {
+            //console.log('transitionEndCallback');
             scope.$apply(function() {
               scope.carouselCollection.adjustBuffer();
               updateSlidePosition(true);

@@ -98,8 +98,8 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ['src/*'],
-      tasks: ['build']
+      files: ['src/**'],
+      tasks: ['quickbuild']
     }
   });
 
@@ -129,6 +129,7 @@ module.exports = function(grunt) {
 
   // Build task.
   grunt.registerTask('build', ['test', 'concat', 'uglify', 'cssmin']);
+  grunt.registerTask('quickbuild', ['jshint', 'concat', 'uglify', 'cssmin']);
 
   // run devserver
   grunt.registerTask('webserver', ['connect:devserver']);
