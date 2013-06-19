@@ -26,7 +26,8 @@
     "grunt-contrib-uglify": "*",
     "grunt-contrib-connect": "*",
     "grunt-contrib-cssmin": "~0.6.0",
-    "grunt-release": "~0.3.3"
+    "grunt-release": "~0.3.3",
+    "grunt-contrib-watch": "~0.4.4"
   },
   "scripts": {
     "test": "karma start test/karma.conf.js --single-run --browsers Chrome",

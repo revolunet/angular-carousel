@@ -34,14 +34,14 @@ module.exports = function(grunt) {
         banner: '<%= meta.banner %>'
       },
       dist: {
-        src: ['src/*.js'],
+        src: ['src/*.js', 'src/**/*.js'],
         dest: '<%= dirs.dest %>/<%= pkg.name %>.js'
       }
     },
     cssmin: {
       combine: {
         files: {
-          '<%= dirs.dest %>/<%= pkg.name %>.min.css': ['src/*.css']
+          '<%= dirs.dest %>/<%= pkg.name %>.min.css': ['src/css/*.css']
         }
       }
     },
@@ -96,6 +96,10 @@ module.exports = function(grunt) {
       options: {
         configFile: 'test/karma.conf.js'
       }
+    },
+    watch: {
+      files: ['src/*'],
+      tasks: ['build']
     }
   });
 
@@ -113,7 +117,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Load the plugin that provides the "watch" task.
-  //grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
 
   // Default task.

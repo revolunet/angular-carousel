@@ -1,4 +1,4 @@
-
+/*global angular, console, describe, it, expect, beforeEach, inject */
 
 //--- SPECS -------------------------
 describe("CollectionManager", function() {
@@ -8,10 +8,17 @@ describe("CollectionManager", function() {
         items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         index: 1
     };
+    beforeEach(module('angular-carousel'));
+
+    var CollectionManagerService;
+    beforeEach(inject(function(CollectionManager) {
+        CollectionManagerService = CollectionManager;
+    }));
+
     describe("basic", function() {
         beforeEach(function() {
-            collec1 = new CollectionManager();
-            collec2 = new CollectionManager(sampleCollectionOptions);
+            collec1 = CollectionManagerService.create();
+            collec2 = CollectionManagerService.create(sampleCollectionOptions);
         });
         it("initialise an empty list", function() {
           expect(collec1.items).toEqual([]);
@@ -77,7 +84,7 @@ describe("CollectionManager", function() {
         });
         var collec = null;
         beforeEach(function() {
-            collec = new CollectionManager(angular.copy(cycleCollectionOptions));
+            collec = CollectionManagerService.create(angular.copy(cycleCollectionOptions));
         });
         it("first card should be last item initially", function() {
             expect(collec.cards[0]).toEqual(10);
@@ -115,14 +122,14 @@ describe("CollectionManager", function() {
             bufferSize: 3,
             index: 0
         });
-        bufferCollectionOptions2 = angular.extend({}, bufferCollectionOptions, {
+        var bufferCollectionOptions2 = angular.extend({}, bufferCollectionOptions, {
             index: 2
         });
         var collec1 = null,
             collec2 = null;
         beforeEach(function() {
-            collec1 = new CollectionManager(bufferCollectionOptions);
-            collec2 = new CollectionManager(bufferCollectionOptions2);
+            collec1 = CollectionManagerService.create(bufferCollectionOptions);
+            collec2 = CollectionManagerService.create(bufferCollectionOptions2);
         });
         it("bufferStart should be correctly initialised", function() {
             expect(collec1.index).toBe(0);
@@ -163,14 +170,14 @@ describe("CollectionManager", function() {
             cycle: true,
             index: 0
         });
-        bufferCycleCollectionOptions2 = angular.extend({}, angular.copy(bufferCycleCollectionOptions), {
+        var bufferCycleCollectionOptions2 = angular.extend({}, angular.copy(bufferCycleCollectionOptions), {
             index: 4
         });
         var collec1 = null,
             collec2 = null;
         beforeEach(function() {
-            collec1 = new CollectionManager(bufferCycleCollectionOptions);
-            collec2 = new CollectionManager(bufferCycleCollectionOptions2);
+            collec1 = CollectionManagerService.create(bufferCycleCollectionOptions);
+            collec2 = CollectionManagerService.create(bufferCycleCollectionOptions2);
         });
         it("should init buffer and index correctly", function() {
             expect(collec1.cards.length).toBe(3);

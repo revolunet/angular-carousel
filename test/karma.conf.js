@@ -18,7 +18,7 @@ files = [
   'lib/angular-mobile.js',
   'lib/browserTrigger.js',
   'components/angular-mocks/angular-mocks.js',
-  'src/*.js',
+  'dist/angular-carousel.js',
   'test/unit/*.js'
 ];
 
