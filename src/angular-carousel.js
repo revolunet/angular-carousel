@@ -1,20 +1,20 @@
-/*global angular, console */
+/*global angular */
 
 /*
-Angular touch carousel with CSS GPU accel and slide buffering
+Angular touch carousel with CSS GPU accel and slide buffering/cycling
 http://github.com/revolunet/angular-carousel
 
 TODO : 
  - OK cycle + index
  - OK cycle without buffer
- - activeIndex : removed
- - prev/next cbs
+ - OK activeIndex : removed
  - OK skip initial animation
- - add/remove ngRepeat collection
  - OK transitionCb bug
+ - OK ngRepeat collections
+ - add/remove ngRepeat collection
+ - prev/next cbs
  - cycle + no initial index ? (is -1)
  - cycle + indicator
- - OK ngRepeat collections
 */
 
 angular.module('angular-carousel', ['ngMobile']);

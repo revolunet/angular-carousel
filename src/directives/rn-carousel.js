@@ -56,7 +56,6 @@ angular.module('angular-carousel')
               event.propertyName === '-webkit-transform' ||
               event.propertyName === '-moz-transform')
           ) {
-            //console.log('transitionEndCallback');
             scope.$apply(function() {
               scope.carouselCollection.adjustBuffer();
               updateSlidePosition(true);
@@ -102,9 +101,12 @@ angular.module('angular-carousel')
           if (newValue) updateSlidePosition();
         });
 
+        var collectionUpdated = false;
         scope.$watch(collectionModel, function(newValue, oldValue) {
           // update whole collection contents
-          scope.carouselCollection.setItems(angular.copy(newValue));
+          // reinitialise index
+          scope.carouselCollection.setItems(angular.copy(newValue), collectionUpdated);
+          collectionUpdated = true;
         });
 
         var vendorPrefixes = ["webkit", "moz"];
@@ -144,10 +146,10 @@ angular.module('angular-carousel')
 
         function updateSlidePosition(skipAnimation) {
           /* trigger carousel position update */
-         skipAnimation = !!skipAnimation || (initialPosition===true);
+          skipAnimation = !!skipAnimation || (initialPosition===true);
           if (containerWidth===0) updateContainerWidth();
           offset = scope.carouselCollection.getRelativeIndex() * -containerWidth;
-
+          //console.log('updateSlidePosition', offset, skipAnimation);
           if (skipAnimation===true) {
               carousel.addClass('rn-carousel-noanimate')
                   .css(translateSlideproperty(offset));

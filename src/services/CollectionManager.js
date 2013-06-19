@@ -117,8 +117,9 @@ angular.module('angular-carousel')
         this.setBufferSize(this.bufferSize || this.length());
         this.goToIndex(this.index);
     };
-    CollectionManager.prototype.setItems = function(items) {
+    CollectionManager.prototype.setItems = function(items, reset) {
         this.log('setItems', items);
+        if (reset) this.index=0;
         this.items = items;
         this.init();
     };

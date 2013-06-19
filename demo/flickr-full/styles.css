@@ -348,11 +348,11 @@ ul.rn-carousel-slides li {
   position: absolute;
   top: 45px;
   bottom: 0px;
-  width: 101% !important; }
+  width: 101% !important;
+  transition: -webkit-filter 0.3s ease-in !important; }
 
 .rn-carousel-slides {
-  height: 100%;
-  transition: -webkit-filter 0.3s ease-in !important; }
+  height: 100%; }
 
 .ng-cloak {
   display: none; }

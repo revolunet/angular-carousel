@@ -91,11 +91,15 @@ angular.module('myApp', ['angular-carousel', 'snap', 'truncate', 'angular-lazy']
 
       // distribute pages with 2, 3, 4, 5 items and choose tp accordingly
       var newPages = partition(newPics, 5);
+      var tplPages = [];
       angular.forEach(newPages, function(page) {
-        page.tpl = 'page-' + 5 + '-' + parseInt(Math.floor(Math.random() * 4) + 1, 0);
+        tplPages.push({
+          images: page,
+          tpl: 'page-' + 5 + '-' + parseInt(Math.floor(Math.random() * 4) + 1, 0)
+        });
       });
 
-      tmpPages = tmpPages.concat(newPages);
+      tmpPages = tmpPages.concat(tplPages);
 
       if (page < maxPages) {
         // enable display then fetch some more pages

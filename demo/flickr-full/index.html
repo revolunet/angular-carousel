@@ -6,8 +6,8 @@
     <link href='./styles.css' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Andika&subset=latin" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="add2home.css">
-    <script type="application/javascript" src="add2home.js"></script>
+    <link rel="stylesheet" href="./lib/add2home.css">
+    <script type="application/javascript" src="./lib/add2home.js"></script>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="revo gallery">
     <title>revolunet Flickr Gallery</title>
@@ -84,9 +84,9 @@
 
       <ul rn-carousel rn-carousel-buffered class="page-container" ng-class="{blurred: blurred}">
         <li ng-repeat="page in pages">
-          <div class="page {{ page.tpl }}" ng-class="{active: ($index == activeIndex) }">
-            <div ng-repeat="item in page" ng-click="toggle(item)" ng-class="item.cls">
-              <div class="img loading" lazy-loading-class="loading"  lazy-loaded-class="loaded" lazy-background="item.image + '.jpg'">
+          <div class="page {{ page.tpl }}">
+            <div ng-repeat="item in page.images" ng-click="toggle(item)" ng-class="item.cls">
+              <div class="img loading" lazy-loading-class="loading" lazy-loaded-class="loaded" lazy-background="item.image + '.jpg'">
                 <div class="caption">{{ item.title|words:10 }}</div>
               </div>
             </div>
@@ -105,14 +105,14 @@
 
     </div>
 
-    <script src="//code.angularjs.org/1.1.4/angular.js"></script>
+    <script src="../../components/angular/angular.js"></script>
     <script src="../../lib/angular-mobile.js"></script>
-    <script src="./angular-snap.min.js"></script>
-    <script src="./truncate.js"></script>
-    <script src="./snap.js"></script>
-    <script src="./lazy.js"></script>
+    <script src="./lib/angular-snap.min.js"></script>
+    <script src="./lib/truncate.js"></script>
+    <script src="./lib/snap.js"></script>
+    <script src="./lib/lazy.js"></script>
 
-    <script src="../../src/angular-carousel.js"></script>
+    <script src="../../dist/angular-carousel.js"></script>
 
     <script src="./app.js"></script>
 
