@@ -51,12 +51,19 @@
       padding:10px;
       color:black;
       background: #bbb;
+      box-sizing: border-box;
     }
     div.repo-name {
       font-size: 18px;
       font-weight: bold;
       margin-bottom:10px;
       text-decoration:underline;
+      -webkit-transition: all 1s ease-in;
+      transition: all 1s ease-in;
+      color:black;
+    }
+    div.repo-name:hover {
+      color:red;
     }
     ul li {
       list-style-type: none
@@ -73,6 +80,7 @@
     a {
       color:white;
     }
+
     </style>
   </head>
   <body ng-app="myApp" ng-controller='demoController'>
@@ -84,13 +92,33 @@
     Try to swipe these demos with your mouse or your finger :
     </div>
 
-    <h3>Discover cities</h3>
-    A very basic carousel<br><br>
+
+    <h3>Simple carousel</h3>
+    A very basic carousel with indicators<br><br>
     <ul rn-carousel rn-carousel-indicator class="image">
       <li ng-repeat="image in cityImages" style="background-image:url({{ image }});">
         <div class="layer" ng-bind-html-unsafe="image"></div>
       </li>
     </ul>
+
+    <h3>Forever carousel</h3>
+    A carousel that cycles forever<br><br>
+    <ul rn-carousel rn-carousel-cycle class="image">
+      <li ng-repeat="image in cityImages2" style="background-image:url({{ image }});">
+        <div class="layer" ng-bind-html-unsafe="image"></div>
+      </li>
+    </ul>
+
+<!--
+    <h3>Forever buffered carousel</h3>
+    A cycling buffered carousel<br><br>
+    <ul rn-carousel rn-carousel-cycle rn-carousel-buffered class="image">
+      <li ng-repeat="image in cityImages2" style="background-image:url({{ image }});">
+        <div class="layer" ng-bind-html-unsafe="image"></div>
+      </li>
+    </ul>
+-->
+
 
     <h3 data-ng-bind-html-unsafe="'Discover sports (slide ' + (currentSport + 1) + '/' + sportImages.length + ')'"></h3>
     This carousel has two way data-binding, custom controls and is buffered (only 3 slides rendered)<br><br>
@@ -102,10 +130,10 @@
 
     <button ng-click="currentSport = currentSport - 1" ng-disabled="currentSport == 0">prev</button>
     <button ng-click="currentSport = currentSport + 1" ng-disabled="currentSport == sportImages.length - 1">next</button>
-  
+
     <h3>Our Public GitHub repos</h3>
-    This carousel has a more advanced template, but works the same way; its also buffered.<br><br>
-    <ul rn-carousel rn-carousel-buffered class="repo" >
+    This carousel has a more advanced template, is buffered and cycles forever.<br><br>
+    <ul rn-carousel rn-carousel-cycle rn-carousel-buffered class="repo" >
       <li ng-repeat="repo in githubRepos">
           <div class="repo-name">{{ repo.name }}</div>
           {{ repo.description }}<br>
@@ -115,7 +143,7 @@
           <b>open issues</b> : {{ repo.open_issues_count }}<br>
       </li>
     </ul>
-    
+
     <h3>Other examples</h3>
     <lI><a href="./demo/infinite.html">Infinite buffered carousel</a> : full screen example for mobile devices. Previous/Next slides are generated on-demand from functions or promises.</li>
       <br>
@@ -126,6 +154,7 @@
     <script src="./lib/angular-mobile.js"></script>
 
     <!-- include carousel src -->
+    <script src="./src/CollectionManager.js"></script>
     <script src="./src/angular-carousel.js"></script>
     <link href='./src/angular-carousel.css' rel='stylesheet' type='text/css'>
 
@@ -135,6 +164,7 @@
       .controller('demoController', function($scope, $http) {
         $scope.sportImages = [];
         $scope.cityImages = [];
+        $scope.cityImages2 = [];
         $scope.githubRepos = [];
 
         $scope.currentSport = 0;
@@ -155,6 +185,7 @@
             $scope.sportImages.push('http://lorempixel.com/400/200/sports/' + j + '/');
           }
           $scope.cityImages.push('http://lorempixel.com/400/200/city/' + i + '/');
+          if (i<3) $scope.cityImages2.push('http://lorempixel.com/400/200/city/' + i + '/');
         }
 
         // infinite carousel stuff
