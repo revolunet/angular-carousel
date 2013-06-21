@@ -52,6 +52,7 @@
       color:black;
       background: #bbb;
       box-sizing: border-box;
+      -moz-box-sizing: border-box;
     }
     div.repo-name {
       font-size: 18px;
@@ -132,8 +133,8 @@
     <button ng-click="currentSport = currentSport + 1" ng-disabled="currentSport == sportImages.length - 1">next</button>
 
     <h3>Our Public GitHub repos</h3>
-    This carousel has a more advanced template, is buffered and cycles forever.<br><br>
-    <ul rn-carousel rn-carousel-cycle rn-carousel-buffered class="repo" >
+    This carousel has a more advanced template and DOM buffered.<br><br>
+    <ul rn-carousel rn-carousel-buffered class="repo" >
       <li ng-repeat="repo in githubRepos">
           <div class="repo-name">{{ repo.name }}</div>
           {{ repo.description }}<br>
@@ -145,8 +146,10 @@
     </ul>
 
     <h3>Other examples</h3>
-    <lI><a href="./demo/infinite.html">Infinite buffered carousel</a> : full screen example for mobile devices. Previous/Next slides are generated on-demand from functions or promises.</li>
+
+<!--    <lI><a href="./demo/infinite.html">Infinite buffered carousel</a> : full screen example for mobile devices. Previous/Next slides are generated on-demand from functions or promises.</li>
       <br>
+    -->
     <li><a href="./demo/flickr-full/index.html">Fullscreen Flickr demo (mobile)</a> : demo using Flickr API and a carousel to display Flickr groups feeds/</li>
 
     <br><br><br>

@@ -1,12 +1,18 @@
-/*global browserTrigger, beforeEach, afterEach, describe, it, inject, expect, module, angular, $*/
+/*global waits, runs, browserTrigger, beforeEach, afterEach, describe, it, inject, expect, module, angular, $*/
 
 describe('carousel', function () {
   'use strict';
 
   var scope, $compile, $sandbox;
 
-  $('body').append("<link href='http://127.0.0.1:9876/base/dist/angular-carousel.min.css' rel='stylesheet' type='text/css'>");
-  $('body').append("<style>ul,li {padding:0;margin:0;width:200px !important} .rn-carousel-animate {-webkit-transition: -webkit-transform 0s ease-out; -moz-transition: -moz-transform 0s ease-out; transition: transform 0s ease-out;}</style>");
+
+  //$('body').append("<link href='/base/dist/angular-carousel.min.css' rel='stylesheet' type='text/css'>");
+  $('body').append("<style>ul,li {padding:0;margin:0;width:200px !important} " +
+      ".rn-carousel-animate { -webkit-transition: -webkit-transform 0.001s ease-out; " +
+      "-moz-transition: -moz-transform 0.001s ease-out; transition: transform 0.001s ease-out;} "+
+      ".rn-carousel-noanimate {-webkit-transition: none;-moz-transition: none;-ms-transition: none;" +
+      "-o-transition: none;transition: none;}</style>");
+
   //console.log(document.location);
   beforeEach(
     module('angular-carousel')
@@ -59,11 +65,15 @@ describe('carousel', function () {
     return $element;
   }
 
+  function getElmTransform(elm) {
+    var curMatrix = elm.css('-webkit-transform');
+    if (!curMatrix) curMatrix = elm.css('transform');
+    return curMatrix;
+  }
   function validCSStransform(elm) {
     var expectedPosition = (elm.outerWidth() * elm.scope().carouselCollection.index * -1),
         expectedMatrix = 'matrix(1, 0, 0, 1, ' + expectedPosition + ', 0)',
-        curMatrix = elm.css('-webkit-transform');
-    if (!curMatrix) curMatrix = elm.css('transform');
+        curMatrix = getElmTransform(elm);
     expect(curMatrix).toBe(expectedMatrix);
   }
 
@@ -89,19 +99,17 @@ describe('carousel', function () {
   describe('directive with a data-bound index defined', function () {
     it('the index attribute should be used to position the first visible slide', function () {
         var elm = compileTpl({useIndex: 'localIndex'});
-        //waits(500);
-        //runs(function () {
-            validCSStransform(elm);
-        //});
+        waitAndCheck(function() {
+          validCSStransform(elm);
+        }, 200);
     });
     it('index change should update the carousel position', function () {
         var elm = compileTpl({useIndex: 'localIndex'});
         scope.localIndex = 5;
         scope.$digest();
-       // waits(500);
-       // runs(function () {
-            validCSStransform(elm);
-       // });
+        waitAndCheck(function() {
+          validCSStransform(elm);
+        }, 200);
     });
     it('carousel index should be bound to local index', function () {
         var elm = compileTpl({useIndex: 'localIndex'});
@@ -114,20 +122,18 @@ describe('carousel', function () {
   describe('directive with a numeric index defined', function () {
     it('the index attribute should be used to position the first visible slide', function () {
         var elm = compileTpl({useIndex: 5});
-        //waits(500);
-        //runs(function () {
-            validCSStransform(elm);
-      //  });
+        waitAndCheck(function() {
+          validCSStransform(elm);
+        }, 200);
     });
     it('index change should update the carousel position', function () {
         // check watcher present even if index is not a bindable attribute
         var elm = compileTpl({useIndex: 5});
         elm.scope().carouselCollection.goToIndex(9);
         scope.$digest();
-      //  waits(500);
-        //runs(function () {
-            validCSStransform(elm);
-       // });
+        waitAndCheck(function() {
+          validCSStransform(elm);
+        }, 200);
     });
     it('index out of range should set the carousel to last slide', function () {
         var elm = compileTpl({useIndex: 100});
@@ -197,7 +203,6 @@ describe('carousel', function () {
         var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
         scope.localIndex = 5;
         scope.$digest();
-        console.log(elm.scope().carouselCollection.index);
         expect(elm.find('li')[0].id).toBe('slide-' + (scope.localIndex - 1));
     });
     it('should position the buffered slides correctly even if index is zero', function () {
@@ -222,54 +227,62 @@ describe('carousel', function () {
     });
   });
 
-  // describe('activeIndex property on standard carousel', function () {
-  //   it('should be at 0 on start', function () {
-  //       var elm = compileTpl();
-  //       expect(elm.scope().activeIndex).toBe(0);
-  //   });
-  //   it('should be set at initial position', function () {
-  //       var elm = compileTpl({useIndex: 'localIndex'});
-  //       expect(elm.scope().activeIndex).toBe(scope.localIndex);
-  //   });
-  //   it('should follow carousel position', function () {
-  //       var elm = compileTpl({useIndex: 'localIndex'});
-  //       scope.localIndex = scope.items.length - 1;
-  //       scope.$digest();
-  //       expect(elm.scope().activeIndex).toBe(scope.items.length - 1);
-  //   });
-  // });
+  describe('index property on standard carousel', function () {
+    it('should be at 0 on start', function () {
+        var elm = compileTpl();
+        expect(elm.scope().carouselCollection.index).toBe(0);
+    });
+    it('should be set at initial position', function () {
+        var elm = compileTpl({useIndex: 'localIndex'});
+        expect(elm.scope().carouselCollection.index).toBe(scope.localIndex);
+    });
+    it('should follow carousel position', function () {
+        var elm = compileTpl({useIndex: 'localIndex'});
+        scope.localIndex = scope.items.length - 1;
+        scope.$digest();
+        expect(elm.scope().carouselCollection.index).toBe(scope.items.length - 1);
+    });
+  });
 
-  // describe('activeIndex property on buffered carousel', function () {
-  //   it('should be at 0 on start', function () {
-  //       var elm = compileTpl({useBuffer: true});
-  //       expect(elm.scope().activeIndex).toBe(0);
-  //   });
-  //   it('should be set correctly at initial position', function () {
-  //       var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
-  //       expect(elm.scope().activeIndex).toBe(elm.scope().totalIndex - elm.scope().carouselBufferStart);
-  //   });
-  //   it('should be last item of buffer if carousel last slide', function () {
-  //       var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
-  //       scope.localIndex = scope.items.length - 1;
-  //       scope.$digest();
-  //       expect(elm.scope().activeIndex).toBe(elm.scope().carouselBufferSize - 1);
-  //   });
-  //   it('should be last item of buffer if carousel last slide', function () {
-  //       var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
-  //       scope.localIndex = 100;
-  //       scope.$digest();
-  //       expect(elm.scope().activeIndex).toBe(elm.scope().carouselBufferSize - 1);
-  //   });
-  //   it('should display first slide when reset local index to 0', function () {
-  //       var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
-  //       scope.localIndex = 5;
-  //       scope.$digest();
-  //       scope.localIndex = 0;
-  //       scope.$digest();
-  //       expect(elm.position().left).toBe(0);
-  //       expect(elm.css('left')).toBe('auto');
-  //   });
-  // });
+  describe('index property on buffered carousel', function () {
+    it('should be at 0 on start', function () {
+        var elm = compileTpl({useBuffer: true});
+        expect(elm.find('li')[0].id).toBe('slide-0');
+        expect(elm.scope().carouselCollection.index).toBe(0);
+    });
+    it('should be set correctly at initial position', function () {
+        var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
+        expect(elm.scope().carouselCollection.index).toBe(scope.localIndex);
+        expect(elm.find('li')[0].id).toBe('slide-' + (scope.localIndex - 1));
+    });
+    it('should be last item of buffer if carousel last slide', function () {
+        var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
+        scope.localIndex = scope.items.length - 1;
+        scope.$digest();
+        waitAndCheck(function() {
+          expect(elm.scope().carouselCollection.index).toBe(scope.localIndex);
+          expect(elm.find('li')[0].id).toBe('slide-' + (scope.localIndex - 2));
+        });
+    });
+    it('should be last item of buffer if carousel last slide', function () {
+        var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
+        scope.localIndex = 100;
+        scope.$digest();
+        waitAndCheck(function() {
+          expect(elm.scope().carouselCollection.index).toBe(scope.items.length - 1);
+          expect(elm.find('li')[0].id).toBe('slide-' + (scope.localIndex-2));
+        });
+    });
+    it('should display first slide when reset local index to 0', function () {
+        var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
+        scope.localIndex = 5;
+        scope.$digest();
+        scope.localIndex = 0;
+        scope.$digest();
+        expect(elm.position().left).toBe(0);
+        expect(elm.css('left')).toBe('auto');
+    });
+  });
 
   // TODO
   // describe('collection update', function () {
@@ -306,7 +319,10 @@ describe('carousel', function () {
     browserTrigger(elm, 'touchmove', [], endX, startY);
     browserTrigger(elm, 'touchend', [], endX, startY);
   }
-
+  function waitAndCheck(cb, delay) {
+    waits(delay || 100);
+    runs(cb);
+  }
   describe('swipe behaviour', function () {
     var minMove;
     beforeEach(function() {
@@ -366,22 +382,26 @@ describe('carousel', function () {
         var elm = compileTpl({useBuffer: true});
         var minMove = -(elm.outerWidth() * 0.1 + 1);
         fakeMove(elm, minMove);
-        fakeMove(elm, minMove);
-        fakeMove(elm, minMove);
-        expect(elm.find('li').length).toBe(3);
-        expect(elm.find('li')[0].id).toBe('slide-2');
-        expect(elm.scope().carouselCollection.index).toBe(3);
-        fakeMove(elm, -minMove);
-        fakeMove(elm, -minMove);
-        expect(elm.find('li').length).toBe(3);
-        expect(elm.find('li')[0].id).toBe('slide-0');
-        expect(elm.scope().carouselCollection.index).toBe(1);
-        fakeMove(elm, -minMove);
-        fakeMove(elm, -minMove);
-        fakeMove(elm, -minMove);
-        expect(elm.find('li').length).toBe(3);
-        expect(elm.find('li')[0].id).toBe('slide-0');
-        expect(elm.scope().carouselCollection.index).toBe(0);
+
+        waitAndCheck(function() {
+          expect(elm.scope().carouselCollection.index).toBe(1);
+          expect(elm.find('li')[0].id).toBe('slide-0');
+          fakeMove(elm, minMove);
+          waitAndCheck(function() {
+            expect(elm.scope().carouselCollection.index).toBe(2);
+            expect(elm.find('li')[0].id).toBe('slide-1');
+            fakeMove(elm, -minMove);
+            waitAndCheck(function() {
+              expect(elm.scope().carouselCollection.index).toBe(1);
+              expect(elm.find('li')[0].id).toBe('slide-0');
+              fakeMove(elm, -minMove);
+              waitAndCheck(function() {
+                expect(elm.scope().carouselCollection.index).toBe(0);
+                expect(elm.find('li')[0].id).toBe('slide-0');
+              });
+            });
+          });
+        });
     });
   });
 

@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.8 - 2013-06-19
+ * @version v0.0.8 - 2013-06-24
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -12,15 +12,10 @@ Angular touch carousel with CSS GPU accel and slide buffering/cycling
 http://github.com/revolunet/angular-carousel
 
 TODO : 
- - OK cycle + index
- - OK cycle without buffer
- - OK activeIndex : removed
- - OK skip initial animation
- - OK transitionCb bug
- - OK ngRepeat collections
+ - skip initial animation
  - add/remove ngRepeat collection
  - prev/next cbs
- - cycle + no initial index ? (is -1)
+ - cycle + no initial index ? (is -1 and has bug)
  - cycle + indicator
 */
 
@@ -78,7 +73,6 @@ angular.module('angular-carousel')
         repeatAttribute.value = originalItem + ' in carouselCollection.cards' + trackProperty ;
 
       return function(scope, iElement, iAttrs, controller) {
-
         carousels++;
         var carouselId = 'rn-carousel-' + carousels,
             swiping = 0,                    // swipe status
@@ -95,7 +89,8 @@ angular.module('angular-carousel')
 
         function transitionEndCallback(event) {
           /* when slide transition finished, update buffer */
-          if (event.srcElement === carousel[0] && (
+          //console.log('transitionEndCallback');
+          if ((event.target && event.target=== carousel[0]) && (
               event.propertyName === 'transform' ||
               event.propertyName === '-webkit-transform' ||
               event.propertyName === '-moz-transform')
@@ -119,9 +114,12 @@ angular.module('angular-carousel')
               scope.$watch('carouselCollection.index', function(newValue) {
                 indexModel.assign(scope.$parent, newValue);
               });
+              initialIndex = indexModel(scope);
               scope.$parent.$watch(indexModel, function(newValue, oldValue) {
-                scope.carouselCollection.goToIndex(newValue, true);
-              });
+                  if (newValue!==undefined) {
+                    scope.carouselCollection.goToIndex(newValue, true);
+                  }
+                });
             } else if (!isNaN(iAttrs.rnCarouselIndex)) {
               /* if user just set an initial number, set it */
               initialIndex = parseInt(iAttrs.rnCarouselIndex, 10);
@@ -130,7 +128,6 @@ angular.module('angular-carousel')
 
         if (angular.isDefined(iAttrs.rnCarouselCycle)) {
           collectionParams.cycle = true;
-          if (initialIndex===0) initialIndex = 1;
         }
         collectionParams.index = initialIndex;
 
@@ -145,12 +142,14 @@ angular.module('angular-carousel')
           if (newValue) updateSlidePosition();
         });
 
-        var collectionUpdated = false;
+        var collectionReady = false;
         scope.$watch(collectionModel, function(newValue, oldValue) {
           // update whole collection contents
           // reinitialise index
-          scope.carouselCollection.setItems(angular.copy(newValue), collectionUpdated);
-          collectionUpdated = true;
+          scope.carouselCollection.setItems(newValue, collectionReady);
+          collectionReady = true;
+          if (containerWidth===0) updateContainerWidth();
+          updateSlidePosition();
         });
 
         var vendorPrefixes = ["webkit", "moz"];
@@ -191,11 +190,12 @@ angular.module('angular-carousel')
         function updateSlidePosition(skipAnimation) {
           /* trigger carousel position update */
           skipAnimation = !!skipAnimation || (initialPosition===true);
+
           if (containerWidth===0) updateContainerWidth();
           offset = scope.carouselCollection.getRelativeIndex() * -containerWidth;
-          //console.log('updateSlidePosition', offset, skipAnimation);
           if (skipAnimation===true) {
-              carousel.addClass('rn-carousel-noanimate')
+              carousel.removeClass('rn-carousel-animate')
+                  .addClass('rn-carousel-noanimate')
                   .css(translateSlideproperty(offset));
           } else {
               carousel.removeClass('rn-carousel-noanimate')
@@ -223,10 +223,10 @@ angular.module('angular-carousel')
             }
             else if (swiping === 2) {
               var slideCount = scope.carouselCollection.length(),
-                  index = scope.carouselCollection.index;
+                  position = scope.carouselCollection.position;
               /* ratio is used for the 'rubber band' effect */
               var ratio = 1;
-              if ((index === 0 && coords.x > startX) || (index === slideCount - 1 && coords.x < startX))
+              if ((position === 0 && coords.x > startX) || (position === slideCount - 1 && coords.x < startX))
                 ratio = 3;
               /* follow cursor movement */
               offset = startOffset + deltaX / ratio;
@@ -241,16 +241,16 @@ angular.module('angular-carousel')
             if (swiping > 0) {
               swiping = 0;
               var slideCount = scope.carouselCollection.length(),
-                  index = scope.carouselCollection.index,
+                  position = scope.carouselCollection.position,
                   slideOffset = (offset < startOffset)?1:-1,
-                  tmpSlideIndex = Math.min(Math.max(0, index + slideOffset), slideCount - 1);
+                  tmpSlideIndex = Math.min(Math.max(0, position + slideOffset), slideCount - 1);
 
               var delta = coords.x - startX;
               if (Math.abs(delta) <= containerWidth * minSwipePercentage) {
                 /* prevent swipe if not swipped enough */
-                tmpSlideIndex = index;
+                tmpSlideIndex = position;
               }
-              var changed = (index !== tmpSlideIndex);
+              var changed = (position !== tmpSlideIndex);
               /* reset slide position if same slide (watch not triggered) */
               if (!changed) {
                 scope.$apply(function() {
@@ -260,10 +260,10 @@ angular.module('angular-carousel')
                 scope.$apply(function() {
                   if (angular.isDefined(iAttrs.rnCarouselCycle)) {
                     // force slide move even if invalid position for cycle carousels
-                    scope.carouselCollection.index = tmpSlideIndex;
+                    scope.carouselCollection.position = tmpSlideIndex;
                     updateSlidePosition();
                   }
-                  scope.carouselCollection.goToIndex(tmpSlideIndex, true);
+                  scope.carouselCollection.goTo(tmpSlideIndex, true);
                 });
               }
             }
@@ -290,21 +290,20 @@ angular.module('angular-carousel')
             bufferSize: 0,
             bufferStart: 0,
             cycle: false,
-            index: 0,
+            cycleOffset: 0,            // offset
+            index: 0,                  // index relative to the original collection
+            position: 0,               // position relative to the current elements
             items: [],
             cards: [],
-            updated: null,
+            updated: null,             // triggers DOM change
             debug: false
-        },
-            me = this,
-            i;
+        };
 
+        var i;
         if(options) for(i in options) initial[i] = options[i];
-        for(i in initial) me[i] = initial[i];
+        for(i in initial) this[i] = initial[i];
 
-        angular.extend(me, initial, options);
-
-        this.log('init', options, me, 'pouet');
+        angular.extend(this, initial, options);
 
         this.init();
 
@@ -313,56 +312,80 @@ angular.module('angular-carousel')
     CollectionManager.prototype.log = function() {
         if (this.debug) {
             console.log.apply(console, arguments);
-            console.log('CollectionManager:', this);
+           // console.log('CollectionManager:', this);
         }
     };
+    CollectionManager.prototype.getPositionFromIndex = function(index) {
+        return (index + this.cycleOffset) % this.length();
+    };
+
     CollectionManager.prototype.goToIndex = function(index, delayedUpdate) {
-        this.log('gotoIndex start', index, delayedUpdate);
+        // cap index
+        index = Math.max(0, Math.min(index, this.getLastIndex()));
+        if (this.updated && index===this.index) {
+            this.log('skip position change(same)');
+            return false;
+        }
+        var position = this.getPositionFromIndex(index);
+        return this.goTo(position, delayedUpdate);
+    };
+
+    CollectionManager.prototype.goTo = function(position, delayedUpdate) {
+        this.log('goto start', position, delayedUpdate);
+
         if (this.length()===0) {
-            this.log('empty, skip');
+            this.log('empty, skip gotoIndex');
             return;
         }
+        // cap position
+        position = Math.max(0, Math.min(position, this.getLastIndex()));
         var cycled = false;
         if (this.cycle) {
-            if (index===0) {
+            if (position===0) {
                 // unshift
-                this.log('cycleAtBeginning', index, this.index);
+                this.log('cycleAtBeginning', position);
                 this.cycleAtBeginning();
-                index = 1;
+                position = 1;
+                this.cycleOffset++;
                 cycled = true;
-            } else if (index === this.getLastIndex()) {
+            } else if (position === this.getLastIndex()) {
                 // push
-                this.log('cycleAtEnd', index, this.index);
+                this.log('cycleAtEnd', position);
                 this.cycleAtEnd();
-                index -= 1;
+                position--;
+                this.cycleOffset--;
                 cycled = true;
             }
+            this.cycleOffset %= this.length();
         }
-        this.index = Math.max(0, Math.min(index, this.getLastIndex()));
+
+        this.position = Math.max(0, Math.min(position, this.getLastIndex()));
+
+        var realIndex = (this.position - this.cycleOffset + this.length()) % this.length();
+        this.index = Math.max(0, Math.min(realIndex, this.getLastIndex()));
 
         if (!delayedUpdate) {
             this.adjustBuffer();
         }
         if (!cycled) this.updated = new Date();
 
-        this.log('gotoIndex start', this.index, cycled);
     };
 
     CollectionManager.prototype.next = function() {
         // go to next item
         if (this.cycle) {
-            this.goToIndex((this.index + 1) % this.length());
+            this.goTo((this.position + 1) % this.length());
         } else {
-            this.goToIndex(Math.min(this.index + 1, this.getLastIndex()));
+            this.goTo(Math.min(this.position + 1, this.getLastIndex()));
         }
     };
     CollectionManager.prototype.prev = function() {
         // go to prev item
         if (this.cycle) {
-            this.goToIndex((this.index - 1 + this.length()) % this.length());
+            this.goTo((this.position - 1 + this.length()) % this.length());
         } else {
-            var prevIndex = (this.length()>0)?(Math.max(0, (this.index - 1) % this.length())):0;
-            this.goToIndex(prevIndex);
+            var prevIndex = (this.length()>0)?(Math.max(0, (this.position - 1) % this.length())):0;
+            this.goTo(prevIndex);
         }
     };
     CollectionManager.prototype.setBufferSize = function(length) {
@@ -374,29 +397,35 @@ angular.module('angular-carousel')
         return (this.bufferSize > 0);
     };
     CollectionManager.prototype.getRelativeIndex = function() {
-        return Math.max(0, Math.min(this.getLastIndex(), this.index - this.bufferStart));
+        var relativeIndex = Math.max(0, Math.min(this.getLastIndex(), this.position - this.bufferStart));
+        return relativeIndex;
     };
     CollectionManager.prototype.adjustBuffer = function() {
         // adjust buffer start position
-        var maxBufferStart = this.getLastIndex() + 1 - this.bufferSize;
-        this.bufferStart = Math.max(0, Math.min(maxBufferStart, this.index - 1));
+        var maxBufferStart = (this.getLastIndex() + 1 - this.bufferSize) % this.length();
+        this.log('maxBufferStart', maxBufferStart);
+        this.bufferStart = Math.max(0, Math.min(maxBufferStart, this.position - 1));
         this.cards = this.items.slice(this.bufferStart, this.bufferStart + this.bufferSize);
-        this.log('adjustBuffer', this.bufferStart, this.cards);
+        this.log('adjustBuffer from', this.bufferStart);
     };
     CollectionManager.prototype.length = function() {
         return this.items.length;
     };
     CollectionManager.prototype.getLastIndex = function() {
-        return Math.max(0, this.length() - 1);
+        var lastIndex = Math.max(0, this.length() - 1);
+        return lastIndex;
     };
     CollectionManager.prototype.init = function() {
-        this.log('init');
+        //this.log('init', this);
         this.setBufferSize(this.bufferSize || this.length());
-        this.goToIndex(this.index);
+        if (this.length() > 0) this.goToIndex(this.index);
     };
     CollectionManager.prototype.setItems = function(items, reset) {
-        this.log('setItems', items);
-        if (reset) this.index=0;
+        this.log('setItems', items, reset);
+        if (reset) {
+            this.index=0;
+            this.position=0;
+        }
         this.items = items;
         this.init();
     };

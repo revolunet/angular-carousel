@@ -89,32 +89,33 @@ describe("CollectionManager", function() {
         it("first card should be last item initially", function() {
             expect(collec.cards[0]).toEqual(10);
         });
-        it("first index should be 1", function() {
-            expect(collec.index).toEqual(1);
+        it("initial index must be 0 and position 1", function() {
+            expect(collec.index).toEqual(0);
+            expect(collec.position).toEqual(1);
         });
         it("prev() on first item should go to last item", function() {
-            expect(collec.index).toBe(1);
-            //console.log(collec.cards);
-            //expect(collec.cards[0]).toEqual(10);
+            expect(collec.position).toBe(1);
+            expect(collec.cards[0]).toEqual(10);
             collec.prev();
             expect(collec.cards[0]).toEqual(9);
             collec.prev();
             expect(collec.cards[0]).toEqual(8);
         });
         it("last card should be first item when we move to last slide", function() {
-            collec.goToIndex(collec.items.length - 1);
+            collec.goTo(collec.items.length - 1);
             expect(collec.cards[collec.cards.length - 1]).toEqual(10);
             collec.next();
             expect(collec.cards[collec.cards.length - 1]).toEqual(1);
         });
         it("next() on last item should go to first item", function() {
-            collec.goToIndex(collec.items.length - 1);
+            collec.goTo(collec.items.length - 1);
             expect(collec.cards[0]).toEqual(1);
+            expect(collec.position).toEqual(8);
             expect(collec.index).toEqual(8);
-            //expect(collec.index).toBe(cycleCollectionOptions.items.length-1);
             collec.next();
             expect(collec.cards[0]).toEqual(2);
-            expect(collec.index).toEqual(8);
+            expect(collec.index).toEqual(9);
+            expect(collec.position).toEqual(8);
         });
     });
     describe("buffer", function() {
@@ -181,7 +182,8 @@ describe("CollectionManager", function() {
         });
         it("should init buffer and index correctly", function() {
             expect(collec1.cards.length).toBe(3);
-            expect(collec1.index).toBe(1);
+            expect(collec1.index).toBe(0);
+            expect(collec1.position).toBe(1);
             expect(collec1.cards).toEqual([10, 1, 2]);
             expect(collec2.cards.length).toBe(3);
             expect(collec2.index).toBe(4);
@@ -194,30 +196,30 @@ describe("CollectionManager", function() {
             collec2.goToIndex(0);
             expect(collec2.cards).toEqual([10, 1, 2]);
             collec2.goToIndex(collec2.items.length - 1);
-            expect(collec2.cards).toEqual([8, 9, 10]);
+            expect(collec2.cards).toEqual([9, 10, 1]);
             collec2.next();
+            expect(collec2.cards).toEqual([10, 1, 2]);
+            collec2.prev();
             expect(collec2.cards).toEqual([9, 10, 1]);
             collec2.prev();
-            expect(collec2.cards).toEqual([8, 9, 10]);
+            collec2.prev();
+            collec2.prev();
+            expect(collec2.cards).toEqual([6, 7, 8]);
             collec2.prev();
             collec2.prev();
             collec2.prev();
-            expect(collec2.cards).toEqual([5, 6, 7]);
             collec2.prev();
-            collec2.prev();
-            collec2.prev();
+            expect(collec2.cards).toEqual([2, 3, 4]);
             collec2.prev();
             expect(collec2.cards).toEqual([1, 2, 3]);
             collec2.prev();
-            expect(collec2.cards).toEqual([10, 1, 2]);
             collec2.prev();
-            collec2.prev();
-            expect(collec2.cards).toEqual([8, 9, 10]);
+            expect(collec2.cards).toEqual([9, 10, 1]);
             collec2.next();
-            collec2.next();
-            expect(collec2.cards).toEqual([10, 1, 2]);
             collec2.next();
             expect(collec2.cards).toEqual([1, 2, 3]);
+            collec2.next();
+            expect(collec2.cards).toEqual([2, 3, 4]);
         });
     });
 });

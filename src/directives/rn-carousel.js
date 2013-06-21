@@ -34,7 +34,6 @@ angular.module('angular-carousel')
         repeatAttribute.value = originalItem + ' in carouselCollection.cards' + trackProperty ;
 
       return function(scope, iElement, iAttrs, controller) {
-
         carousels++;
         var carouselId = 'rn-carousel-' + carousels,
             swiping = 0,                    // swipe status
@@ -51,7 +50,8 @@ angular.module('angular-carousel')
 
         function transitionEndCallback(event) {
           /* when slide transition finished, update buffer */
-          if (event.srcElement === carousel[0] && (
+          //console.log('transitionEndCallback');
+          if ((event.target && event.target=== carousel[0]) && (
               event.propertyName === 'transform' ||
               event.propertyName === '-webkit-transform' ||
               event.propertyName === '-moz-transform')
@@ -75,9 +75,12 @@ angular.module('angular-carousel')
               scope.$watch('carouselCollection.index', function(newValue) {
                 indexModel.assign(scope.$parent, newValue);
               });
+              initialIndex = indexModel(scope);
               scope.$parent.$watch(indexModel, function(newValue, oldValue) {
-                scope.carouselCollection.goToIndex(newValue, true);
-              });
+                  if (newValue!==undefined) {
+                    scope.carouselCollection.goToIndex(newValue, true);
+                  }
+                });
             } else if (!isNaN(iAttrs.rnCarouselIndex)) {
               /* if user just set an initial number, set it */
               initialIndex = parseInt(iAttrs.rnCarouselIndex, 10);
@@ -86,7 +89,6 @@ angular.module('angular-carousel')
 
         if (angular.isDefined(iAttrs.rnCarouselCycle)) {
           collectionParams.cycle = true;
-          if (initialIndex===0) initialIndex = 1;
         }
         collectionParams.index = initialIndex;
 
@@ -101,12 +103,14 @@ angular.module('angular-carousel')
           if (newValue) updateSlidePosition();
         });
 
-        var collectionUpdated = false;
+        var collectionReady = false;
         scope.$watch(collectionModel, function(newValue, oldValue) {
           // update whole collection contents
           // reinitialise index
-          scope.carouselCollection.setItems(angular.copy(newValue), collectionUpdated);
-          collectionUpdated = true;
+          scope.carouselCollection.setItems(newValue, collectionReady);
+          collectionReady = true;
+          if (containerWidth===0) updateContainerWidth();
+          updateSlidePosition();
         });
 
         var vendorPrefixes = ["webkit", "moz"];
@@ -147,11 +151,12 @@ angular.module('angular-carousel')
         function updateSlidePosition(skipAnimation) {
           /* trigger carousel position update */
           skipAnimation = !!skipAnimation || (initialPosition===true);
+
           if (containerWidth===0) updateContainerWidth();
           offset = scope.carouselCollection.getRelativeIndex() * -containerWidth;
-          //console.log('updateSlidePosition', offset, skipAnimation);
           if (skipAnimation===true) {
-              carousel.addClass('rn-carousel-noanimate')
+              carousel.removeClass('rn-carousel-animate')
+                  .addClass('rn-carousel-noanimate')
                   .css(translateSlideproperty(offset));
           } else {
               carousel.removeClass('rn-carousel-noanimate')
@@ -179,10 +184,10 @@ angular.module('angular-carousel')
             }
             else if (swiping === 2) {
               var slideCount = scope.carouselCollection.length(),
-                  index = scope.carouselCollection.index;
+                  position = scope.carouselCollection.position;
               /* ratio is used for the 'rubber band' effect */
               var ratio = 1;
-              if ((index === 0 && coords.x > startX) || (index === slideCount - 1 && coords.x < startX))
+              if ((position === 0 && coords.x > startX) || (position === slideCount - 1 && coords.x < startX))
                 ratio = 3;
               /* follow cursor movement */
               offset = startOffset + deltaX / ratio;
@@ -197,16 +202,16 @@ angular.module('angular-carousel')
             if (swiping > 0) {
               swiping = 0;
               var slideCount = scope.carouselCollection.length(),
-                  index = scope.carouselCollection.index,
+                  position = scope.carouselCollection.position,
                   slideOffset = (offset < startOffset)?1:-1,
-                  tmpSlideIndex = Math.min(Math.max(0, index + slideOffset), slideCount - 1);
+                  tmpSlideIndex = Math.min(Math.max(0, position + slideOffset), slideCount - 1);
 
               var delta = coords.x - startX;
               if (Math.abs(delta) <= containerWidth * minSwipePercentage) {
                 /* prevent swipe if not swipped enough */
-                tmpSlideIndex = index;
+                tmpSlideIndex = position;
               }
-              var changed = (index !== tmpSlideIndex);
+              var changed = (position !== tmpSlideIndex);
               /* reset slide position if same slide (watch not triggered) */
               if (!changed) {
                 scope.$apply(function() {
@@ -216,10 +221,10 @@ angular.module('angular-carousel')
                 scope.$apply(function() {
                   if (angular.isDefined(iAttrs.rnCarouselCycle)) {
                     // force slide move even if invalid position for cycle carousels
-                    scope.carouselCollection.index = tmpSlideIndex;
+                    scope.carouselCollection.position = tmpSlideIndex;
                     updateSlidePosition();
                   }
-                  scope.carouselCollection.goToIndex(tmpSlideIndex, true);
+                  scope.carouselCollection.goTo(tmpSlideIndex, true);
                 });
               }
             }
