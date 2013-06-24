@@ -89,7 +89,7 @@ angular.module('angular-carousel')
 
         function transitionEndCallback(event) {
           /* when slide transition finished, update buffer */
-          //console.log('transitionEndCallback');
+          //console.log('transitionEndCallback', this, event);
           if ((event.target && event.target=== carousel[0]) && (
               event.propertyName === 'transform' ||
               event.propertyName === '-webkit-transform' ||
@@ -282,7 +282,7 @@ angular.module('angular-carousel')
           end: function (coords) {
             /* when movement ends, go to next slide or stay on the same */
             if (containerWidth===0) updateContainerWidth();
-            if (swiping > 0) {
+            if (swiping > 1) {
               swiping = 0;
               var lastIndex = scope.carouselCollection.getLastIndex(),
                   position = scope.carouselCollection.position,
