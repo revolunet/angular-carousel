@@ -36,6 +36,10 @@ module.exports = function(grunt) {
       dist: {
         src: ['src/*.js', 'src/**/*.js'],
         dest: '<%= dirs.dest %>/<%= pkg.name %>.js'
+      },
+      ngMobile: {
+        src: ['lib/angular-mobile.js'],
+        dest: '<%= dirs.dest %>/angular-mobile.js'
       }
     },
     cssmin: {
