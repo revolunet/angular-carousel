@@ -95,21 +95,13 @@
         $scope.page = 0;
 
         $scope.getSlide = function(item, direction) {
-          // generate n new slides
-          // we can send one or more items
-          // with promises, or not
-         //return null;
-          //var itemCount = 1;
-         // var items = [];
-          //for (var i = 0; i < itemCount; i++) {
-            var nextDate = new Date();
-            nextDate.setTime(item.date.getTime() + (direction*86400000));
-            var item = {
-              bg: getColor(),
-              date: nextDate
-            };
-        //  };
-          //if (direction < 0) items.reverse();
+          // generate a new slide
+          var nextDate = new Date();
+          nextDate.setTime(item.date.getTime() + (direction*86400000));
+          var item = {
+            bg: getColor(),
+            date: nextDate
+          };
 
           return item;
 
