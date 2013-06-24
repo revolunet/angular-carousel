@@ -42,6 +42,7 @@ angular.module('MyApp', ['angular-carousel']);
  - `rn-carousel-index` two way binding to control the carousel position, see demo page.
  - `rn-carousel-indicator` to turn on the indicator, see demo page.
  - `rn-carousel-buffered` to buffer the carousel, good if you have many or unlimited items inside.
+ - `rn-carousel-cycle` to have an forever-cycling carousel.
  - ~~`rn-carousel-next="addSlides(index, item)"` : callback called when carousel reach the penultimate slide. you can then return one or more elements if needed.~~
  - ~~`rn-carousel-prev="addSlides(index, item)"` : callback called when carousel reach the second slide. you can then return one or more elements if needed.~~
 
