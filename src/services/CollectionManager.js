@@ -17,8 +17,8 @@ angular.module('angular-carousel')
             cycleOffset: 0,            // offset
             index: 0,                  // index relative to the original collection
             position: 0,               // position relative to the current elements
-            items: [],
-            cards: [],
+            items: [],                 // total collection
+            cards: [],                 // bufered DOM collection
             updated: null,             // triggers DOM change
             debug: false
         };
@@ -163,6 +163,8 @@ angular.module('angular-carousel')
         this.items.push(slide);
         if (updateIndex) {
             // no need to change index when appending items
+            this.adjustBuffer();
+            this.updated = new Date();
         }
         if (!this.buffered) {
             this.bufferSize++;
@@ -172,11 +174,13 @@ angular.module('angular-carousel')
         // insert item(s) at beginning
         this.log('unshift item(s)', slide, updateIndex);
         this.items.unshift(slide);
-        if (updateIndex) {
-            this.position++;
-        }
         if (!this.buffered) {
             this.bufferSize++;
+        }
+        if (updateIndex) {
+            this.position++;
+            this.adjustBuffer();
+            this.updated = new Date();
         }
     };
     CollectionManager.prototype.cycleAtBeginning = function() {

@@ -81,7 +81,7 @@ angular.module('angular-carousel')
             offset  = 0,                    // move offset
             minSwipePercentage = 0.1,       // minimum swipe required to trigger slide change
             containerWidth = 0,          // store width of the first slide
-            initialPosition = true;         // flag to detect initial status
+            skipAnimation = true;
 
         /* add a wrapper div that will hide the overflow */
         var carousel = iElement.wrap("<div id='" + carouselId +"' class='rn-carousel-container'></div>"),
@@ -108,13 +108,20 @@ angular.module('angular-carousel')
           if (items) {
             if (angular.isObject(items.promise)) {
               items.promise.then(function(items) {
-                if (items) scope.carouselCollection[method](items, true);
+                if (items) {
+                  skipAnimation = true;
+                  scope.carouselCollection[method](items, true);
+                }
               });
             } else if (angular.isFunction(items.then)) {
               items.then(function(items) {
-                if (items) scope.carouselCollection[method](items, true);
+                if (items) {
+                  skipAnimation = true;
+                  scope.carouselCollection[method](items, true);
+                }
               });
             } else {
+              skipAnimation = true;
               scope.carouselCollection[method](items, true);
             }
           }
@@ -224,9 +231,9 @@ angular.module('angular-carousel')
           container.append(indicator);
         }
 
-        function updateSlidePosition(skipAnimation) {
+        function updateSlidePosition(forceSkipAnimation) {
           /* trigger carousel position update */
-          skipAnimation = !!skipAnimation || (initialPosition===true);
+          skipAnimation = !!forceSkipAnimation || skipAnimation;
 
           if (containerWidth===0) updateContainerWidth();
           offset = scope.carouselCollection.getRelativeIndex() * -containerWidth;
@@ -239,7 +246,7 @@ angular.module('angular-carousel')
                   .addClass('rn-carousel-animate')
                   .css(translateSlideproperty(offset));
           }
-          initialPosition = false;
+          skipAnimation = false;
         }
 
         $swipe.bind(carousel, {
@@ -331,8 +338,8 @@ angular.module('angular-carousel')
             cycleOffset: 0,            // offset
             index: 0,                  // index relative to the original collection
             position: 0,               // position relative to the current elements
-            items: [],
-            cards: [],
+            items: [],                 // total collection
+            cards: [],                 // bufered DOM collection
             updated: null,             // triggers DOM change
             debug: false
         };
@@ -477,6 +484,8 @@ angular.module('angular-carousel')
         this.items.push(slide);
         if (updateIndex) {
             // no need to change index when appending items
+            this.adjustBuffer();
+            this.updated = new Date();
         }
         if (!this.buffered) {
             this.bufferSize++;
@@ -486,11 +495,13 @@ angular.module('angular-carousel')
         // insert item(s) at beginning
         this.log('unshift item(s)', slide, updateIndex);
         this.items.unshift(slide);
-        if (updateIndex) {
-            this.position++;
-        }
         if (!this.buffered) {
             this.bufferSize++;
+        }
+        if (updateIndex) {
+            this.position++;
+            this.adjustBuffer();
+            this.updated = new Date();
         }
     };
     CollectionManager.prototype.cycleAtBeginning = function() {

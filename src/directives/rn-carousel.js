@@ -42,7 +42,7 @@ angular.module('angular-carousel')
             offset  = 0,                    // move offset
             minSwipePercentage = 0.1,       // minimum swipe required to trigger slide change
             containerWidth = 0,          // store width of the first slide
-            initialPosition = true;         // flag to detect initial status
+            skipAnimation = true;
 
         /* add a wrapper div that will hide the overflow */
         var carousel = iElement.wrap("<div id='" + carouselId +"' class='rn-carousel-container'></div>"),
@@ -69,13 +69,20 @@ angular.module('angular-carousel')
           if (items) {
             if (angular.isObject(items.promise)) {
               items.promise.then(function(items) {
-                if (items) scope.carouselCollection[method](items, true);
+                if (items) {
+                  skipAnimation = true;
+                  scope.carouselCollection[method](items, true);
+                }
               });
             } else if (angular.isFunction(items.then)) {
               items.then(function(items) {
-                if (items) scope.carouselCollection[method](items, true);
+                if (items) {
+                  skipAnimation = true;
+                  scope.carouselCollection[method](items, true);
+                }
               });
             } else {
+              skipAnimation = true;
               scope.carouselCollection[method](items, true);
             }
           }
@@ -185,9 +192,9 @@ angular.module('angular-carousel')
           container.append(indicator);
         }
 
-        function updateSlidePosition(skipAnimation) {
+        function updateSlidePosition(forceSkipAnimation) {
           /* trigger carousel position update */
-          skipAnimation = !!skipAnimation || (initialPosition===true);
+          skipAnimation = !!forceSkipAnimation || skipAnimation;
 
           if (containerWidth===0) updateContainerWidth();
           offset = scope.carouselCollection.getRelativeIndex() * -containerWidth;
@@ -200,7 +207,7 @@ angular.module('angular-carousel')
                   .addClass('rn-carousel-animate')
                   .css(translateSlideproperty(offset));
           }
-          initialPosition = false;
+          skipAnimation = false;
         }
 
         $swipe.bind(carousel, {

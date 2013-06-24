@@ -103,14 +103,14 @@
             date: nextDate
           };
 
-          return item;
+         // return item;
 
           // sample promise
           var defer = $q.defer();
 
           $timeout(function() {
               defer.resolve(item);
-          }, 2000);
+          }, 0);
           return defer;
         };
 
