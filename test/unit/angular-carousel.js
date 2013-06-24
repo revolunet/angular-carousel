@@ -405,6 +405,9 @@ describe('carousel', function () {
     });
   });
 
+  // describe('delayed collection and index', function () {
+  //   it('should follow multiple moves and buffer accordingly', function() {
+
   // describe('swipe buffered + index behaviour', function () {
   //   it('should initialise buffer start correctly when index is set', function() {
   //       var elm = compileTpl({useBuffer: true, useIndex: "localIndex", nbItems: 5});

@@ -43,8 +43,8 @@ angular.module('MyApp', ['angular-carousel']);
  - `rn-carousel-indicator` to turn on the indicator, see demo page.
  - `rn-carousel-buffered` to buffer the carousel, good if you have many or unlimited items inside.
  - `rn-carousel-cycle` to have an forever-cycling carousel.
- - ~~`rn-carousel-next="addSlides(index, item)"` : callback called when carousel reach the penultimate slide. you can then return one or more elements if needed.~~
- - ~~`rn-carousel-prev="addSlides(index, item)"` : callback called when carousel reach the second slide. you can then return one or more elements if needed.~~
+ - `rn-carousel-next="getNextSlide(item)"` : callback called when carousel reach the last slide, that should return a single slide. great for generating slides on-demand.
+ - `rn-carousel-prev="getPrevSlide(item)"` : callback called when carousel reach the first slide, that should return a single slide. great for generating slides on-demand.
 
 
 ## Todo :
@@ -53,7 +53,6 @@ angular.module('MyApp', ['angular-carousel']);
  - optional auto-slide
  - buffering : allow buffer size tuning (default=3 slides)
  - buffering : add intelligent indicators
- - getPrev/getNext callbacks
 
 ## Inspirations
  - https://github.com/ajoslin/angular-mobile-nav

@@ -121,6 +121,7 @@ describe("CollectionManager", function() {
     describe("buffer", function() {
         var bufferCollectionOptions = angular.extend({}, sampleCollectionOptions, {
             bufferSize: 3,
+            buffered: true,
             index: 0
         });
         var bufferCollectionOptions2 = angular.extend({}, bufferCollectionOptions, {
@@ -168,6 +169,7 @@ describe("CollectionManager", function() {
     describe("buffer+cycle", function() {
         var bufferCycleCollectionOptions = angular.extend({}, sampleCollectionOptions, {
             bufferSize: 3,
+            buffered: true,
             cycle: true,
             index: 0
         });

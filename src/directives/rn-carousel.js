@@ -57,9 +57,45 @@ angular.module('angular-carousel')
               event.propertyName === '-moz-transform')
           ) {
             scope.$apply(function() {
+              checkEdges();
               scope.carouselCollection.adjustBuffer();
               updateSlidePosition(true);
             });
+          }
+        }
+
+        function addSlides(position, items) {
+          var method = (position==='after')?'push':'unshift';
+          if (items) {
+            if (angular.isObject(items.promise)) {
+              items.promise.then(function(items) {
+                if (items) scope.carouselCollection[method](items, true);
+              });
+            } else if (angular.isFunction(items.then)) {
+              items.then(function(items) {
+                if (items) scope.carouselCollection[method](items, true);
+              });
+            } else {
+              scope.carouselCollection[method](items, true);
+            }
+          }
+        }
+
+        function checkEdges() {
+          var position = scope.carouselCollection.position,
+              lastIndex = scope.carouselCollection.getLastIndex(),
+              slides=null;
+          if (position===0 && angular.isDefined(iAttrs.rnCarouselPrev)) {
+            slides = $parse(iAttrs.rnCarouselPrev)(scope, {
+              item: scope.carouselCollection.cards[0]
+            });
+            addSlides('before', slides);
+          }
+          if (position===lastIndex && angular.isDefined(iAttrs.rnCarouselNext)) {
+            slides = $parse(iAttrs.rnCarouselNext)(scope, {
+              item: scope.carouselCollection.cards[scope.carouselCollection.cards.length - 1]
+            });
+            addSlides('after', slides);
           }
         }
 
@@ -94,6 +130,7 @@ angular.module('angular-carousel')
 
         if (isBuffered) {
           collectionParams.bufferSize = 3;
+          collectionParams.buffered = true;
         }
 
         // initialise the collection
@@ -183,11 +220,11 @@ angular.module('angular-carousel')
               startOffset = offset;
             }
             else if (swiping === 2) {
-              var slideCount = scope.carouselCollection.length(),
+              var lastIndex = scope.carouselCollection.getLastIndex(),
                   position = scope.carouselCollection.position;
               /* ratio is used for the 'rubber band' effect */
               var ratio = 1;
-              if ((position === 0 && coords.x > startX) || (position === slideCount - 1 && coords.x < startX))
+              if ((position === 0 && coords.x > startX) || (position === lastIndex && coords.x < startX))
                 ratio = 3;
               /* follow cursor movement */
               offset = startOffset + deltaX / ratio;
@@ -201,10 +238,10 @@ angular.module('angular-carousel')
             if (containerWidth===0) updateContainerWidth();
             if (swiping > 0) {
               swiping = 0;
-              var slideCount = scope.carouselCollection.length(),
+              var lastIndex = scope.carouselCollection.getLastIndex(),
                   position = scope.carouselCollection.position,
                   slideOffset = (offset < startOffset)?1:-1,
-                  tmpSlideIndex = Math.min(Math.max(0, position + slideOffset), slideCount - 1);
+                  tmpSlideIndex = Math.min(Math.max(0, position + slideOffset), lastIndex);
 
               var delta = coords.x - startX;
               if (Math.abs(delta) <= containerWidth * minSwipePercentage) {

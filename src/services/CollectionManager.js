@@ -12,6 +12,7 @@ angular.module('angular-carousel')
         var initial = {
             bufferSize: 0,
             bufferStart: 0,
+            buffered: false,
             cycle: false,
             cycleOffset: 0,            // offset
             index: 0,                  // index relative to the original collection
@@ -117,7 +118,7 @@ angular.module('angular-carousel')
         this.adjustBuffer();
     };
     CollectionManager.prototype.isBuffered = function() {
-        return (this.bufferSize > 0);
+        return this.buffered;
     };
     CollectionManager.prototype.getRelativeIndex = function() {
         var relativeIndex = Math.max(0, Math.min(this.getLastIndex(), this.position - this.bufferStart));
@@ -129,7 +130,7 @@ angular.module('angular-carousel')
         this.log('maxBufferStart', maxBufferStart);
         this.bufferStart = Math.max(0, Math.min(maxBufferStart, this.position - 1));
         this.cards = this.items.slice(this.bufferStart, this.bufferStart + this.bufferSize);
-        this.log('adjustBuffer from', this.bufferStart);
+        this.log('adjustBuffer from', this.bufferStart, 'to', this.bufferStart + this.bufferSize);
     };
     CollectionManager.prototype.length = function() {
         return this.items.length;
@@ -156,13 +157,27 @@ angular.module('angular-carousel')
         // extract first item and put it at end
         this.push(this.items.shift());
     };
-    CollectionManager.prototype.push = function(slide) {
+    CollectionManager.prototype.push = function(slide, updateIndex) {
         // insert item(s) at end
+        this.log('push item(s)', slide, updateIndex);
         this.items.push(slide);
+        if (updateIndex) {
+            // no need to change index when appending items
+        }
+        if (!this.buffered) {
+            this.bufferSize++;
+        }
     };
-    CollectionManager.prototype.unshift = function(slide) {
+    CollectionManager.prototype.unshift = function(slide, updateIndex) {
         // insert item(s) at beginning
+        this.log('unshift item(s)', slide, updateIndex);
         this.items.unshift(slide);
+        if (updateIndex) {
+            this.position++;
+        }
+        if (!this.buffered) {
+            this.bufferSize++;
+        }
     };
     CollectionManager.prototype.cycleAtBeginning = function() {
         // extract last item and put it at beginning

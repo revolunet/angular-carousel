@@ -40,25 +40,25 @@
   <body ng-app="myApp" ng-controller='demoController'>
     <a href="https://github.com/revolunet/angular-carousel"><img style="z-index:100;position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 
-    <ul rn-carousel rn-carousel-index="page" rn-carousel-buffered rn-carousel-next="getSlide(index, item, 1)" rn-carousel-prev="getSlide(index, item, -1)" class="basic">
+    <ul rn-carousel rn-carousel-index="page" rn-carousel-buffered rn-carousel-next="getSlide(item, 1)" rn-carousel-prev="getSlide(item, -1)" class="basic">
       <li ng-repeat="page in pages" style="background-color:{{ page.bg }};">
         Infinite angular-carousel demo<br><br>
         <h3 ng-bind="page.date|date"></h3>
         <br><br><br>
-        <h5 ng-bind="'activeIndex: ' + activeIndex"></h5>
-        <h5 ng-bind="'totalIndex: ' + totalIndex"></h5>
-        <h5 ng-bind="'#items: ' + carouselItems.length"></h5>
-        <h5 ng-bind="'carouselBufferStart: ' + carouselBufferStart"></h5>
-
+        <h5 ng-bind="'index: ' + carouselCollection.index"></h5>
+        <h5 ng-bind="'position: ' + carouselCollection.position"></h5>
+        <h5 ng-bind="'#items: ' + carouselCollection.items.length"></h5>
+        <h5 ng-bind="'#DOM items: ' + carouselCollection.cards.length"></h5>
       </li>
     </ul>
 
-    <script src="//code.angularjs.org/1.1.4/angular.min.js"></script>
+    <script src="//code.angularjs.org/1.1.5/angular.js"></script>
+    <!-- <script src="../components/angular/angular.js"></script> -->
     <script src="../lib/angular-mobile.js"></script>
 
     <!-- include carousel src -->
-    <script src="../src/angular-carousel.js"></script>
-    <link href='../src/angular-carousel.css' rel='stylesheet' type='text/css'>
+    <script src="../dist/angular-carousel.js"></script>
+    <link href='../dist/angular-carousel.min.css' rel='stylesheet' type='text/css'>
 
     <script>
     /* demo page code */
@@ -92,32 +92,32 @@
         $scope.pages.push(addPage());
         $scope.pages.push(addPage());
 
-        $scope.page = 4;
+        $scope.page = 0;
 
-        $scope.getSlide = function(index, item, direction) {
+        $scope.getSlide = function(item, direction) {
           // generate n new slides
           // we can send one or more items
           // with promises, or not
          //return null;
-          var itemCount = 3;
-          var items = [];
-          for (var i = 0; i < itemCount; i++) {
+          //var itemCount = 1;
+         // var items = [];
+          //for (var i = 0; i < itemCount; i++) {
             var nextDate = new Date();
-            nextDate.setTime(item.date.getTime() + (direction*(i+1)*86400000));
-            items.push({
+            nextDate.setTime(item.date.getTime() + (direction*86400000));
+            var item = {
               bg: getColor(),
               date: nextDate
-            });
-          };
-          if (direction < 0) items.reverse();
+            };
+        //  };
+          //if (direction < 0) items.reverse();
 
-          return items;
+          return item;
 
           // sample promise
           var defer = $q.defer();
 
           $timeout(function() {
-              defer.resolve(items);
+              defer.resolve(item);
           }, 2000);
           return defer;
         };

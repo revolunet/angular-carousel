@@ -54,7 +54,7 @@
       </span>
     </h3>
 
-    <ul rn-carousel rn-carousel-cycle rn-carousel-buffered rn-carousel-index="index" class="basic">
+    <ul rn-carousel rn-carousel-buffered rn-carousel-prev="prev(item)"  rn-carousel-next="next(item)" class="basic">
       <li ng-repeat="page in pages">
         <h1 style='font-size:120px' ng-bind="'#' + page.id"></h1>
         <h3>carouselCollection.index: {{ carouselCollection.index }}</h3>
@@ -64,6 +64,7 @@
     </ul>
 
     <script src="//code.angularjs.org/1.1.5/angular.js"></script>
+    <!-- <script src="./components/angular/angular.js"></script> -->
     <script src="./lib/angular-mobile.js"></script>
 
     <!-- include carousel src -->
@@ -75,19 +76,35 @@
     angular.module('myApp', ['angular-carousel'])
       .controller('demoController', function($scope, $http) {
         // add some initial pages
-        $scope.pages = [];
+        $scope.pages = [{
+          id:0
+        }];
+
+        $scope.prev = function(item) {
+          console.log('prev', arguments);
+          return {
+            id: item.id - 1
+          };
+        }
+
+        $scope.next = function(item) {
+          console.log('next', arguments);
+          return {
+            id: item.id + 1
+          };
+        }
 
         $scope.changeSlide = function(page) {
           $scope.index = page;
         }
 
-        var nbPages = 10;
-        for (var i=0; i<nbPages; i++) {
-          $scope.pages.push({
-            id: i
-          });
-        } 
-        $scope.index = 3;
+        // var nbPages = 10;
+        // for (var i=0; i<nbPages; i++) {
+        //   $scope.pages.push({
+        //     id: i
+        //   });
+        // } 
+        // $scope.index = 3;
       });
 
     </script>
