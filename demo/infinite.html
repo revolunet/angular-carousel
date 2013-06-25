@@ -87,10 +87,10 @@
         // add some initial pages
         $scope.pages = [];
         $scope.pages.push(addPage());
-        $scope.pages.push(addPage());
-        $scope.pages.push(addPage());
-        $scope.pages.push(addPage());
-        $scope.pages.push(addPage());
+        // $scope.pages.push(addPage());
+        // $scope.pages.push(addPage());
+        // $scope.pages.push(addPage());
+        // $scope.pages.push(addPage());
 
         $scope.page = 0;
 
@@ -103,14 +103,14 @@
             date: nextDate
           };
 
-         // return item;
+         //return item;
 
           // sample promise
           var defer = $q.defer();
 
           $timeout(function() {
               defer.resolve(item);
-          }, 0);
+          }, 10);
           return defer;
         };
 

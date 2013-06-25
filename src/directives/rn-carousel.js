@@ -50,7 +50,7 @@ angular.module('angular-carousel')
 
         function transitionEndCallback(event) {
           /* when slide transition finished, update buffer */
-          //console.log('transitionEndCallback', this, event);
+         // console.log('transitionEndCallback', this, event);
           if ((event.target && event.target=== carousel[0]) && (
               event.propertyName === 'transform' ||
               event.propertyName === '-webkit-transform' ||
@@ -64,26 +64,37 @@ angular.module('angular-carousel')
           }
         }
 
+        function updateSlides(method, items) {
+          // force apply if no apply/digest phase in progress
+          function cb() {
+            skipAnimation = true;
+            scope.carouselCollection[method](items, true);
+          }
+          if(!scope.$$phase) {
+            scope.$apply(cb);
+          } else {
+            cb();
+          }
+
+        }
+
         function addSlides(position, items) {
           var method = (position==='after')?'push':'unshift';
           if (items) {
             if (angular.isObject(items.promise)) {
               items.promise.then(function(items) {
                 if (items) {
-                  skipAnimation = true;
-                  scope.carouselCollection[method](items, true);
+                  updateSlides(method, items);
                 }
               });
             } else if (angular.isFunction(items.then)) {
               items.then(function(items) {
                 if (items) {
-                  skipAnimation = true;
-                  scope.carouselCollection[method](items, true);
+                  updateSlides(method, items);
                 }
               });
             } else {
-              skipAnimation = true;
-              scope.carouselCollection[method](items, true);
+              updateSlides(method, items);
             }
           }
         }
@@ -195,7 +206,7 @@ angular.module('angular-carousel')
         function updateSlidePosition(forceSkipAnimation) {
           /* trigger carousel position update */
           skipAnimation = !!forceSkipAnimation || skipAnimation;
-
+          //console.log('updateSlidePosition, skip:', skipAnimation);
           if (containerWidth===0) updateContainerWidth();
           offset = scope.carouselCollection.getRelativeIndex() * -containerWidth;
           if (skipAnimation===true) {
