@@ -1,6 +1,6 @@
 angular.module('angular-carousel')
 
-.directive('rnCarousel', ['$compile', '$parse', '$swipe', 'CollectionManager', function($compile, $parse, $swipe, CollectionManager) {
+.directive('rnCarousel', ['$compile', '$parse', '$swipe', '$document', 'CollectionManager', function($compile, $parse, $swipe, $document, CollectionManager) {
   /* track number of carousel instances */
   var carousels = 0;
 
@@ -231,38 +231,11 @@ angular.module('angular-carousel')
           skipAnimation = false;
         }
 
-        $swipe.bind(carousel, {
-          /* use angular $swipe service */
-          start: function(coords) {
-            /* capture initial event position */
-            if (swiping === 0) {
-              swiping = 1;
-              startX = coords.x;
-            }
-          },
-          move: function (coords) {
-            if (swiping===0) return;
-            var deltaX = coords.x - startX;
-            if (swiping === 1 && deltaX !== 0) {
-              swiping = 2;
-              startOffset = offset;
-            }
-            else if (swiping === 2) {
-              var lastIndex = scope.carouselCollection.getLastIndex(),
-                  position = scope.carouselCollection.position;
-              /* ratio is used for the 'rubber band' effect */
-              var ratio = 1;
-              if ((position === 0 && coords.x > startX) || (position === lastIndex && coords.x < startX))
-                ratio = 3;
-              /* follow cursor movement */
-              offset = startOffset + deltaX / ratio;
-              carousel.css(translateSlideproperty(offset))
-                      .removeClass('rn-carousel-animate')
-                      .addClass('rn-carousel-noanimate');
-            }
-          },
-          end: function (coords) {
+        /* bind events */
+
+        function swipeEnd(coords) {
             /* when movement ends, go to next slide or stay on the same */
+            $document.unbind('mouseup', documentMouseUpEvent);
             if (containerWidth===0) updateContainerWidth();
             if (swiping > 1) {
               swiping = 0;
@@ -293,6 +266,48 @@ angular.module('angular-carousel')
                 });
               }
             }
+        }
+
+        function documentMouseUpEvent(event) {
+          swipeEnd({
+            x: event.clientX,
+            y: event.clientY
+          });
+        }
+
+        $swipe.bind(carousel, {
+          /* use angular $swipe service */
+          start: function(coords) {
+            /* capture initial event position */
+            if (swiping === 0) {
+              swiping = 1;
+              startX = coords.x;
+            }
+            $document.bind('mouseup', documentMouseUpEvent);
+          },
+          move: function (coords) {
+            if (swiping===0) return;
+            var deltaX = coords.x - startX;
+            if (swiping === 1 && deltaX !== 0) {
+              swiping = 2;
+              startOffset = offset;
+            }
+            else if (swiping === 2) {
+              var lastIndex = scope.carouselCollection.getLastIndex(),
+                  position = scope.carouselCollection.position;
+              /* ratio is used for the 'rubber band' effect */
+              var ratio = 1;
+              if ((position === 0 && coords.x > startX) || (position === lastIndex && coords.x < startX))
+                ratio = 3;
+              /* follow cursor movement */
+              offset = startOffset + deltaX / ratio;
+              carousel.css(translateSlideproperty(offset))
+                      .removeClass('rn-carousel-animate')
+                      .addClass('rn-carousel-noanimate');
+            }
+          },
+          end: function (coords) {
+            swipeEnd(coords);
           }
         });
       //  if (containerWidth===0) updateContainerWidth();
