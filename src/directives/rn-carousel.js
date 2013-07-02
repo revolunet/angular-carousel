@@ -168,6 +168,16 @@ angular.module('angular-carousel')
           updateSlidePosition();
         });
 
+        if (angular.isDefined(iAttrs.rnCarouselWatch)) {
+          scope.$watch(originalCollection, function(newValue, oldValue) {
+            // partial collection update, watch deeply so use carefully
+            scope.carouselCollection.setItems(newValue, false);
+            collectionReady = true;
+            if (containerWidth===0) updateContainerWidth();
+            updateSlidePosition();
+          }, true);
+        }
+
         var vendorPrefixes = ["webkit", "moz"];
         function genCSSProperties(property, value) {
           /* cross browser CSS properties generator */

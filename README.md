@@ -43,6 +43,7 @@ angular.module('MyApp', ['angular-carousel']);
  - `rn-carousel-indicator` to turn on the indicator, see demo page.
  - `rn-carousel-buffered` to buffer the carousel, good if you have many or unlimited items inside.
  - `rn-carousel-cycle` to have an forever-cycling carousel.
+ - `rn-carousel-watch` force deep watch of the ngRepeat collection (listen to add/remove items).
  - `rn-carousel-next="getNextSlide(item)"` : callback called when carousel reach the last slide, that should return a single slide. great for generating slides on-demand.
  - `rn-carousel-prev="getPrevSlide(item)"` : callback called when carousel reach the first slide, that should return a single slide. great for generating slides on-demand.
 

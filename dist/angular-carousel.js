@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.8 - 2013-06-25
+ * @version v0.0.8 - 2013-07-02
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -206,6 +206,16 @@ angular.module('angular-carousel')
           if (containerWidth===0) updateContainerWidth();
           updateSlidePosition();
         });
+
+        if (angular.isDefined(iAttrs.rnCarouselWatch)) {
+          scope.$watch(originalCollection, function(newValue, oldValue) {
+            // partial collection update, watch deeply so use carefully
+            scope.carouselCollection.setItems(newValue, false);
+            collectionReady = true;
+            if (containerWidth===0) updateContainerWidth();
+            updateSlidePosition();
+          }, true);
+        }
 
         var vendorPrefixes = ["webkit", "moz"];
         function genCSSProperties(property, value) {
@@ -473,7 +483,7 @@ angular.module('angular-carousel')
     };
     CollectionManager.prototype.init = function() {
         //this.log('init', this);
-        this.setBufferSize(this.bufferSize || this.length());
+        this.setBufferSize(this.isBuffered()?this.bufferSize:this.length());
         if (this.length() > 0) this.goToIndex(this.index);
     };
     CollectionManager.prototype.setItems = function(items, reset) {

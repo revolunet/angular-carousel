@@ -141,7 +141,7 @@ angular.module('angular-carousel')
     };
     CollectionManager.prototype.init = function() {
         //this.log('init', this);
-        this.setBufferSize(this.bufferSize || this.length());
+        this.setBufferSize(this.isBuffered()?this.bufferSize:this.length());
         if (this.length() > 0) this.goToIndex(this.index);
     };
     CollectionManager.prototype.setItems = function(items, reset) {

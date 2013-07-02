@@ -38,7 +38,8 @@ describe('carousel', function () {
       useIndex: false,
       useIndicator: false,
       useBuffer: false,
-      nbItems: 25
+      nbItems: 25,
+      useWatch: false
     };
     if (overrideOptions) angular.extend(options, overrideOptions);
     var sampleData = {
@@ -56,6 +57,7 @@ describe('carousel', function () {
     var tpl = '<ul rn-carousel ';
     if (options.useIndicator) tpl += ' rn-carousel-indicator ';
     if (options.useBuffer) tpl += ' rn-carousel-buffered ';
+    if (options.useWatch) tpl += ' rn-carousel-watch ';
     if (options.useIndex) tpl += ' rn-carousel-index="' + options.useIndex + '" ';
     tpl += '><li class="test" style="width:200px" ng-repeat="item in items" id="slide-{{ item.id }}">{{ item.text }}</li></ul>';
     angular.extend(scope, sampleData.scope);
@@ -405,6 +407,119 @@ describe('carousel', function () {
     });
   });
 
+  describe('collection watch', function () {
+    describe('standard watch (no deep)', function () {
+      it('it should display first slide when we reset the collection', function () {
+        var elm = compileTpl({useIndex: 'localIndex'});
+        scope.localIndex = 5;
+        scope.$digest();
+        expect(elm.scope().carouselCollection.index).toBe(5);
+        scope.items = [{id:1}, {id:2}];
+        scope.$digest();
+        expect(elm.position().left).toBe(0);
+        expect(elm.css('left')).toBe('auto');
+        expect(elm.scope().carouselCollection.index).toBe(0);
+      });
+      it('should NOT update slides when collection changes partially', function() {
+        var elm = compileTpl();
+        var originalLength = scope.items.length;
+        expect(elm.find('li').length).toBe(originalLength);
+        scope.items.push({'text': 'new item', 'id': 999});
+        scope.$digest();
+        expect(elm.find('li').length).toBe(originalLength);
+        expect(elm.find('li').last()[0].id).toBe('slide-' + (originalLength - 1));
+        scope.items.pop();
+        scope.items.pop();
+        scope.items.pop();
+        scope.$digest();
+        expect(elm.find('li').length).toBe(originalLength);
+        expect(elm.find('li').last()[0].id).toBe('slide-' + (originalLength - 1));
+      });
+    });
+    describe('standard watch (no deep) + buffer', function () {
+      it('it should display first slide when we reset the collection', function () {
+        var elm = compileTpl({useBuffer: true, useIndex: 'localIndex'});
+        scope.localIndex = 5;
+        scope.$digest();
+        expect(elm.scope().carouselCollection.index).toBe(5);
+        scope.items = [{id:1}, {id:2}];
+        scope.$digest();
+        expect(elm.position().left).toBe(0);
+        expect(elm.css('left')).toBe('auto');
+        expect(elm.scope().carouselCollection.index).toBe(0);
+      });
+      it('should NOT update slides when collection changes partially', function() {
+        var elm = compileTpl({useBuffer: true});
+        var originalLength = elm.scope().carouselCollection.bufferSize;
+        expect(elm.find('li').length).toBe(originalLength);
+        scope.items.push({'text': 'new item', 'id': 999});
+        scope.$digest();
+        expect(elm.find('li').length).toBe(originalLength);
+        expect(elm.find('li').last()[0].id).toBe('slide-' + (originalLength - 1));
+        scope.items.pop();
+        scope.items.pop();
+        scope.items.pop();
+        scope.$digest();
+        expect(elm.find('li').length).toBe(originalLength);
+        expect(elm.find('li').last()[0].id).toBe('slide-' + (originalLength - 1));
+      });
+    });
+    describe('deep watch', function () {
+      it('should display first slide when we reset the collection', function () {
+          var elm = compileTpl({useIndex: 'localIndex', useWatch: true});
+          scope.localIndex = 5;
+          scope.$digest();
+          expect(elm.scope().carouselCollection.index).toBe(5);
+          scope.items = [{id:1}, {id:2}];
+          scope.$digest();
+          expect(elm.position().left).toBe(0);
+          expect(elm.css('left')).toBe('auto');
+          expect(elm.scope().carouselCollection.index).toBe(0);
+      });
+      it('should update slides when collection changes partially', function() {
+        var elm = compileTpl({useWatch: true});
+        expect(elm.find('li').length).toBe(scope.items.length);
+        scope.items.push({'text': 'new item', 'id': 999});
+        scope.$digest();
+        expect(elm.find('li').length).toBe(scope.items.length);
+        expect(elm.find('li').last()[0].id).toBe('slide-999');
+        scope.items.pop();
+        scope.items.pop();
+        scope.items.pop();
+        scope.$digest();
+        expect(elm.find('li').length).toBe(scope.items.length);
+        expect(elm.find('li').last()[0].id).toBe('slide-' + scope.items[scope.items.length - 1].id);
+      });
+    });
+    describe('deep watch + buffer', function () {
+      it('should display first slide when we reset the collection', function () {
+          var elm = compileTpl({userBuffer:true, useIndex: 'localIndex', useWatch: true});
+          scope.localIndex = 5;
+          scope.$digest();
+          expect(elm.scope().carouselCollection.index).toBe(5);
+          scope.items = [{id:1}, {id:2}];
+          scope.$digest();
+          expect(elm.position().left).toBe(0);
+          expect(elm.css('left')).toBe('auto');
+          expect(elm.scope().carouselCollection.index).toBe(0);
+      });
+      it('should update slides when collection changes partially', function() {
+        var elm = compileTpl({userBuffer:true, useWatch: true});
+        expect(elm.find('li').length).toBe(scope.items.length);
+        scope.items.push({'text': 'new item', 'id': 999});
+        scope.$digest();
+        expect(elm.find('li').length).toBe(scope.items.length);
+        expect(elm.find('li').last()[0].id).toBe('slide-999');
+        scope.items.pop();
+        scope.items.pop();
+        scope.items.pop();
+        scope.$digest();
+        expect(elm.find('li').length).toBe(scope.items.length);
+        expect(elm.find('li').last()[0].id).toBe('slide-' + scope.items[scope.items.length - 1].id);
+      });
+    });
+    
+  });
   // describe('delayed collection and index', function () {
   //   it('should follow multiple moves and buffer accordingly', function() {
 
