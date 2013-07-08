@@ -12,8 +12,7 @@ angular.module('angular-carousel')
       tElement.find('li').attr('ng-repeat', repeatExpr);
       return function(scope, iElement, iAttrs) {
         // wrap the original content in a real rn-carousel
-        scope.currentItem = $parse(iAttrs.rnCarouselCurrent)(scope);
-        scope.items = [scope.currentItem];
+        scope.items = [$parse(iAttrs.rnCarouselCurrent)(scope)];
         scope.$watchCollection('carouselCollection.position', function(newValue) {
           // assign the new item to the parent scope
           $parse(iAttrs.rnCarouselCurrent).assign(scope.$parent, scope.items[newValue]);
