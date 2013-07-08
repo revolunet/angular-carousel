@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.8 - 2013-07-03
+ * @version v0.0.8 - 2013-07-08
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -51,8 +51,7 @@ angular.module('angular-carousel')
       tElement.find('li').attr('ng-repeat', repeatExpr);
       return function(scope, iElement, iAttrs) {
         // wrap the original content in a real rn-carousel
-        scope.currentItem = $parse(iAttrs.rnCarouselCurrent)(scope);
-        scope.items = [scope.currentItem];
+        scope.items = [$parse(iAttrs.rnCarouselCurrent)(scope)];
         scope.$watchCollection('carouselCollection.position', function(newValue) {
           // assign the new item to the parent scope
           $parse(iAttrs.rnCarouselCurrent).assign(scope.$parent, scope.items[newValue]);
@@ -91,11 +90,11 @@ angular.module('angular-carousel')
       var exprMatch = repeatAttribute.value.match(/^\s*(.+)\s+in\s+(.*?)\s*(\s+track\s+by\s+(.+)\s*)?$/),
           originalItem = exprMatch[1],
           originalCollection = exprMatch[2],
-          trackProperty = exprMatch[3] || '',
+          trackProperty = exprMatch[3],
           isBuffered = angular.isDefined(tAttrs['rnCarouselBuffered']);
 
         /* update the current ngRepeat expression and add a slice operator */
-        repeatAttribute.value = originalItem + ' in carouselCollection.cards' + trackProperty ;
+        repeatAttribute.value = originalItem + ' in carouselCollection.cards track by $index';
 
       return function(scope, iElement, iAttrs, controller) {
         carousels++;
@@ -338,7 +337,6 @@ angular.module('angular-carousel')
             y: event.clientY
           });
         }
-
         $swipe.bind(carousel, {
           /* use angular $swipe service */
           start: function(coords) {
@@ -542,10 +540,10 @@ angular.module('angular-carousel')
     CollectionManager.prototype.push = function(slide, updateIndex) {
         // insert item(s) at end
         this.log('push item(s)', slide, updateIndex);
-        if (this.items.indexOf(slide)>-1) {
-            this.log('item already present, skip it');
-            return;
-        }
+        // if (this.items.indexOf(slide)>-1) {
+        //     this.log('item already present, skip it');
+        //     return;
+        // }
         this.items.push(slide);
         if (updateIndex) {
             // no need to change index when appending items
@@ -559,10 +557,10 @@ angular.module('angular-carousel')
     CollectionManager.prototype.unshift = function(slide, updateIndex) {
         // insert item(s) at beginning
         this.log('unshift item(s)', slide, updateIndex);
-        if (this.items.indexOf(slide)>-1) {
-            this.log('item already present, skip it');
-            return;
-        }
+        // if (this.items.indexOf(slide)>-1) {
+        //     this.log('item already present, skip it');
+        //     return;
+        // }
         this.items.unshift(slide);
         if (!this.buffered) {
             this.bufferSize++;
