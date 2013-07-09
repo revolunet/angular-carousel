@@ -238,7 +238,6 @@ angular.module('angular-carousel')
             $document.unbind('mouseup', documentMouseUpEvent);
             if (containerWidth===0) updateContainerWidth();
             if (swiping > 1) {
-              swiping = 0;
               var lastIndex = scope.carouselCollection.getLastIndex(),
                   position = scope.carouselCollection.position,
                   slideOffset = (offset < startOffset)?1:-1,
@@ -266,6 +265,7 @@ angular.module('angular-carousel')
                 });
               }
             }
+            swiping = 0;
         }
 
         function documentMouseUpEvent(event) {
