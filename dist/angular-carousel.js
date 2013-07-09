@@ -90,11 +90,11 @@ angular.module('angular-carousel')
       var exprMatch = repeatAttribute.value.match(/^\s*(.+)\s+in\s+(.*?)\s*(\s+track\s+by\s+(.+)\s*)?$/),
           originalItem = exprMatch[1],
           originalCollection = exprMatch[2],
-          trackProperty = exprMatch[3],
+          trackProperty = exprMatch[3] || '',
           isBuffered = angular.isDefined(tAttrs['rnCarouselBuffered']);
 
         /* update the current ngRepeat expression and add a slice operator */
-        repeatAttribute.value = originalItem + ' in carouselCollection.cards track by $index';
+        repeatAttribute.value = originalItem + ' in carouselCollection.cards ' + trackProperty;
 
       return function(scope, iElement, iAttrs, controller) {
         carousels++;
@@ -545,10 +545,10 @@ angular.module('angular-carousel')
     CollectionManager.prototype.push = function(slide, updateIndex) {
         // insert item(s) at end
         this.log('push item(s)', slide, updateIndex);
-        // if (this.items.indexOf(slide)>-1) {
-        //     this.log('item already present, skip it');
-        //     return;
-        // }
+        if (this.items.indexOf(slide)>-1) {
+            this.log('item already present, skip it');
+            return;
+        }
         this.items.push(slide);
         if (updateIndex) {
             // no need to change index when appending items
@@ -562,10 +562,10 @@ angular.module('angular-carousel')
     CollectionManager.prototype.unshift = function(slide, updateIndex) {
         // insert item(s) at beginning
         this.log('unshift item(s)', slide, updateIndex);
-        // if (this.items.indexOf(slide)>-1) {
-        //     this.log('item already present, skip it');
-        //     return;
-        // }
+        if (this.items.indexOf(slide)>-1) {
+            this.log('item already present, skip it');
+            return;
+        }
         this.items.unshift(slide);
         if (!this.buffered) {
             this.bufferSize++;

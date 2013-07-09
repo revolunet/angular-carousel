@@ -27,11 +27,11 @@ angular.module('angular-carousel')
       var exprMatch = repeatAttribute.value.match(/^\s*(.+)\s+in\s+(.*?)\s*(\s+track\s+by\s+(.+)\s*)?$/),
           originalItem = exprMatch[1],
           originalCollection = exprMatch[2],
-          trackProperty = exprMatch[3],
+          trackProperty = exprMatch[3] || '',
           isBuffered = angular.isDefined(tAttrs['rnCarouselBuffered']);
 
         /* update the current ngRepeat expression and add a slice operator */
-        repeatAttribute.value = originalItem + ' in carouselCollection.cards track by $index';
+        repeatAttribute.value = originalItem + ' in carouselCollection.cards ' + trackProperty;
 
       return function(scope, iElement, iAttrs, controller) {
         carousels++;
