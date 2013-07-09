@@ -196,12 +196,15 @@ angular.module('angular-carousel')
         carousel[0].addEventListener('webkitTransitionEnd', transitionEndCallback, false);  // webkit
         carousel[0].addEventListener('transitionend', transitionEndCallback, false);        // mozilla
 
-        $document[0].addEventListener('orientationchange', function() {
+        window.addEventListener('orientationchange', function() {
+          // when orientation change, force width re-redetection
           updateContainerWidth();
           updateSlidePosition();
         });
 
         function updateContainerWidth() {
+            container.css('width', 'auto');
+            skipAnimation = true;
             var slides = carousel.find('li');
             if (slides.length === 0) {
               containerWidth = carousel[0].getBoundingClientRect().width;

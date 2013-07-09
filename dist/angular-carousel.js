@@ -259,12 +259,15 @@ angular.module('angular-carousel')
         carousel[0].addEventListener('webkitTransitionEnd', transitionEndCallback, false);  // webkit
         carousel[0].addEventListener('transitionend', transitionEndCallback, false);        // mozilla
 
-        $document[0].addEventListener('orientationchange', function() {
+        window.addEventListener('orientationchange', function() {
+          // when orientation change, force width re-redetection
           updateContainerWidth();
           updateSlidePosition();
         });
 
         function updateContainerWidth() {
+            container.css('width', 'auto');
+            skipAnimation = true;
             var slides = carousel.find('li');
             if (slides.length === 0) {
               containerWidth = carousel[0].getBoundingClientRect().width;
@@ -545,7 +548,7 @@ angular.module('angular-carousel')
     CollectionManager.prototype.push = function(slide, updateIndex) {
         // insert item(s) at end
         this.log('push item(s)', slide, updateIndex);
-        if (this.items.indexOf(slide)>-1) {
+        if (this.cards.indexOf(slide)>-1) {
             this.log('item already present, skip it');
             return;
         }
@@ -562,7 +565,7 @@ angular.module('angular-carousel')
     CollectionManager.prototype.unshift = function(slide, updateIndex) {
         // insert item(s) at beginning
         this.log('unshift item(s)', slide, updateIndex);
-        if (this.items.indexOf(slide)>-1) {
+        if (this.cards.indexOf(slide)>-1) {
             this.log('item already present, skip it');
             return;
         }
