@@ -48,6 +48,12 @@ angular.module('angular-carousel')
         var carousel = iElement.wrap("<div id='" + carouselId +"' class='rn-carousel-container'></div>"),
             container = carousel.parent();
 
+        function getTransformCoordinates(el) {
+          var results = angular.element(el).css('-webkit-transform').match(/translate3d\((-?\d+(?:px)?), (-?\d+(?:px)?), (-?\d+(?:px)?)\)/)
+          if(!results) return [0, 0, 0];
+          return results.slice(1, 3);
+        }
+
         function transitionEndCallback(event) {
           /* when slide transition finished, update buffer */
          // console.log('transitionEndCallback', this, event);
@@ -61,6 +67,10 @@ angular.module('angular-carousel')
               scope.carouselCollection.adjustBuffer();
               updateSlidePosition(true);
             });
+
+          // we replace the 3d transform with 2d transform to prevent blurry effect
+          carousel.css('transform', '').css(translateSlideProperty(getTransformCoordinates(carousel[0]), false));
+
           }
         }
 
@@ -188,9 +198,12 @@ angular.module('angular-carousel')
           });
           return css;
         }
-        function translateSlideproperty(offset) {
-          return genCSSProperties('transform', 'translate3d(' + offset + 'px,0,0)');
-          //return genCSSProperties('transform', 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,' + offset + 'px, 0, 0, 1)');
+        function translateSlideProperty(offset, is3d) {
+          if (is3d) {
+            return genCSSProperties('transform', 'translate3d(' + offset + 'px,0,0)');
+          } else {
+            return genCSSProperties('transform', 'translate(' + offset + 'px,0)');
+          }
         }
 
         carousel[0].addEventListener('webkitTransitionEnd', transitionEndCallback, false);  // webkit
@@ -230,11 +243,11 @@ angular.module('angular-carousel')
           if (skipAnimation===true) {
               carousel.removeClass('rn-carousel-animate')
                   .addClass('rn-carousel-noanimate')
-                  .css(translateSlideproperty(offset));
+                  .css(translateSlideProperty(offset, false));
           } else {
               carousel.removeClass('rn-carousel-noanimate')
                   .addClass('rn-carousel-animate')
-                  .css(translateSlideproperty(offset));
+                  .css(translateSlideProperty(offset, true));
           }
           skipAnimation = false;
         }
@@ -308,7 +321,7 @@ angular.module('angular-carousel')
                 ratio = 3;
               /* follow cursor movement */
               offset = startOffset + deltaX / ratio;
-              carousel.css(translateSlideproperty(offset))
+              carousel.css(translateSlideProperty(offset, true))
                       .removeClass('rn-carousel-animate')
                       .addClass('rn-carousel-noanimate');
             }
