@@ -190,11 +190,16 @@ angular.module('angular-carousel')
         }
         function translateSlideproperty(offset) {
           return genCSSProperties('transform', 'translate3d(' + offset + 'px,0,0)');
-          //matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + offset + ', 0, 0, 1)');
+          //return genCSSProperties('transform', 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,' + offset + 'px, 0, 0, 1)');
         }
 
         carousel[0].addEventListener('webkitTransitionEnd', transitionEndCallback, false);  // webkit
         carousel[0].addEventListener('transitionend', transitionEndCallback, false);        // mozilla
+
+        $document[0].addEventListener('orientationchange', function() {
+          updateContainerWidth();
+          updateSlidePosition();
+        });
 
         function updateContainerWidth() {
             var slides = carousel.find('li');
