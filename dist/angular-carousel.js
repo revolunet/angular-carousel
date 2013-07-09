@@ -358,6 +358,10 @@ angular.module('angular-carousel')
             y: event.clientY
           });
         }
+        // move throttling
+        var lastMove = null,
+            moveDelay = 100;
+
         $swipe.bind(carousel, {
           /* use angular $swipe service */
           start: function(coords) {
@@ -376,6 +380,9 @@ angular.module('angular-carousel')
               startOffset = offset;
             }
             else if (swiping === 2) {
+              var now = (new Date()).getTime();
+              if (lastMove && (now-lastMove) < moveDelay) return;
+              lastMove = now;
               var lastIndex = scope.carouselCollection.getLastIndex(),
                   position = scope.carouselCollection.position;
               /* ratio is used for the 'rubber band' effect */
