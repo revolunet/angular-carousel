@@ -15,10 +15,11 @@ files = [
   JASMINE_ADAPTER,
   'components/jquery/jquery.min.js',
   'components/angular/angular.js',
-  'components/angular/angular-mobile.js',
-  //'lib/browserTrigger.js',
+  'lib/angular-mobile.js',
+  'lib/browserTrigger.js',
   'components/angular/angular-mocks.js',
-  'dist/angular-carousel.js',
+  'src/angular-carousel.js',
+  'src/**/*.js',
   'test/unit/*.js'
 ];
 
@@ -61,7 +62,7 @@ autoWatch = true;
 // - PhantomJS
 // - IE (only Windows)
 // CLI --browsers Chrome,Firefox,Safari
-browsers = ['Chrome']; //, 'Firefox'];
+browsers = ['Chrome', 'Firefox']; //, 'Firefox'];
 
 // If browser does not capture in given timeout [ms], kill it
 // CLI --capture-timeout 5000
