@@ -39,7 +39,7 @@ angular.module('angular-carousel')
 
 angular.module('angular-carousel')
 
-.directive('rnCarouselInfinite', function($parse, $compile) {
+.directive('rnCarouselInfinite', ['$parse', '$compile', function($parse, $compile) {
   return {
     restrict: 'EA',
     transclude:  true,
@@ -59,7 +59,7 @@ angular.module('angular-carousel')
       };
     }
   };
-});
+}]);
 
 angular.module('angular-carousel')
 
