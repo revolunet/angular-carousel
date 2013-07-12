@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.8 - 2013-07-09
+ * @version v0.0.8 - 2013-07-12
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -63,7 +63,7 @@ angular.module('angular-carousel')
 
 angular.module('angular-carousel')
 
-.directive('rnCarousel', ['$compile', '$parse', '$swipe', '$document', 'CollectionManager', function($compile, $parse, $swipe, $document, CollectionManager) {
+.directive('rnCarousel', ['$compile', '$parse', '$swipe', '$document', '$window', 'CollectionManager', function($compile, $parse, $swipe, $document, $window, CollectionManager) {
   /* track number of carousel instances */
   var carousels = 0;
 
@@ -360,7 +360,8 @@ angular.module('angular-carousel')
         }
         // move throttling
         var lastMove = null,
-            moveDelay = 100;
+            // todo: requestAnimationFrame instead
+            moveDelay = ($window.navigator.platform=='iPad')?0:50;
 
         $swipe.bind(carousel, {
           /* use angular $swipe service */

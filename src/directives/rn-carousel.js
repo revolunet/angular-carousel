@@ -1,6 +1,6 @@
 angular.module('angular-carousel')
 
-.directive('rnCarousel', ['$compile', '$parse', '$swipe', '$document', 'CollectionManager', function($compile, $parse, $swipe, $document, CollectionManager) {
+.directive('rnCarousel', ['$compile', '$parse', '$swipe', '$document', '$window', 'CollectionManager', function($compile, $parse, $swipe, $document, $window, CollectionManager) {
   /* track number of carousel instances */
   var carousels = 0;
 
@@ -297,7 +297,8 @@ angular.module('angular-carousel')
         }
         // move throttling
         var lastMove = null,
-            moveDelay = 100;
+            // todo: requestAnimationFrame instead
+            moveDelay = ($window.navigator.platform=='iPad')?0:50;
 
         $swipe.bind(carousel, {
           /* use angular $swipe service */
