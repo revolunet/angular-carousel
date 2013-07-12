@@ -15,8 +15,8 @@ files = [
   JASMINE_ADAPTER,
   'components/jquery/jquery.min.js',
   'components/angular/angular.js',
-  'components/angular/angular-mobile.js',
-  //'lib/browserTrigger.js',
+  'dist/angular-mobile.js',
+  'lib/browserTrigger.js',
   'components/angular/angular-mocks.js',
   'dist/angular-carousel.js',
   'test/unit/*.js'

@@ -160,10 +160,10 @@ angular.module('angular-carousel')
     CollectionManager.prototype.push = function(slide, updateIndex) {
         // insert item(s) at end
         this.log('push item(s)', slide, updateIndex);
-        if (this.cards.indexOf(slide)>-1) {
-            this.log('item already present, skip it');
-            return;
-        }
+        // if (this.items.indexOf(slide)>-1) {
+        //     this.log('item already present, skip it');
+        //     return;
+        // }
         this.items.push(slide);
         if (updateIndex) {
             // no need to change index when appending items
@@ -177,10 +177,10 @@ angular.module('angular-carousel')
     CollectionManager.prototype.unshift = function(slide, updateIndex) {
         // insert item(s) at beginning
         this.log('unshift item(s)', slide, updateIndex);
-        if (this.cards.indexOf(slide)>-1) {
-            this.log('item already present, skip it');
-            return;
-        }
+        // if (this.items.indexOf(slide)>-1) {
+        //     this.log('item already present, skip it');
+        //     return;
+        // }
         this.items.unshift(slide);
         if (!this.buffered) {
             this.bufferSize++;

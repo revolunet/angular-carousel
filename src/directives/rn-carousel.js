@@ -69,6 +69,7 @@ angular.module('angular-carousel')
             });
 
           // we replace the 3d transform with 2d transform to prevent blurry effect
+          // todo : do this only if needed
           carousel.css('transform', '').css(translateSlideProperty(getTransformCoordinates(carousel[0]), false));
 
           }

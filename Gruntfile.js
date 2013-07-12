@@ -132,7 +132,7 @@ module.exports = function(grunt) {
   grunt.registerTask('test-server', ['karma:server']);
 
   // Build task.
-  grunt.registerTask('build', ['test', 'concat', 'uglify', 'cssmin']);
+  grunt.registerTask('build', ['concat', 'uglify', 'cssmin', 'test']);
   grunt.registerTask('quickbuild', ['jshint', 'concat', 'uglify', 'cssmin']);
 
   // run devserver

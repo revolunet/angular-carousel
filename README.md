@@ -50,7 +50,7 @@ The `prev()` and `next()` function return promises containing the prev and next 
  - `rn-carousel-index` two way binding to control the carousel position.
  - `rn-carousel-indicator` to turn on the indicator, see demo page.
  - `rn-carousel-buffered` to buffer the carousel, good to minimize the DOM.
- - `rn-carousel-cycle` to have an forever-cycling carousel.
+ - ~~`rn-carousel-cycle` to have an forever-cycling carousel.~~ (BROKEN)
  - `rn-carousel-watch` force deep watch of the ngRepeat collection (listen to add/remove items).
 
 
