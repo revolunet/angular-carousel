@@ -210,11 +210,15 @@ angular.module('angular-carousel')
         carousel[0].addEventListener('webkitTransitionEnd', transitionEndCallback, false);  // webkit
         carousel[0].addEventListener('transitionend', transitionEndCallback, false);        // mozilla
 
-        window.addEventListener('orientationchange', function() {
-          // when orientation change, force width re-redetection
-          updateContainerWidth();
-          updateSlidePosition();
-        });
+        // when orientation change, force width re-redetection
+        window.addEventListener('orientationchange', resize);
+        // when window is resized (responsive design)
+        window.addEventListener('resize', resize);
+          
+        function resize () {
+            updateContainerWidth();
+            updateSlidePosition();
+        }
 
         function updateContainerWidth() {
             container.css('width', 'auto');
