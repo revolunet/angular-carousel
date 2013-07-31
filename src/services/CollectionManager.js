@@ -150,7 +150,7 @@ angular.module('angular-carousel')
             this.index=0;
             this.position=0;
         }
-        this.items = items;
+        this.items = items || [];  // prevent internal errors when items is undefined
         this.init();
     };
     CollectionManager.prototype.cycleAtEnd = function() {
