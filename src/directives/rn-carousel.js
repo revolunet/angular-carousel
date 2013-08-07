@@ -15,24 +15,33 @@ angular.module('angular-carousel')
          this expression will be used to update the carousel
          buffered carousels will add a slice operator to that expression
 
-         TODO: handle various ng-repeat syntaxes, see sources regexps
+         if no ng-repeat found, try to use existing <li> DOM nodes
       */
       var liAttributes = tElement.find('li')[0].attributes,
-          repeatAttribute = liAttributes['ng-repeat'];
+          repeatAttribute = liAttributes['ng-repeat'],
+          isBuffered = false,
+          originalCollection,
+          fakeArray;
       if (!repeatAttribute) repeatAttribute = liAttributes['data-ng-repeat'];
       if (!repeatAttribute) repeatAttribute = liAttributes['x-ng-repeat'];
       if (!repeatAttribute) {
-        throw new Error("carousel: cannot find the ngRepeat attribute");
+        var liChilds = tElement.find('li');
+        if (liChilds.length < 2) {
+          throw new Error("carousel: cannot find the ngRepeat attribute OR no childNodes detected");
+        }
+        // if we use DOM nodes instead of ng-repeat, create a fake collection
+        originalCollection = 'fakeArray';
+        fakeArray = Array.prototype.slice.apply(liChilds);
+      } else {
+        var exprMatch = repeatAttribute.value.match(/^\s*(.+)\s+in\s+(.*?)\s*(\s+track\s+by\s+(.+)\s*)?$/),
+            originalItem = exprMatch[1],
+            trackProperty = exprMatch[3] || '';
+        originalCollection = exprMatch[2];
+        isBuffered = angular.isDefined(tAttrs['rnCarouselBuffered']);
+
+          /* update the current ngRepeat expression and add a slice operator */
+          repeatAttribute.value = originalItem + ' in carouselCollection.cards ' + trackProperty;
       }
-      var exprMatch = repeatAttribute.value.match(/^\s*(.+)\s+in\s+(.*?)\s*(\s+track\s+by\s+(.+)\s*)?$/),
-          originalItem = exprMatch[1],
-          originalCollection = exprMatch[2],
-          trackProperty = exprMatch[3] || '',
-          isBuffered = angular.isDefined(tAttrs['rnCarouselBuffered']);
-
-        /* update the current ngRepeat expression and add a slice operator */
-        repeatAttribute.value = originalItem + ' in carouselCollection.cards ' + trackProperty;
-
       return function(scope, iElement, iAttrs, controller) {
         carousels++;
         var carouselId = 'rn-carousel-' + carousels,
@@ -47,6 +56,11 @@ angular.module('angular-carousel')
         /* add a wrapper div that will hide the overflow */
         var carousel = iElement.wrap("<div id='" + carouselId +"' class='rn-carousel-container'></div>"),
             container = carousel.parent();
+
+        if (fakeArray) {
+          // publish the fakeArray on the scope to be able to add indicators
+          scope.fakeArray = fakeArray;
+        }
 
         function getTransformCoordinates(el) {
           var results = angular.element(el).css('transform').match(/translate3d\((-?\d+(?:px)?),\s*(-?\d+(?:px)?),\s*(-?\d+(?:px)?)\)/);

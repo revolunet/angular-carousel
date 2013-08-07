@@ -81,18 +81,27 @@
     a {
       color:white;
     }
+    ul.puredom {
+      width:300px;
+      height:200px;
+      font-size:0;
+    }
+    .puredom li {
+      background: #666;
+      text-align:center;
+      font-size:24px;
+    }
 
     </style>
   </head>
   <body ng-app="myApp" ng-controller='demoController'>
     <a href="https://github.com/revolunet/angular-carousel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
     <h1>AngularJS Touch Carousel</h1>
-    <div class='intro'>Transform your ng-repeat in a mobile-friendly carousel just by adding a 'rn-carousel' attribute to your ul/li block, thanks to AngularJS magic :)<br><br>
+    <div class='intro'>Transform your ng-repeat or DOM nodes in a mobile-friendly carousel just by adding a 'rn-carousel' attribute to your ul/li block, thanks to AngularJS magic :)<br><br>
     Carousels are data-bound to your ngRepeat collections, can be DOM buffered (good for performance), can cycle over your fixed collection or receive on-demand slides for infinite carousels :)
     <br><br>
     Try to swipe these demos with your mouse or your finger :
     </div>
-
 
     <h3>Simple carousel</h3>
     A very basic carousel with indicators<br><br>
@@ -100,6 +109,16 @@
       <li ng-repeat="image in cityImages" style="background-image:url({{ image }});">
         <div class="layer" ng-bind-html-unsafe="image"></div>
       </li>
+    </ul>
+
+    <h3>Simple carousel without ng-repeat</h3>
+    This carousel use the ul/li structure to generate the slides<br><br>
+    <ul rn-carousel rn-carousel-indicator class="puredom">
+      <li>Slide #1</li>
+      <li>Slide #2</li>
+      <li>Slide #3</li>
+      <li>Slide #4</li>
+      <li>Slide #5</li>
     </ul>
 
 

@@ -25,14 +25,21 @@ angular.module('MyApp', ['angular-carousel']);
 
  3. Add a `rn-carousel` attribute to your `<ul>` block and your `<li>`'s become magically swipable ;)
 ```html
-<h3>Discover sports</h3>
 <ul rn-carousel class="image">
   <li ng-repeat="image in sportImages" style="background-image:url({{ image }});">
     <div class="layer">{{ image }}</div>
   </li>
 </ul>
 ```
- 4. Alternatively, for an infinite carousel, use the `rn-carousel-prev` and `rn-carousel-next` callbacks :
+ 4. You can also use `rn-carousel` without ng-repeat ;)
+```html
+<ul rn-carousel class="image">
+  <li>slide #1</li>
+  <li>slide #2</li>
+  <li>slide #3</li>
+</ul>
+```
+ 5. Alternatively, for an infinite carousel, use the `rn-carousel-prev` and `rn-carousel-next` callbacks :
 ```html
 <div rn-carousel-infinite rn-carousel-next="next(item)" rn-carousel-prev="prev(item)" rn-carousel-current="product">
   <h1> #{{ product.id }} </h1>
