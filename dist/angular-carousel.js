@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.8 - 2013-07-12
+ * @version v0.0.8 - 2013-08-07
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -112,7 +112,7 @@ angular.module('angular-carousel')
             container = carousel.parent();
 
         function getTransformCoordinates(el) {
-          var results = angular.element(el).css('-webkit-transform').match(/translate3d\((-?\d+(?:px)?), (-?\d+(?:px)?), (-?\d+(?:px)?)\)/)
+          var results = angular.element(el).css('transform').match(/translate3d\((-?\d+(?:px)?),\s*(-?\d+(?:px)?),\s*(-?\d+(?:px)?)\)/);
           if(!results) return [0, 0, 0];
           return results.slice(1, 3);
         }
@@ -133,7 +133,7 @@ angular.module('angular-carousel')
 
           // we replace the 3d transform with 2d transform to prevent blurry effect
           // todo : do this only if needed
-          carousel.css('transform', '').css(translateSlideProperty(getTransformCoordinates(carousel[0]), false));
+          carousel.css(translateSlideProperty(getTransformCoordinates(carousel[0]), false));
 
           }
         }
@@ -273,11 +273,15 @@ angular.module('angular-carousel')
         carousel[0].addEventListener('webkitTransitionEnd', transitionEndCallback, false);  // webkit
         carousel[0].addEventListener('transitionend', transitionEndCallback, false);        // mozilla
 
-        window.addEventListener('orientationchange', function() {
-          // when orientation change, force width re-redetection
-          updateContainerWidth();
-          updateSlidePosition();
-        });
+        // when orientation change, force width re-redetection
+        window.addEventListener('orientationchange', resize);
+        // when window is resized (responsive design)
+        window.addEventListener('resize', resize);
+          
+        function resize () {
+            updateContainerWidth();
+            updateSlidePosition();
+        }
 
         function updateContainerWidth() {
             container.css('width', 'auto');
@@ -560,7 +564,7 @@ angular.module('angular-carousel')
             this.index=0;
             this.position=0;
         }
-        this.items = items;
+        this.items = items || [];  // prevent internal errors when items is undefined
         this.init();
     };
     CollectionManager.prototype.cycleAtEnd = function() {

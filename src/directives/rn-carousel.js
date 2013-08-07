@@ -49,7 +49,7 @@ angular.module('angular-carousel')
             container = carousel.parent();
 
         function getTransformCoordinates(el) {
-          var results = angular.element(el).css('-webkit-transform').match(/translate3d\((-?\d+(?:px)?), (-?\d+(?:px)?), (-?\d+(?:px)?)\)/)
+          var results = angular.element(el).css('transform').match(/translate3d\((-?\d+(?:px)?),\s*(-?\d+(?:px)?),\s*(-?\d+(?:px)?)\)/);
           if(!results) return [0, 0, 0];
           return results.slice(1, 3);
         }
@@ -70,7 +70,7 @@ angular.module('angular-carousel')
 
           // we replace the 3d transform with 2d transform to prevent blurry effect
           // todo : do this only if needed
-          carousel.css('transform', '').css(translateSlideProperty(getTransformCoordinates(carousel[0]), false));
+          carousel.css(translateSlideProperty(getTransformCoordinates(carousel[0]), false));
 
           }
         }
