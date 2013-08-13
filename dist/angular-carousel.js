@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.8 - 2013-08-07
+ * @version v0.0.8 - 2013-08-13
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -119,7 +119,6 @@ angular.module('angular-carousel')
 
         function transitionEndCallback(event) {
           /* when slide transition finished, update buffer */
-         // console.log('transitionEndCallback', this, event);
           if ((event.target && event.target=== carousel[0]) && (
               event.propertyName === 'transform' ||
               event.propertyName === '-webkit-transform' ||
@@ -131,9 +130,9 @@ angular.module('angular-carousel')
               updateSlidePosition(true);
             });
 
-          // we replace the 3d transform with 2d transform to prevent blurry effect
-          // todo : do this only if needed
-          carousel.css(translateSlideProperty(getTransformCoordinates(carousel[0]), false));
+          // we should replace the 3d transform with 2d transform to prevent blurry effect on some phones (eg: GS3)
+          // todo : use non-3d version for browsers not supporting it
+          carousel.css(translateSlideProperty(getTransformCoordinates(carousel[0]), true));
 
           }
         }
@@ -305,7 +304,6 @@ angular.module('angular-carousel')
         function updateSlidePosition(forceSkipAnimation) {
           /* trigger carousel position update */
           skipAnimation = !!forceSkipAnimation || skipAnimation;
-          //console.log('updateSlidePosition, skip:', skipAnimation);
           if (containerWidth===0) updateContainerWidth();
           offset = scope.carouselCollection.getRelativeIndex() * -containerWidth;
           if (skipAnimation===true) {
@@ -331,7 +329,6 @@ angular.module('angular-carousel')
                   position = scope.carouselCollection.position,
                   slideOffset = (offset < startOffset)?1:-1,
                   tmpSlideIndex = Math.min(Math.max(0, position + slideOffset), lastIndex);
-
               var delta = coords.x - startX;
               if (Math.abs(delta) <= containerWidth * minSwipePercentage) {
                 /* prevent swipe if not swipped enough */
@@ -366,7 +363,7 @@ angular.module('angular-carousel')
         // move throttling
         var lastMove = null,
             // todo: requestAnimationFrame instead
-            moveDelay = ($window.navigator.platform=='iPad')?0:50;
+            moveDelay = ($window.jasmine || $window.navigator.platform=='iPad')?0:50;
 
         $swipe.bind(carousel, {
           /* use angular $swipe service */
