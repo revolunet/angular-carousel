@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.8 - 2013-08-22
+ * @version v0.0.8 - 2013-09-12
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -290,7 +290,7 @@ angular.module('angular-carousel')
         window.addEventListener('orientationchange', resize);
         // when window is resized (responsive design)
         window.addEventListener('resize', resize);
-          
+
         function resize () {
             updateContainerWidth();
             updateSlidePosition();
@@ -319,7 +319,7 @@ angular.module('angular-carousel')
           /* trigger carousel position update */
           skipAnimation = !!forceSkipAnimation || skipAnimation;
           if (containerWidth===0) updateContainerWidth();
-          offset = scope.carouselCollection.getRelativeIndex() * -containerWidth;
+          offset = Math.round(scope.carouselCollection.getRelativeIndex() * -containerWidth);
           if (skipAnimation===true) {
               carousel.removeClass('rn-carousel-animate')
                   .addClass('rn-carousel-noanimate')

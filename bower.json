@@ -10,7 +10,8 @@
   },
   "main": "./dist/angular-carousel.js",
   "dependencies": {
-    "angular": "PatternConsulting/bower-angular", 
+    "angular": "1.2.0-rc.2",
+    "angular-mocks": "1.2.0-rc.2",
     "jquery": "1.9.1"
   }
 }
