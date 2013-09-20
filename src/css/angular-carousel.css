@@ -15,7 +15,7 @@ ul.rn-carousel-slides {
   padding: 0;
   margin: 0;
 }
-ul.rn-carousel-slides li {
+ul.rn-carousel-slides > li {
   white-space: normal;
   vertical-align:top;
   display: inline-block;
