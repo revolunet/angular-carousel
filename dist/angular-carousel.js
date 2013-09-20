@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.8 - 2013-08-22
+ * @version v0.0.8 - 2013-09-20
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -48,7 +48,7 @@ angular.module('angular-carousel')
     template: '<ul rn-carousel rn-carousel-buffered><li ng-transclude></li></ul>',
     compile: function(tElement, tAttrs, linker) {
       var repeatExpr = tAttrs.rnCarouselCurrent + ' in items';
-      tElement.find('li').attr('ng-repeat', repeatExpr);
+      tElement.children('li').attr('ng-repeat', repeatExpr);
       return function(scope, iElement, iAttrs) {
         // wrap the original content in a real rn-carousel
         scope.items = [$parse(iAttrs.rnCarouselCurrent)(scope)];
@@ -80,7 +80,7 @@ angular.module('angular-carousel')
 
          if no ng-repeat found, try to use existing <li> DOM nodes
       */
-      var liAttributes = tElement.find('li')[0].attributes,
+      var liAttributes = tElement.children('li')[0].attributes,
           repeatAttribute = liAttributes['ng-repeat'],
           isBuffered = false,
           originalCollection,
@@ -88,7 +88,7 @@ angular.module('angular-carousel')
       if (!repeatAttribute) repeatAttribute = liAttributes['data-ng-repeat'];
       if (!repeatAttribute) repeatAttribute = liAttributes['x-ng-repeat'];
       if (!repeatAttribute) {
-        var liChilds = tElement.find('li');
+        var liChilds = tElement.children('li');
         if (liChilds.length < 2) {
           throw new Error("carousel: cannot find the ngRepeat attribute OR no childNodes detected");
         }
@@ -290,7 +290,7 @@ angular.module('angular-carousel')
         window.addEventListener('orientationchange', resize);
         // when window is resized (responsive design)
         window.addEventListener('resize', resize);
-          
+
         function resize () {
             updateContainerWidth();
             updateSlidePosition();
@@ -299,7 +299,7 @@ angular.module('angular-carousel')
         function updateContainerWidth() {
             container.css('width', 'auto');
             skipAnimation = true;
-            var slides = carousel.find('li');
+            var slides = carousel.children('li');
             if (slides.length === 0) {
               containerWidth = carousel[0].getBoundingClientRect().width;
             } else {
@@ -319,7 +319,7 @@ angular.module('angular-carousel')
           /* trigger carousel position update */
           skipAnimation = !!forceSkipAnimation || skipAnimation;
           if (containerWidth===0) updateContainerWidth();
-          offset = scope.carouselCollection.getRelativeIndex() * -containerWidth;
+          offset = Math.round(scope.carouselCollection.getRelativeIndex() * -containerWidth);
           if (skipAnimation===true) {
               carousel.removeClass('rn-carousel-animate')
                   .addClass('rn-carousel-noanimate')
