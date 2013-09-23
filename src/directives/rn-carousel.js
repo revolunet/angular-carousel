@@ -305,6 +305,18 @@ angular.module('angular-carousel')
             swiping = 0;
         }
 
+        function swipelessClick() {
+          if (angular.isDefined(iAttrs.rnCarouselClick)) {
+            scope.$apply(function() {
+              var clickCallback = $parse(iAttrs.rnCarouselClick)(scope);
+              if (clickCallback) {
+                var currentItem = scope.carouselCollection.cards[scope.carouselCollection.position];
+                clickCallback(currentItem);
+              }
+            });
+          }
+        }
+                          
         function documentMouseUpEvent(event) {
           swipeEnd({
             x: event.clientX,
@@ -351,6 +363,7 @@ angular.module('angular-carousel')
             }
           },
           end: function (coords) {
+            if (swiping === 1) swipelessClick();
             swipeEnd(coords);
           }
         });

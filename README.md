@@ -59,7 +59,7 @@ The `prev()` and `next()` function return promises containing the prev and next 
  - `rn-carousel-buffered` to buffer the carousel, good to minimize the DOM.
  - ~~`rn-carousel-cycle` to have an forever-cycling carousel.~~ (BROKEN)
  - `rn-carousel-watch` force deep watch of the ngRepeat collection (listen to add/remove items).
-
+ - `rn-carousel-click` specify a callback function when a slide is clicked but not swiped; function should take the current item as its argument.
 
 ### Infinite carousel :
 
