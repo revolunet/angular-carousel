@@ -19,7 +19,7 @@ TODO :
  - cycle + indicator
 */
 
-angular.module('angular-carousel', ['ngMobile']);
+angular.module('angular-carousel', ['ngTouch']);
 
 angular.module('angular-carousel')
 

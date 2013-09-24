@@ -12,6 +12,7 @@
   "dependencies": {
     "angular": "1.2.0-rc.2",
     "angular-mocks": "1.2.0-rc.2",
-    "jquery": "1.9.1"
+    "jquery": "1.9.1",
+    "angular-touch": "~1.2.0-rc.2"
   }
 }
