@@ -16,7 +16,7 @@ files = [
   'bower_components/jquery/jquery.min.js',
   'bower_components/angular/angular.js',
   'bower_components/angular-mocks/angular-mocks.js',
-  'dist/angular-mobile.js',
+  'bower_components/angular-touch/angular-touch.js',
   'lib/browserTrigger.js',
   'dist/angular-carousel.js',
   'test/unit/*.js'
