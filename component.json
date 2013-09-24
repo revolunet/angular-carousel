@@ -10,8 +10,8 @@
   },
   "main": "./dist/angular-carousel.js",
   "dependencies": {
-    "angular": "1.0.6",
-    "angular-mocks": "1.0.6",
+    "angular": "1.2.0-rc.2",
+    "angular-mocks": "1.2.0-rc.2",
     "angular-scenario": "1.0.6",
     "jquery": "1.9.1"
   }
