@@ -13,11 +13,11 @@ basePath = './..';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
-  'components/jquery/jquery.min.js',
-  'components/angular/angular.js',
+  'bower_components/jquery/jquery.min.js',
+  'bower_components/angular/angular.js',
+  'bower_components/angular-mocks/angular-mocks.js',
   'dist/angular-mobile.js',
   'lib/browserTrigger.js',
-  'components/angular/angular-mocks.js',
   'dist/angular-carousel.js',
   'test/unit/*.js'
 ];
