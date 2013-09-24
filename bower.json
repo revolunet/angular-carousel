@@ -2,7 +2,7 @@
   "author": "revolunet",
   "name": "angular-carousel",
   "description": "Mobile friendly AngularJS carousel",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "homepage": "https://github.com/revolunet/angular-carousel",
   "repository": {
     "type": "git",
@@ -10,7 +10,8 @@
   },
   "main": "./dist/angular-carousel.js",
   "dependencies": {
-    "angular": "PatternConsulting/bower-angular", 
+    "angular": "1.2.0-rc.2",
+    "angular-mocks": "1.2.0-rc.2",
     "jquery": "1.9.1"
   }
 }
