@@ -312,7 +312,7 @@ describe('carousel', function () {
 
   function fakeMove(elm, distance) {
     // trigger a carousel swipe movement
-    var startX = 10,
+    var startX = 100,
         startY = 10,
         endX = distance + startX;
 
@@ -364,17 +364,18 @@ describe('carousel', function () {
     });
     it('should follow multiple moves', function() {
         var elm = compileTpl();
-        var minMove = -(elm.outerWidth() * 0.1 + 1);
-        fakeMove(elm, minMove);
-        fakeMove(elm, minMove);
-        fakeMove(elm, minMove);
+       // var minMove = -(elm.outerWidth() * 0.1 + 1);
+        fakeMove(elm, -minMove);
+        //console.log(minMove, elm.scope().carouselCollection.index);
+        fakeMove(elm,-minMove);
+        fakeMove(elm, -minMove);
         expect(elm.scope().carouselCollection.index).toBe(3);
-        fakeMove(elm, -minMove);
-        fakeMove(elm, -minMove);
+        fakeMove(elm, minMove);
+        fakeMove(elm, minMove);
         expect(elm.scope().carouselCollection.index).toBe(1);
-        fakeMove(elm, -minMove);
-        fakeMove(elm, -minMove);
-        fakeMove(elm, -minMove);
+        fakeMove(elm, minMove);
+        fakeMove(elm, minMove);
+        fakeMove(elm, minMove);
         expect(elm.scope().carouselCollection.index).toBe(0);
     });
   });

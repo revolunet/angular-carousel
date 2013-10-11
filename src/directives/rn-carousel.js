@@ -286,6 +286,7 @@ angular.module('angular-carousel')
                 tmpSlideIndex = position;
               }
               var changed = (position !== tmpSlideIndex);
+              //console.log(offset, startOffset, slideOffset);
               /* reset slide position if same slide (watch not triggered) */
               if (!changed) {
                 scope.$apply(function() {
@@ -304,7 +305,24 @@ angular.module('angular-carousel')
             }
             swiping = 0;
         }
+        function isInsideCarousel(coords) {
+          // check coords are inside the carousel area
+          // we always compute the container dimensions in case user have scrolled the page
+          var containerRect = container[0].getBoundingClientRect();
 
+          var isInside = (coords.x > containerRect.left && coords.x < (containerRect.left + containerWidth) &&
+                  (coords.y > containerRect.top && coords.y < containerRect.top + containerRect.height));
+
+          // console.log('isInsideCarousel', {
+          //   containerLeft: containerRect.left,
+          //   containerTop: containerRect.top,
+          //   containerHeight: containerRect.height,
+          //   isInside: isInside,
+          //   x: coords.x,
+          //   y: coords.y
+          // });
+          return isInside;
+        }
         function documentMouseUpEvent(event) {
           swipeEnd({
             x: event.clientX,
@@ -319,6 +337,7 @@ angular.module('angular-carousel')
         $swipe.bind(carousel, {
           /* use angular $swipe service */
           start: function(coords) {
+           // console.log('$swipe start');
             /* capture initial event position */
             if (swiping === 0) {
               swiping = 1;
@@ -327,6 +346,13 @@ angular.module('angular-carousel')
             $document.bind('mouseup', documentMouseUpEvent);
           },
           move: function (coords) {
+            // cancel movement if not inside
+            if (!isInsideCarousel(coords)) {
+             // console.log('force end');
+              swipeEnd(coords);
+              return;
+            }
+            //console.log('$swipe move');
             if (swiping===0) return;
             var deltaX = coords.x - startX;
             if (swiping === 1 && deltaX !== 0) {
@@ -351,6 +377,7 @@ angular.module('angular-carousel')
             }
           },
           end: function (coords) {
+            //console.log('$swipe end');
             swipeEnd(coords);
           }
         });
