@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.9 - 2013-10-12
+ * @version v0.0.9 - 2013-10-30
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -23,7 +23,7 @@ angular.module('angular-carousel', ['ngTouch']);
 
 angular.module('angular-carousel')
 
-.directive('rnCarouselIndicators', [function() {
+.directive('rnCarouselIndicators', ['$rootScope', '$timeout', function($rootScope, $timeout) {
   return {
     restrict: 'A',
     replace: true,
@@ -32,8 +32,20 @@ angular.module('angular-carousel')
       index: '='
     },
     template: '<div class="rn-carousel-indicator">' +
-                '<span ng-repeat="item in items" ng-class="{active: $index==$parent.index}">●</span>' +
-              '</div>'
+                '<span ng-repeat="item in items" ng-class="{active: $index==$parent.index}" ng-click="select($event, $index)">&bull;</span>' +
+              '</div>',
+    link:function(scope, element, attrs){
+      var carouselId;
+      $timeout(function(){
+        carouselId = element.parent().attr('id');
+      }, 300);
+
+      scope.select = function(e, index) {
+        if(e) e.stopPropagation();
+        $rootScope.$broadcast('angularCarousel:select', carouselId, index);
+      };
+    }
+
   };
 }]);
 
@@ -445,6 +457,13 @@ angular.module('angular-carousel')
           }
         });
       //  if (containerWidth===0) updateContainerWidth();
+
+        scope.$on('angularCarousel:select', function(e, id, index){
+          if (id == carouselId) {
+            // only respond if the correct carousel
+            scope.carouselCollection.goToIndex(index);
+          }
+        });
       };
     }
   };

@@ -382,6 +382,13 @@ angular.module('angular-carousel')
           }
         });
       //  if (containerWidth===0) updateContainerWidth();
+
+        scope.$on('angularCarousel:select', function(e, id, index){
+          if (id == carouselId) {
+            // only respond if the correct carousel
+            scope.carouselCollection.goToIndex(index);
+          }
+        });
       };
     }
   };
