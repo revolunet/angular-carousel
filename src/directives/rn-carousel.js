@@ -242,6 +242,7 @@ angular.module('angular-carousel')
             } else {
               containerWidth = slides[0].getBoundingClientRect().width;
             }
+            containerWidth = Math.floor(containerWidth);
             container.css('width', containerWidth + 'px');
             return containerWidth;
         }
