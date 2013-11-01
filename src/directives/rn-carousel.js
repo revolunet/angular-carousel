@@ -248,7 +248,10 @@ angular.module('angular-carousel')
 
         /* enable carousel indicator */
         if (angular.isDefined(iAttrs.rnCarouselIndicator)) {
-          var indicator = $compile("<div id='" + carouselId +"-indicator' index='carouselCollection.index' items='carouselCollection.items' data-rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
+          scope.setActive = function(index) {
+            scope.carouselCollection.goToIndex(index, true);
+          };
+          var indicator = $compile("<div id='" + carouselId +"-indicator' index='carouselCollection.index' items='carouselCollection.items' delegate='this' data-rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
           container.append(indicator);
         }
 
