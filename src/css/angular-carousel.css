@@ -49,7 +49,9 @@ ul.rn-carousel-slides > li {
   padding: 0 5px;
   color: #333;
   transition: color .2s ease-out;
+  cursor: pointer;
 }
 .rn-carousel-indicator span.active {
   color:white;
+  cursor: default;
 }
