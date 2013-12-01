@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.9 - 2013-10-11
+ * @version v0.0.9 - 2013-12-01
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -305,7 +305,10 @@ angular.module('angular-carousel')
             } else {
               containerWidth = slides[0].getBoundingClientRect().width;
             }
-            container.css('width', containerWidth + 'px');
+            /* Don't set the container's width to '0px' as 'getBoundingClientRect().width' is probably equal to 0 because the items have not been rendered yet. Otherwise, this might prevent the carousel from beign displayed. */
+            if (containerWidth !== 0) {
+                container.css('width', containerWidth + 'px');
+            }
             return containerWidth;
         }
 
