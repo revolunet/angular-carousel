@@ -23,6 +23,8 @@ ul.rn-carousel-slides > li {
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
 }
 .rn-carousel-animate {
   -webkit-transition: -webkit-transform .1s ease-out;
