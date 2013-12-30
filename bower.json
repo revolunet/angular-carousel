@@ -10,9 +10,9 @@
   },
   "main": "./dist/angular-carousel.js",
   "dependencies": {
-    "angular": "1.2.0-rc.2",
-    "angular-mocks": "1.2.0-rc.2",
-    "jquery": "1.9.1",
-    "angular-touch": "~1.2.0-rc.2"
+    "angular": "~1.2.*-build",
+    "angular-mocks": "~1.2.*-build",
+    "jquery": "1.10.2",
+    "angular-touch": "~1.2.*-build"
   }
 }
