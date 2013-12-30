@@ -9,6 +9,20 @@
     "url": "git://github.com/revolunet/angular-carousel.git"
   },
   "main": "./dist/angular-carousel.js",
+  "ignore": [
+    "**/.*",
+    "src",
+    "components",
+    "node_modules",
+    "scripts",
+    "bower_components",
+    "test",
+    "index.html",
+    "Gruntfile.js",
+    "test.html",
+    "demo",
+    "lib"
+  ],
   "dependencies": {
     "angular": "~1.2.*-build",
     "angular-mocks": "~1.2.*-build",
