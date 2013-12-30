@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.9 - 2013-12-29
+ * @version v0.0.9 - 2013-12-30
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -11,7 +11,7 @@
 Angular touch carousel with CSS GPU accel and slide buffering/cycling
 http://github.com/revolunet/angular-carousel
 
-TODO : 
+TODO :
  - skip initial animation
  - add/remove ngRepeat collection
  - prev/next cbs
@@ -19,7 +19,22 @@ TODO :
  - cycle + indicator
 */
 
-angular.module('angular-carousel', ['ngTouch']);
+angular.module('angular-carousel', ['ngTouch']).config(['$provide', function($provide) {
+  $provide.decorator('$rootScope', ['$delegate', function($delegate) {
+    $delegate.safeApply = function(fn) {
+      var phase = $delegate.$$phase;
+      if (phase === "$apply" || phase === "$digest") {
+        if (fn && typeof fn === 'function') {
+          fn();
+        }
+      } else {
+        $delegate.$apply(fn);
+      }
+    };
+
+    return $delegate;
+  }]);
+}]);
 
 angular.module('angular-carousel')
 
@@ -75,7 +90,7 @@ angular.module('angular-carousel')
 
 angular.module('angular-carousel')
 
-.directive('rnCarousel', ['$compile', '$parse', '$swipe', '$document', '$window', 'CollectionManager', function($compile, $parse, $swipe, $document, $window, CollectionManager) {
+.directive('rnCarousel', ['$rootScope', '$compile', '$parse', '$swipe', '$document', '$window', 'CollectionManager', function($rootScope, $compile, $parse, $swipe, $document, $window, CollectionManager) {
   /* track number of carousel instances */
   var carousels = 0;
 
@@ -150,7 +165,7 @@ angular.module('angular-carousel')
               event.propertyName === '-webkit-transform' ||
               event.propertyName === '-moz-transform')
           ) {
-            scope.$apply(function() {
+            $rootScope.safeApply(function() {
               checkEdges();
               scope.carouselCollection.adjustBuffer();
               updateSlidePosition(true);
@@ -169,11 +184,9 @@ angular.module('angular-carousel')
             skipAnimation = true;
             scope.carouselCollection[method](items, true);
           }
-          if(!scope.$$phase) {
-            scope.$apply(cb);
-          } else {
+          $rootScope.safeApply(function(){
             cb();
-          }
+          });
 
         }
 
@@ -364,11 +377,11 @@ angular.module('angular-carousel')
               //console.log(offset, startOffset, slideOffset);
               /* reset slide position if same slide (watch not triggered) */
               if (!changed) {
-                scope.$apply(function() {
+                $rootScope.safeApply(function() {
                   updateSlidePosition();
                 });
               } else {
-                scope.$apply(function() {
+                $rootScope.safeApply(function() {
                   if (angular.isDefined(iAttrs.rnCarouselCycle)) {
                     // force slide move even if invalid position for cycle carousels
                     scope.carouselCollection.position = tmpSlideIndex;

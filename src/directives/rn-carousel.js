@@ -1,6 +1,6 @@
 angular.module('angular-carousel')
 
-.directive('rnCarousel', ['$compile', '$parse', '$swipe', '$document', '$window', 'CollectionManager', function($compile, $parse, $swipe, $document, $window, CollectionManager) {
+.directive('rnCarousel', ['$rootScope', '$compile', '$parse', '$swipe', '$document', '$window', 'CollectionManager', function($rootScope, $compile, $parse, $swipe, $document, $window, CollectionManager) {
   /* track number of carousel instances */
   var carousels = 0;
 
@@ -75,7 +75,7 @@ angular.module('angular-carousel')
               event.propertyName === '-webkit-transform' ||
               event.propertyName === '-moz-transform')
           ) {
-            scope.$apply(function() {
+            $rootScope.safeApply(function() {
               checkEdges();
               scope.carouselCollection.adjustBuffer();
               updateSlidePosition(true);
@@ -94,11 +94,9 @@ angular.module('angular-carousel')
             skipAnimation = true;
             scope.carouselCollection[method](items, true);
           }
-          if(!scope.$$phase) {
-            scope.$apply(cb);
-          } else {
+          $rootScope.safeApply(function(){
             cb();
-          }
+          });
 
         }
 
@@ -289,11 +287,11 @@ angular.module('angular-carousel')
               //console.log(offset, startOffset, slideOffset);
               /* reset slide position if same slide (watch not triggered) */
               if (!changed) {
-                scope.$apply(function() {
+                $rootScope.safeApply(function() {
                   updateSlidePosition();
                 });
               } else {
-                scope.$apply(function() {
+                $rootScope.safeApply(function() {
                   if (angular.isDefined(iAttrs.rnCarouselCycle)) {
                     // force slide move even if invalid position for cycle carousels
                     scope.carouselCollection.position = tmpSlideIndex;
