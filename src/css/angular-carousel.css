@@ -1,6 +1,6 @@
 /*
 generic styles applied to any carousel
-must be ul/li 
+must be ul/li
 */
 .rn-carousel-container {
   overflow: hidden;
@@ -25,7 +25,7 @@ ul.rn-carousel-slides > li {
   backface-visibility: hidden;
   -webkit-perspective: 1000;
   perspective: 1000;
-} 
+}
 .rn-carousel-animate {
   -webkit-transition: -webkit-transform .1s ease-out;
   -moz-transition: -moz-transform .1s ease-out;
@@ -50,7 +50,14 @@ ul.rn-carousel-slides > li {
 .rn-carousel-indicator span {
   padding: 0 5px;
   color: #333;
+  -webkit-transition: color .2s ease-out;
+  -moz-transition: color .2s ease-out;
+  -ms-transition: color .2s ease-out;
+  -o-transition: color .2s ease-out;
   transition: color .2s ease-out;
+  font-size: 22px;
+  line-height: 22px;
+  cursor: pointer;
 }
 .rn-carousel-indicator span.active {
   color:white;

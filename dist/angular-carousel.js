@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.9 - 2013-10-11
+ * @version v0.0.9 - 2013-12-30
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -11,7 +11,7 @@
 Angular touch carousel with CSS GPU accel and slide buffering/cycling
 http://github.com/revolunet/angular-carousel
 
-TODO : 
+TODO :
  - skip initial animation
  - add/remove ngRepeat collection
  - prev/next cbs
@@ -19,11 +19,26 @@ TODO :
  - cycle + indicator
 */
 
-angular.module('angular-carousel', ['ngMobile']);
+angular.module('angular-carousel', ['ngTouch']).config(['$provide', function($provide) {
+  $provide.decorator('$rootScope', ['$delegate', function($delegate) {
+    $delegate.safeApply = function(fn) {
+      var phase = $delegate.$$phase;
+      if (phase === "$apply" || phase === "$digest") {
+        if (fn && typeof fn === 'function') {
+          fn();
+        }
+      } else {
+        $delegate.$apply(fn);
+      }
+    };
+
+    return $delegate;
+  }]);
+}]);
 
 angular.module('angular-carousel')
 
-.directive('rnCarouselIndicators', [function() {
+.directive('rnCarouselIndicators', ['$rootScope', '$timeout', function($rootScope, $timeout) {
   return {
     restrict: 'A',
     replace: true,
@@ -32,8 +47,20 @@ angular.module('angular-carousel')
       index: '='
     },
     template: '<div class="rn-carousel-indicator">' +
-                '<span ng-repeat="item in items" ng-class="{active: $index==$parent.index}">●</span>' +
-              '</div>'
+                '<span ng-repeat="item in items" ng-class="{active: $index==$parent.index}" ng-click="select($event, $index)">&bull;</span>' +
+              '</div>',
+    link:function(scope, element, attrs){
+      var carouselId;
+      $timeout(function(){
+        carouselId = element.parent().attr('id');
+      }, 300);
+
+      scope.select = function(e, index) {
+        if(e) e.stopPropagation();
+        $rootScope.$broadcast('angularCarousel:select', carouselId, index);
+      };
+    }
+
   };
 }]);
 
@@ -63,7 +90,7 @@ angular.module('angular-carousel')
 
 angular.module('angular-carousel')
 
-.directive('rnCarousel', ['$compile', '$parse', '$swipe', '$document', '$window', 'CollectionManager', function($compile, $parse, $swipe, $document, $window, CollectionManager) {
+.directive('rnCarousel', ['$rootScope', '$compile', '$parse', '$swipe', '$document', '$window', 'CollectionManager', function($rootScope, $compile, $parse, $swipe, $document, $window, CollectionManager) {
   /* track number of carousel instances */
   var carousels = 0;
 
@@ -138,7 +165,7 @@ angular.module('angular-carousel')
               event.propertyName === '-webkit-transform' ||
               event.propertyName === '-moz-transform')
           ) {
-            scope.$apply(function() {
+            $rootScope.safeApply(function() {
               checkEdges();
               scope.carouselCollection.adjustBuffer();
               updateSlidePosition(true);
@@ -157,11 +184,9 @@ angular.module('angular-carousel')
             skipAnimation = true;
             scope.carouselCollection[method](items, true);
           }
-          if(!scope.$$phase) {
-            scope.$apply(cb);
-          } else {
+          $rootScope.safeApply(function(){
             cb();
-          }
+          });
 
         }
 
@@ -219,7 +244,7 @@ angular.module('angular-carousel')
               initialIndex = indexModel(scope);
               scope.$parent.$watch(indexModel, function(newValue, oldValue) {
                   if (newValue!==undefined) {
-                    scope.carouselCollection.goToIndex(newValue, true);
+                    scope.carouselCollection.goToIndex(newValue, false);
                   }
                 });
             } else if (!isNaN(iAttrs.rnCarouselIndex)) {
@@ -352,11 +377,11 @@ angular.module('angular-carousel')
               //console.log(offset, startOffset, slideOffset);
               /* reset slide position if same slide (watch not triggered) */
               if (!changed) {
-                scope.$apply(function() {
+                $rootScope.safeApply(function() {
                   updateSlidePosition();
                 });
               } else {
-                scope.$apply(function() {
+                $rootScope.safeApply(function() {
                   if (angular.isDefined(iAttrs.rnCarouselCycle)) {
                     // force slide move even if invalid position for cycle carousels
                     scope.carouselCollection.position = tmpSlideIndex;
@@ -445,6 +470,13 @@ angular.module('angular-carousel')
           }
         });
       //  if (containerWidth===0) updateContainerWidth();
+
+        scope.$on('angularCarousel:select', function(e, id, index){
+          if (id == carouselId) {
+            // only respond if the correct carousel
+            scope.carouselCollection.goToIndex(index);
+          }
+        });
       };
     }
   };

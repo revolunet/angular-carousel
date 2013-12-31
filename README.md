@@ -14,7 +14,7 @@ Proudly brought to you by the [@revolunet](http://twitter.com/revolunet) team.
 ```html
 <link href="lib/angular-carousel.css" rel="stylesheet" type="text/css" />
 <script src="lib/angular.js"></script>
-<script src="lib/angular-mobile.js"></script>
+<script src="./bower_components/angular-touch/angular-touch.js"></script>
 <script src="lib/angular-carousel.js"></script>
 ```
 
