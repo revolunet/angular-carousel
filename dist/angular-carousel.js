@@ -244,7 +244,7 @@ angular.module('angular-carousel')
               initialIndex = indexModel(scope);
               scope.$parent.$watch(indexModel, function(newValue, oldValue) {
                   if (newValue!==undefined) {
-                    scope.carouselCollection.goToIndex(newValue, true);
+                    scope.carouselCollection.goToIndex(newValue, false);
                   }
                 });
             } else if (!isNaN(iAttrs.rnCarouselIndex)) {
