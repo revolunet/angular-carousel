@@ -1,6 +1,8 @@
-/* global require, module, process */
+/* global require, module, process, __dirname */
 
 'use strict';
+
+var path = require('path');
 
 module.exports = function(grunt) {
 
@@ -21,31 +23,39 @@ module.exports = function(grunt) {
         options: {
           port: 9999,
           hostname: '0.0.0.0',
-          base: '.',
-          keepalive: true
+          base: '.'
         }
       }
     },
     dirs: {
+      src: 'src',
       dest: 'dist'
+    },
+    copy: {
+
+    },
+    autoprefixer: {
+      source: {
+        options: {
+          //browsers: ['last 2 version', '> 1%', 'android', 'chrome', 'firefox']
+        },
+        src: '<%= dirs.src %>/css/<%= pkg.name %>.css',
+        dest: '<%= dirs.dest %>/<%= pkg.name %>.css'
+      }
     },
     concat: {
       options: {
         banner: '<%= meta.banner %>'
       },
       dist: {
-        src: ['src/*.js', 'src/**/*.js'],
+        src: ['<%= dirs.src %>/*.js', '<%= dirs.src %>/**/*.js'],
         dest: '<%= dirs.dest %>/<%= pkg.name %>.js'
-      },
-      ngMobile: {
-        src: ['lib/angular-mobile.js'],
-        dest: '<%= dirs.dest %>/angular-mobile.js'
       }
     },
     cssmin: {
       combine: {
         files: {
-          '<%= dirs.dest %>/<%= pkg.name %>.min.css': ['src/css/*.css']
+          '<%= dirs.dest %>/<%= pkg.name %>.min.css': ['<%= dirs.dest %>/<%= pkg.name %>.css']
         }
       }
     },
@@ -59,7 +69,7 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      files: ['Gruntfile.js', 'src/*.js', 'test/unit/*.js'],
+      files: ['Gruntfile.js', '<%= dirs.src %>/*.js', 'test/unit/*.js'],
       options: {
         curly: false,
         browser: true,
@@ -81,69 +91,50 @@ module.exports = function(grunt) {
         }
       }
     },
-    // watch: {
-    //   files: '<config:jshint.files>',
-    //   tasks: 'default'
-    // },
     karma: {
-      test: {
-        options: {
-          reporters: ['dots'],
-          singleRun: true
-        }
-      },
-      server: {
-        options: {
-          singleRun: false
-        }
-      },
       options: {
-        configFile: 'test/karma.conf.js'
+          // needed to use absolute path for some reason
+          configFile: path.join(__dirname, 'test', 'karma.conf.js')
+      },
+      unit: {
+          port: 7101,
+          background: true
+      },
+      continuous: {
+          singleRun: true
       }
     },
     watch: {
-      files: ['src/**'],
-      tasks: ['quickbuild']
+      dev: {
+        files: ['<%= dirs.src %>/**'],
+        tasks: ['build']
+      },
+      test: {
+        files: ['test/unit/**'],
+        tasks: ['karma:unit:run']
+      }
+      
     }
   });
 
-  // Load the plugin that provides the "jshint" task.
+  grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-
-  // Load the plugin that provides the "concat" task.
   grunt.loadNpmTasks('grunt-contrib-concat');
-
-  // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-uglify');
-
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-
   grunt.loadNpmTasks('grunt-contrib-connect');
-
-  // Load the plugin that provides the "watch" task.
   grunt.loadNpmTasks('grunt-contrib-watch');
-
-
-  // Default task.
-  grunt.registerTask('default', ['test']);
+  grunt.loadNpmTasks('grunt-karma');
 
   // Test tasks.
-  grunt.registerTask('test', ['jshint', 'karma:test']);
-  grunt.registerTask('test-server', ['karma:server']);
+  grunt.registerTask('test', ['jshint', 'karma:unit']);
 
   // Build task.
-  grunt.registerTask('build', ['concat', 'uglify', 'cssmin', 'test']);
-  grunt.registerTask('quickbuild', ['jshint', 'concat', 'uglify', 'cssmin']);
+  grunt.registerTask('quickbuild', ['jshint', 'concat', 'uglify', 'autoprefixer', 'cssmin']);
+  grunt.registerTask('build', ['quickbuild', 'test']);
 
-  // run devserver
-  grunt.registerTask('webserver', ['connect:devserver']);
-
-  // Provides the "karma" task.
-  grunt.registerMultiTask('karma', 'Starts up a karma server.', function() {
-    var done = this.async();
-    require('karma').server.start(this.options(), function(code) {
-      done(code === 0);
-    });
-  });
+  // Default task.
+  grunt.registerTask('default', ['build', 'connect', 'watch']);
 
 };
