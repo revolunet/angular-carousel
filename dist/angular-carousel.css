@@ -9,6 +9,8 @@ use autoprefixer to build the final CSS
     position: relative;
     white-space: nowrap;
     overflow: visible;
+    -webkit-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
     padding: 0;
     margin: 0;
@@ -19,5 +21,7 @@ use autoprefixer to build the final CSS
     display: inline-block;
     width: 100%;
     height: 100%;
+    -webkit-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
     backface-visibility: hidden;
 }

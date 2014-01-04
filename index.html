@@ -1,252 +1,187 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="DemoApp">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=620, user-scalable=no">
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='./dist/angular-carousel.css' rel='stylesheet' type='text/css'>
     <style>
-    html, body { 
-      height:100%; 
-      padding:0;
-      margin:0;
-    }
-    body {
-      margin: 0;
-      background: #333;
-      color:white;
-      padding: 10px;
-    }
-    * {
-      font-family: 'Droid Sans', sans-serif;
-    }
-    h1 {
-      margin-top: 5px;
-    }
-    h3 {
-      margin: 30px 0 10px 0;
-    }
-    .image {
-      width: 400px;
-      height: 200px;
-    }
-    .image-wide {
-      width: 500px;
-      height: 250px;
-    }
-    .image li, .image-wide li {
-      background-size: auto;
-      background-position: center center;
-    }
-    div.layer {
-      background-color:rgba(0, 0, 0, 0.5);
-      padding:5px;
-      font-size:10px;
-    }
-    .repo {
-      width: 300px;
-      height: 200px;
-      
-    }
-    .repo li {
-      padding:10px;
-      color:black;
-      background: #bbb;
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-    }
-    div.repo-name {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom:10px;
-      text-decoration:underline;
-      -webkit-transition: all 1s ease-in;
-      transition: all 1s ease-in;
-      color:black;
-    }
-    div.repo-name:hover {
-      color:red;
-    }
-    ul li {
-      list-style-type: none
-    }
-    ul.basic {
-      width:300px;
-      height:200px;
-    }
-    ul.basic li {
-      text-align:center;
-      padding-top:80px;
-      font-size: 22px;
-    }
-    a {
-      color:white;
-    }
-    ul.puredom {
-      width:300px;
-      height:200px;
-      font-size:0;
-    }
-    .puredom li {
-      background: #666;
-      text-align:center;
-      font-size:24px;
-    }
-
+        html, body { 
+          height:100%; 
+          padding:0;
+          margin:0;
+        }
+        body {
+          margin: 0;
+          background: #333;
+          color:white;
+          padding: 10px;
+        }
+        a {
+          color:white;
+        }
+        * {
+          font-family: 'Droid Sans', sans-serif;
+        }
+        h1 {
+          margin-top: 5px;
+        }
+        h3 {
+          margin: 30px 0 10px 0;
+        }
+        .my-slider {
+            width: 320px;
+            height: 200px;
+            font-size:0;
+        }
+        .my-slider li {
+            box-sizing: border-box;
+            font-size:30px;
+            position:relative;
+        }
+        .my-slider li div.debug {
+            box-sizing: border-box;
+            position:absolute;
+            bottom:0;
+            height:50px;
+            background:rgba(0,0,0,0.7);
+            color:white;
+            font-size:12px;
+            width:100%;
+            padding:5px;
+        }
+        .my-slider.standard li {
+            text-align:center;
+            padding:20px;
+            font-size:20px;
+        }
+        .big {
+            margin-top:30px;
+            width:100%;
+            font-size:30px;
+        }
+        .controls {
+            width:320px;
+            text-align: center;
+        }
+        .ng-cloak {
+          display:none;
+        }
     </style>
-  </head>
-  <body ng-app="myApp" ng-controller='demoController'>
-    <a href="https://github.com/revolunet/angular-carousel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
-    <h1>AngularJS Touch Carousel</h1>
-    <div class='intro'>Transform your ng-repeat or DOM nodes in a mobile-friendly carousel just by adding a 'rn-carousel' attribute to your ul/li block, thanks to AngularJS magic :)<br><br>
-    Carousels are data-bound to your ngRepeat collections, can be DOM buffered (good for performance), can cycle over your fixed collection or receive on-demand slides for infinite carousels :)
-    <br><br>
-    Try to swipe these demos with your mouse or your finger :
-    </div>
+    <body ng-controller="DemoCtrl">
+        <a href="https://github.com/revolunet/angular-carousel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 
-    <h3>Simple carousel</h3>
-    A very basic carousel with indicators<br><br>
-    <ul rn-carousel rn-carousel-indicator class="image">
-      <li ng-repeat="image in cityImages" style="background-image:url({{ image }});">
-        <div class="layer" ng-bind-html-unsafe="image"></div>
-      </li>
-    </ul>
+        <h1>AngularJS Touch Carousel</h1>
+        <div class='intro'>
+            Transform your ng-repeat or DOM nodes in a mobile-friendly carousel just by adding a 'rn-carousel' attribute to your HTML; AngularJS directives FTW :)<br><br>
+            Carousels are data-bound to your ngRepeat collections and can be DOM buffered (good for performance)
+            <br><br>
+            Try to swipe these demos with your mouse or finger :
+        </div>
 
-    <h3>Simple carousel without ng-repeat</h3>
-    This carousel use the ul/li structure to generate the slides<br><br>
-    <ul rn-carousel rn-carousel-indicator class="puredom">
-      <li>Slide #1</li>
-      <li>Slide #2</li>
-      <li>Slide #3</li>
-      <li>Slide #4</li>
-      <li>Slide #5</li>
-    </ul>
+        <h3>ngRepeat demo (buffered carousel)</h3>
+        <ul rn-carousel rn-carousel-buffered class="my-slider ng-cloak">
+            <li ng-repeat="slide in slides|filter:{odd:true}:true track by slide.label" ng-style="{'background-image': 'url(' + slide.img + ')'}">
+                <div class="debug">
+                    {{ slide.label }} / {{ slides.length }}
+                    <br>
+                    carouselIndex: {{ carouselIndex }}<br>
+                    carouselBufferIndex: {{ carouselBufferIndex }}<br>
+                </div>
+            </li>
+        </ul>
 
+        <h3>template-based demo</h3>
+        <ul rn-carousel class="my-slider standard ng-cloak">
+            <li ng-style="{'background-color': colors[0]}">
+                This is a standard template
+                <div class="big">slide #1</div>
+            </li>
+            <li ng-style="{'background-color': colors[10]}">
+                Here's sophie : <br>
+                <img src="./demo/img/sophie.jpeg">
+            </li>
+            <li ng-style="{'background-color': colors[30]}">
+                A friend of mine : <br>
+                <img src="./demo/img/grumpy.jpg" height="120">
+            </li>
+            <li ng-style="{'background-color': colors[40]}">
+                And to finish :
+                <iframe width="100%" height="80%" src="//www.youtube.com/embed/OQSNhk5ICTI" frameborder="0" allowfullscreen></iframe>
+            </li>
+        </ul>
 
+        <h3>buffered ngRepeat carousel with custom controls</h3>
+        <ul rn-carousel rn-carousel-buffered rn-carousel-index="slideIndex" class="my-slider ng-cloak">
+            <li ng-repeat="slide in slides2" ng-style="{'background-image': 'url(' + slide.img + ')'}">
+                <div class="debug">
+                    {{ slide.label }} / {{ slides2.length }}
+                    <br>
+                    carouselIndex: {{ carouselIndex }}<br>
+                    carouselBufferIndex: {{ carouselBufferIndex }}<br>
+                </div>
+            </li>
+        </ul>
+        <div class="controls ng-cloak">
+            <button ng-disabled="slideIndex==0" ng-click="prev()">prev</button>
+            <span>{{ slideIndex + 1 }} / {{ slides2.length }}</span>
+            <button ng-click="next()" ng-disabled="slideIndex==slides2.length-1" >next</button>
+            <button ng-click="pushSlide()">add 3 slides</button>
+        </div>
 
-<!--
-    <h3>Forever carousel</h3>
-    A carousel that cycles forever<br><br>
-    <ul rn-carousel rn-carousel-cycle rn-carousel-indicator class="image">
-      <li data-ng-repeat="image in cityImages2" style="background-image:url({{ image }});">
-        <div class="layer" ng-bind-html-unsafe="image"></div>
-      </li>
-    </ul>
-
-    <h3>Forever buffered carousel</h3>
-    A cycling buffered carousel<br><br>
-    <ul rn-carousel rn-carousel-cycle rn-carousel-buffered class="image">
-      <li ng-repeat="image in cityImages2" style="background-image:url({{ image }});">
-        <div class="layer" ng-bind-html-unsafe="image"></div>
-      </li>
-    </ul>
--->
-
-
-    <h3 data-ng-bind-html-unsafe="'Discover sports (slide ' + (currentSport + 1) + '/' + sportImages.length + ')'"></h3>
-    This carousel has two way data-binding, custom controls and is buffered (only 3 slides rendered)<br><br>
-    <ul data-rn-carousel rn-carousel-buffered rn-carousel-index="currentSport" class="image">
-      <li ng-repeat="image in sportImages" style="background-image:url({{ image }});">
-        <div class="layer" ng-bind-html-unsafe="image"></div>
-      </li>
-    </ul>
-
-    <button ng-click="currentSport = currentSport - 1" ng-disabled="currentSport == 0">prev</button>
-    <button ng-click="currentSport = currentSport + 1" ng-disabled="currentSport == sportImages.length - 1">next</button>
-
-    <h3>Our Public GitHub repos</h3>
-    This carousel has a more advanced template and DOM buffered.<br><br>
-    <ul rn-carousel rn-carousel-buffered class="repo" >
-      <li ng-repeat="repo in githubRepos">
-          <div class="repo-name">{{ repo.name }}</div>
-          {{ repo.description }}<br>
-          <br>
-          <b>watchers</b> : {{ repo.watchers_count }}<br>
-          <b>forks</b> : {{ repo.forks_count }}<br>
-          <b>open issues</b> : {{ repo.open_issues_count }}<br>
-      </li>
-    </ul>
-
-    <h3>Other examples</h3>
-
-<!--    <lI><a href="./demo/infinite.html">Infinite buffered carousel</a> : full screen example for mobile devices. Previous/Next slides are generated on-demand from functions or promises.</li>
-      <br>
-    -->
-    <li><a href="./demo/flickr-full/index.html">Fullscreen Flickr demo (mobile)</a> : demo using Flickr API and a carousel to display Flickr groups feeds</li>
-    <li><a href="./demo/infinite.html">Infinite carousel 1</a> : using rn-carousel-prev and rn-carousel-next</li>
-    <li><a href="./demo/infinite2.html">Infinite carousel 2</a> : using rn-carousel-infinite and prev/next callbacks</li>
-    <li><a href="./demo/dynamic.html">add/remove slides dynamically</a> : using the rn-carousel-watch attribute</li>
-
-
-    <br><br><br>
-    <script src="//code.angularjs.org/1.1.5/angular.js"></script>
-    <script src="./lib/angular-mobile.js"></script>
-
-    <!-- include carousel src -->
+        <h3>Other demos</h3>
+        <ul>
+          <li><a href="demo/flickr-full" target="_blank">Flickr browser</a></li>
+        </ul>
+        <br><br>
+    </body>
+    <script src="//code.angularjs.org/1.2.7/angular.min.js"></script>
+    <script src="//code.angularjs.org/1.2.7/angular-touch.min.js"></script>
     <script src="./dist/angular-carousel.js"></script>
-    <link href='./dist/angular-carousel.min.css' rel='stylesheet' type='text/css'>
-
     <script>
-    /* demo page code */
-    angular.module('myApp', ['angular-carousel'])
-      .controller('demoController', function($scope, $http) {
-        $scope.sportImages = [];
-        $scope.cityImages = [];
-        $scope.cityImages2 = [];
-        $scope.githubRepos = [];
+        angular.module('DemoApp', [
+            'angular-carousel'
+        ])
 
-        $scope.currentSport = 0;
+        .controller('DemoCtrl', function($scope, $timeout) {
+            $scope.colors = ["#fc0003", "#f70008", "#f2000d", "#ed0012", "#e80017", "#e3001c", "#de0021", "#d90026", "#d4002b", "#cf0030", "#c90036", "#c4003b", "#bf0040", "#ba0045", "#b5004a", "#b0004f", "#ab0054", "#a60059", "#a1005e", "#9c0063", "#960069", "#91006e", "#8c0073", "#870078", "#82007d", "#7d0082", "#780087", "#73008c", "#6e0091", "#690096", "#63009c", "#5e00a1", "#5900a6", "#5400ab", "#4f00b0", "#4a00b5", "#4500ba", "#4000bf", "#3b00c4", "#3600c9", "#3000cf", "#2b00d4", "#2600d9", "#2100de", "#1c00e3", "#1700e8", "#1200ed", "#0d00f2", "#0800f7", "#0300fc"];
 
-        $http.get('https://api.github.com/users/revolunet/repos', {
-          params: {
-            sort: 'updated',
-            order:'desc'
-          }
-        }).success(function(data) {
-          $scope.githubRepos = data;
-        }).error(function() {
-          alert('cannot fetch github API');
-        })
+            function addSlide(target, style) {
+                var i = target.length;
+                target.push({
+                    label: 'slide #' + (i + 1),
+                    img: 'http://lorempixel.com/320/250/' + style + '/' + (i % 10) ,
+                    color: $scope.colors[ (i*10) % $scope.colors.length],
+                    odd: (i % 2 === 0)
+                });
+            };
 
-        for (var i=0; i<10; i++) {
-          for (var j=0; j<10; j++) {
-            $scope.sportImages.push('http://lorempixel.com/400/200/sports/' + j + '/');
-          }
-          $scope.cityImages.push('http://lorempixel.com/400/200/city/' + i + '/');
-          if (i<5) $scope.cityImages2.push('http://lorempixel.com/400/200/city/' + i + '/');
-        }
+            function addSlides(target, style, qty) {
+                for (var i=0; i < qty; i++) {
+                    addSlide(target, style);
+                }
+            }
 
-        // infinite carousel stuff
-        var currentDay = (new Date()),
-            colors = ['#339966', '#336699', '#cc9933', '#cc6633', '#cc3366', '#66cc33'];
+            $scope.pushSlide = function() {
+                addSlides($scope.slides2, 'city', 3);
+            }
 
-        function addPage() {
-          // generate a single page, with color and a new date
-          var colorIndex = $scope.pages.length % colors.length;
-          $scope.pages.push({
-            bg: colors[colorIndex],
-            date: currentDay
-          })
-          currentDay = new Date(currentDay.getTime() + 60*60*24*1000);
-        }
+            // 1st ngRepeat demo
+            $scope.slides = [];
+            addSlides($scope.slides, 'sports', 50);
 
-        // add some initial pages
-        $scope.pages = [];
-        addPage();
-        addPage();
-        addPage();
-        addPage();
-        addPage();
+            // 2nd ngRepeat demo
+            $scope.slides2 = [];
+            $scope.slideIndex = 0;
+            addSlides($scope.slides2, 'city', 5);
+            $scope.prev = function() {
+                $scope.slideIndex--;
+            }
+            $scope.next = function() {
+                $scope.slideIndex++;
+            }
 
-        $scope.generateSlides = function() {
-          // callback called when carousel reach the penultimate slide
-          // add some slides (could be one)
-          addPage();
-          addPage();
-          addPage();
-        };
-
-      });
+        });
 
     </script>
-  </body>
 </html>

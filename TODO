@@ -1,0 +1,34 @@
+
+
+Carousel v2:
+    Base features:
+        ✔ basic ngRepeat @done (14-01-04 20:22)
+        ✔ ngRepeat with filter @done (14-01-04 20:54)
+        ✔ ngRepeat with filter and track by @done (14-01-04 20:59)
+        ✔ template based only @done (14-01-04 20:22)
+    Bindings:
+        ✔ should have a carousel-index binding @done (14-01-04 20:22)
+    Buffering:
+        ✔ should optionnaly buffer the carousel DOM @done (14-01-04 20:22)
+    Indicators:
+        ☐ should have optional indicators
+        ☐ indicators should be clickable
+        ☐ indicators should be customisable
+    Animations:
+        ☐ should have some builtin animations
+        ☐ should be able to customise animations
+    Bugs:
+        ☐ bug when rn-carousel-index change while animation from outside
+        ☐ handle touch cancel
+    Advanced:
+        ☐ optional cycle
+        ☐ infinite carousels with slide generators
+        ☐ optional auto-slide
+    Tests:
+        ✔ setup karma @done (14-01-05 00:15)
+    Tooling:
+        ✔ update grunt @done (14-01-04 22:09)
+        ✔ add autoprefixer @done (14-01-04 22:09)
+        ☐ template with code samples for the demo page
+    Docs:
+        ☐ README update
