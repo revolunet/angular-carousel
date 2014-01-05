@@ -5,7 +5,12 @@
 
     .filter('carouselSlice', function() {
         return function(collection, start, size) {
-            return collection.slice(start, start + size);
+            if (angular.isArray(collection)) {
+                return collection.slice(start, start + size);
+            } else if (angular.isObject(collection)) {
+                // dont try to slice collections :)
+                return collection;
+            }
         };
     });
 

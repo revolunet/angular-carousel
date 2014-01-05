@@ -50,7 +50,7 @@ angular.module('MyApp', ['angular-carousel']);
 ### Regular carousel :
  - `rn-carousel-index` two way binding to control the carousel position.
  - `rn-carousel-indicator` to turn on the indicator, see demo page.
- - `rn-carousel-buffered` to buffer the carousel, good to minimize the DOM.
+ - `rn-carousel-buffered` to buffer the carousel, good to minimize the DOM. (works only with arrays)
 
 ## Todo :
  - see the [TODO file](./TODO)

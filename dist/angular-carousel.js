@@ -158,7 +158,12 @@ angular.module('angular-carousel')
                     // watch the given collection
                     if (isRepeatBased) {
                         scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
-                            slidesCount = newValue.length;
+                            slidesCount = 0;
+                            if (angular.isArray(newValue)) {
+                                slidesCount = newValue.length;
+                            } else if (angular.isObject(newValue)) {
+                                slidesCount = Object.keys(newValue).length;
+                            }
                             updateIndicatorArray();
                             if (!containerWidth) updateContainerWidth();
                             goToSlide(scope.carouselIndex);
@@ -405,7 +410,12 @@ angular.module('angular-carousel')
 
     .filter('carouselSlice', function() {
         return function(collection, start, size) {
-            return collection.slice(start, start + size);
+            if (angular.isArray(collection)) {
+                return collection.slice(start, start + size);
+            } else if (angular.isObject(collection)) {
+                // dont try to slice collections :)
+                return collection;
+            }
         };
     });
 

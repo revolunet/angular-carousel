@@ -2,6 +2,7 @@
 <html ng-app="DemoApp">
   <head>
     <meta charset="UTF-8">
+    <title>angular-carousel demo</title>
     <meta name="viewport" content="width=620, user-scalable=no">
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
     <link href='./dist/angular-carousel.css' rel='stylesheet' type='text/css'>
@@ -70,6 +71,7 @@
         .center {
             text-align:center;
         }
+
     </style>
     <body ng-controller="DemoCtrl">
         <a href="https://github.com/revolunet/angular-carousel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
@@ -79,7 +81,7 @@
             Transform your ng-repeat or DOM nodes in a mobile-friendly carousel just by adding a 'rn-carousel' attribute to your HTML; AngularJS directives FTW :)<br><br>
             Carousels are data-bound to your ngRepeat collections and can be DOM buffered (good for performance)
             <br><br>
-            Try to swipe these demos with your mouse or finger :
+            Swipe these demos with your mouse or finger :
         </div>
 
         <h3>ngRepeat demo (buffered carousel)</h3>
@@ -114,7 +116,7 @@
             </li>
         </ul>
 
-        <h3>buffered ngRepeat carousel with indicator and custom controls</h3>
+        <h3>buffered ngRepeat carousel with custom controls</h3>
         <ul rn-carousel rn-carousel-buffered rn-carousel-indicator rn-carousel-index="slideIndex" class="my-slider ng-cloak">
             <li ng-repeat="slide in slides2" ng-style="{'background-image': 'url(' + slide.img + ')'}">
                 <div class="debug">
@@ -131,6 +133,13 @@
             <button ng-click="next()" ng-disabled="slideIndex==slides2.length-1" >next</button>
             <button ng-click="pushSlide()">add 3 slides</button>
         </div>
+
+        <h3>object-based ngRepeat carousel with indicators</h3>
+        <ul rn-carousel rn-carousel-indicator rn-carousel-index="slideIndex" class="my-slider slider3 ng-cloak">
+            <li ng-repeat="(label, color) in slides3"  ng-style="{'background-color': color}" class="center">
+                <div class="big">{{ label }}</div>
+            </li>
+        </ul>
 
         <h3>Other demos</h3>
         <ul>
@@ -182,6 +191,15 @@
             }
             $scope.next = function() {
                 $scope.slideIndex++;
+            }
+
+            // 4rd demo
+            $scope.slides3 = {
+                '#1': $scope.colors[5],
+                '#2': $scope.colors[15],
+                '#3': $scope.colors[25],
+                '#4': $scope.colors[35],
+                '#5': $scope.colors[45]
             }
 
         });

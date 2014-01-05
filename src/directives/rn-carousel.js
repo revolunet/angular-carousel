@@ -123,7 +123,12 @@
                     // watch the given collection
                     if (isRepeatBased) {
                         scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
-                            slidesCount = newValue.length;
+                            slidesCount = 0;
+                            if (angular.isArray(newValue)) {
+                                slidesCount = newValue.length;
+                            } else if (angular.isObject(newValue)) {
+                                slidesCount = Object.keys(newValue).length;
+                            }
                             updateIndicatorArray();
                             if (!containerWidth) updateContainerWidth();
                             goToSlide(scope.carouselIndex);
