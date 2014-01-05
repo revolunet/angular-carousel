@@ -98,6 +98,7 @@ module.exports = function(grunt) {
       },
       unit: {
           port: 7101,
+          singleRun: false,
           background: true
       },
       continuous: {
@@ -107,7 +108,7 @@ module.exports = function(grunt) {
     watch: {
       dev: {
         files: ['<%= dirs.src %>/**'],
-        tasks: ['build']
+        tasks: ['build', 'karma:unit:run']
       },
       test: {
         files: ['test/unit/**'],
@@ -127,14 +128,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-karma');
 
-  // Test tasks.
-  grunt.registerTask('test', ['jshint', 'karma:unit']);
-
   // Build task.
-  grunt.registerTask('quickbuild', ['jshint', 'concat', 'uglify', 'autoprefixer', 'cssmin']);
-  grunt.registerTask('build', ['quickbuild', 'test']);
+  grunt.registerTask('build', ['jshint', 'concat', 'uglify', 'autoprefixer', 'cssmin']);
 
   // Default task.
-  grunt.registerTask('default', ['build', 'connect', 'watch']);
+  grunt.registerTask('default', ['build', 'connect', 'karma:unit', 'watch']);
 
 };
