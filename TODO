@@ -11,8 +11,8 @@ Carousel v2:
     Buffering:
         ✔ should optionnaly buffer the carousel DOM @done (14-01-04 20:22)
     Indicators:
-        ☐ should have optional indicators
-        ☐ indicators should be clickable
+        ✔ should have optional indicators @done (14-01-05 01:56)
+        ✔ indicators should be clickable @done (14-01-05 01:56)
         ☐ indicators should be customisable
     Animations:
         ☐ should have some builtin animations

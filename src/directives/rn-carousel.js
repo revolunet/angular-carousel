@@ -3,7 +3,7 @@
 
     angular.module('angular-carousel')
 
-    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', function($swipe, $window, $document, $parse) {
+    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', function($swipe, $window, $document, $parse, $compile) {
         // internal ids to allow multiple instances
         var carouselId = 0,
             // used to compute the sliding speed
@@ -63,7 +63,7 @@
                     slidesCount = tElement.children().length;
                 }
 
-                return function(scope, iElement, iAttributes) {
+                return function(scope, iElement, iAttributes, containerCtrl) {
 
                     carouselId++;
 
@@ -78,8 +78,21 @@
                         timestamp;
 
                     // add a wrapper div that will hide the overflow
-                    var carousel = iElement.wrap("<div id='" + carouselId +"' class='rn-carousel-container'></div>"),
+                    var carousel = iElement.wrap("<div id='carousel-" + carouselId +"' class='rn-carousel-container'></div>"),
                         container = carousel.parent();
+
+                    // enable carousel indicator
+                    if (angular.isDefined(iAttributes.rnCarouselIndicator)) {
+                        updateIndicatorArray();
+                        scope.$watch('carouselIndex', function(newValue) {
+                            scope.indicatorIndex = newValue;
+                        });
+                        scope.$watch('indicatorIndex', function(newValue) {
+                            goToSlide(newValue, true);
+                        });
+                        var indicator = $compile("<div id='carousel-" + carouselId +"-indicator' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
+                        container.append(indicator);
+                    }
 
                     scope.carouselBufferIndex = 0;
                     scope.carouselBufferSize = 5;
@@ -110,13 +123,20 @@
                     // watch the given collection
                     if (isRepeatBased) {
                         scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
-                            //console.log('collection updated', repeatCollection, arguments);
                             slidesCount = newValue.length;
+                            updateIndicatorArray();
                             if (!containerWidth) updateContainerWidth();
                             goToSlide(scope.carouselIndex);
                         });
                     } else {
                         updateContainerWidth();
+                    }
+
+                    function updateIndicatorArray() {
+                        // generate an arrat to be used by the indicators
+                        var items = [];
+                        for (var i = 0; i < slidesCount; i++) items[i] = i;
+                        scope.carouselIndicatorArray = items;
                     }
 
                     function getCarouselWidth() {
@@ -277,8 +297,10 @@
                         var minMove = getAbsMoveTreshold(),
                             currentOffset = (scope.carouselIndex * containerWidth),
                             absMove = currentOffset - destination,
+                            slidesMove = -Math[absMove>=0?'ceil':'floor'](absMove / containerWidth),
                             shouldMove = Math.abs(absMove) > minMove,
-                            moveOffset = shouldMove?(absMove<0)?1:-1:0;
+                            moveOffset = shouldMove?slidesMove:0;
+
                         destination = (moveOffset + scope.carouselIndex) * containerWidth;
                         amplitude = destination - offset;
                         timestamp = Date.now();

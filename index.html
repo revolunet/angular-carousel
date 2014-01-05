@@ -67,6 +67,9 @@
         .ng-cloak {
           display:none;
         }
+        .center {
+            text-align:center;
+        }
     </style>
     <body ng-controller="DemoCtrl">
         <a href="https://github.com/revolunet/angular-carousel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
@@ -92,7 +95,7 @@
         </ul>
 
         <h3>template-based demo</h3>
-        <ul rn-carousel class="my-slider standard ng-cloak">
+        <ul rn-carousel rn-carousel-indicator class="my-slider standard ng-cloak">
             <li ng-style="{'background-color': colors[0]}">
                 This is a standard template
                 <div class="big">slide #1</div>
@@ -111,8 +114,8 @@
             </li>
         </ul>
 
-        <h3>buffered ngRepeat carousel with custom controls</h3>
-        <ul rn-carousel rn-carousel-buffered rn-carousel-index="slideIndex" class="my-slider ng-cloak">
+        <h3>buffered ngRepeat carousel with indicator and custom controls</h3>
+        <ul rn-carousel rn-carousel-buffered rn-carousel-indicator rn-carousel-index="slideIndex" class="my-slider ng-cloak">
             <li ng-repeat="slide in slides2" ng-style="{'background-image': 'url(' + slide.img + ')'}">
                 <div class="debug">
                     {{ slide.label }} / {{ slides2.length }}
@@ -135,7 +138,7 @@
         </ul>
         <br><br>
     </body>
-    <script src="//code.angularjs.org/1.2.7/angular.min.js"></script>
+    <script src="//code.angularjs.org/1.2.7/angular.js"></script>
     <script src="//code.angularjs.org/1.2.7/angular-touch.min.js"></script>
     <script src="./dist/angular-carousel.js"></script>
     <script>
