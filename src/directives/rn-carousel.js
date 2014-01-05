@@ -167,7 +167,7 @@
                         if (isNaN(x)) {
                             x = scope.carouselIndex * containerWidth;
                         }
-                        
+
                         offset = x;
                         var move = -Math.round(offset);
                         move += (scope.carouselBufferIndex * containerWidth);
@@ -274,6 +274,7 @@
                         event.stopPropagation();
                         return false;
                     }
+
                     function swipeMove(coords, event) {
                         //console.log('swipeMove', coords, event);
                         var x, delta;
@@ -291,7 +292,7 @@
                         event.stopPropagation();
                         return false;
                     }
-                    
+
                     function swipeEnd(coords, event, forceAnimation) {
                         //console.log('swipeEnd', 'scope.carouselIndex', scope.carouselIndex);
                         $document.unbind('mouseup', documentMouseUpEvent);
@@ -345,9 +346,8 @@
                     });
 
                     function onOrientationChange() {
-                      alert('onOrientationChange');
-                      updateContainerWidth();
-                      goToSlide();
+                        updateContainerWidth();
+                        goToSlide();
                     }
 
                     // handle orientation change
