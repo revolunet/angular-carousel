@@ -10,13 +10,13 @@ Proudly brought to you by the [@revolunet](http://twitter.com/revolunet) team.
 
 ## Usage :
 
- 1. If you use bower, just `bower install angular-rn-carousel`.
- 2. If not, add `angular-carousel.css`, `angular-carousel.js` to your code:
+ 1. If you use bower, just `bower install angular-rn-carousel`. If not, download files [from the github repo](./dist)
+ 2. Add `angular-carousel.css`, `angular-carousel.js` to your code:
 ```html
-<link href="lib/angular-carousel.css" rel="stylesheet" type="text/css" />
-<script src="lib/angular.js"></script>
-<script src="lib/angular-mobile.js"></script>
-<script src="lib/angular-carousel.js"></script>
+<link href="angular-carousel.css" rel="stylesheet" type="text/css" />
+<script src="angular.js"></script>
+<script src="angular-touch.js"></script>
+<script src="angular-carousel.js"></script>
 ```
 
  2. Add a dependency to the `angular-carousel` module in your application.
@@ -32,6 +32,7 @@ angular.module('MyApp', ['angular-carousel']);
   </li>
 </ul>
 ```
+
  4. You can also use `rn-carousel` without ng-repeat ;)
 ```html
 <ul rn-carousel class="image">
@@ -43,9 +44,10 @@ angular.module('MyApp', ['angular-carousel']);
 
 ## Features :
  - Mobile friendly, tested on webkit+firefox
- - CSS 3D transformations with GPU accel
+ - use CSS 3D transformations and `requestAnimationFrame`.
  - DOM buffering
  - index data-binding
+ - optional indicators
 
 ### Regular carousel :
  - `rn-carousel-index` two way binding to control the carousel position.
