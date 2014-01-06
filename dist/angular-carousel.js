@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.0.9 - 2014-01-05
+ * @version v0.1.3 - 2014-01-06
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -202,7 +202,7 @@ angular.module('angular-carousel')
                         if (isNaN(x)) {
                             x = scope.carouselIndex * containerWidth;
                         }
-                        
+
                         offset = x;
                         var move = -Math.round(offset);
                         move += (scope.carouselBufferIndex * containerWidth);
@@ -309,6 +309,7 @@ angular.module('angular-carousel')
                         event.stopPropagation();
                         return false;
                     }
+
                     function swipeMove(coords, event) {
                         //console.log('swipeMove', coords, event);
                         var x, delta;
@@ -326,7 +327,7 @@ angular.module('angular-carousel')
                         event.stopPropagation();
                         return false;
                     }
-                    
+
                     function swipeEnd(coords, event, forceAnimation) {
                         //console.log('swipeEnd', 'scope.carouselIndex', scope.carouselIndex);
                         $document.unbind('mouseup', documentMouseUpEvent);
@@ -380,9 +381,8 @@ angular.module('angular-carousel')
                     });
 
                     function onOrientationChange() {
-                      alert('onOrientationChange');
-                      updateContainerWidth();
-                      goToSlide();
+                        updateContainerWidth();
+                        goToSlide();
                     }
 
                     // handle orientation change
