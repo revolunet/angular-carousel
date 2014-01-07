@@ -304,8 +304,15 @@
                             currentOffset = (scope.carouselIndex * containerWidth),
                             absMove = currentOffset - destination,
                             slidesMove = -Math[absMove>=0?'ceil':'floor'](absMove / containerWidth),
-                            shouldMove = Math.abs(absMove) > minMove,
-                            moveOffset = shouldMove?slidesMove:0;
+                            shouldMove = Math.abs(absMove) > minMove;
+
+                        if ((slidesMove + scope.carouselIndex) >= slidesCount ) {
+                            slidesMove = slidesCount - 1 - scope.carouselIndex;
+                        }
+                        if ((slidesMove + scope.carouselIndex) < 0) {
+                            slidesMove = -scope.carouselIndex;
+                        }
+                        var moveOffset = shouldMove?slidesMove:0;
 
                         destination = (moveOffset + scope.carouselIndex) * containerWidth;
                         amplitude = destination - offset;
