@@ -158,6 +158,7 @@
 
                     function updateContainerWidth() {
                         // force the carousel container width to match the first slide width
+                        container.css('width', '100%');
                         container.css('width', getCarouselWidth() + 'px');
                     }
 
@@ -353,12 +354,12 @@
                     // handle orientation change
                     var winEl = angular.element($window);
                     winEl.bind('orientationchange', onOrientationChange);
-                    //winEl.bind('resize', onOrientationChange);
+                    winEl.bind('resize', onOrientationChange);
 
                     scope.$on('$destroy', function() {
                         $document.unbind('mouseup', documentMouseUpEvent);
                         winEl.unbind('orientationchange', onOrientationChange);
-                      //  winEl.unbind('resize', onOrientationChange);
+                        winEl.unbind('resize', onOrientationChange);
                     });
 
                 };
