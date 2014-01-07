@@ -339,8 +339,11 @@
                         }
                     });
 
-                    // initialise first slide
-                    goToSlide(scope.carouselIndex);
+                    // initialise first slide only if no binding
+                    // if so, the binding will trigger the first init
+                    if (!isIndexBound) {
+                        goToSlide(scope.carouselIndex);
+                    }
 
                     // detect supported CSS property
                     transformProperty = 'transform';
