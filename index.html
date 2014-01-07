@@ -1,78 +1,13 @@
 <!DOCTYPE html>
 <html ng-app="DemoApp">
-  <head>
-    <meta charset="UTF-8">
-    <title>angular-carousel demo</title>
-    <meta name="viewport" content="width=620, user-scalable=no">
-    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link href='./dist/angular-carousel.css' rel='stylesheet' type='text/css'>
-    <style>
-        html, body { 
-          height:100%; 
-          padding:0;
-          margin:0;
-        }
-        body {
-          margin: 0;
-          background: #333;
-          color:white;
-          padding: 10px;
-        }
-        a {
-          color:white;
-        }
-        * {
-          font-family: 'Droid Sans', sans-serif;
-        }
-        h1 {
-          margin-top: 5px;
-        }
-        h3 {
-          margin: 30px 0 10px 0;
-        }
-        .my-slider {
-            width: 320px;
-            height: 200px;
-            font-size:0;
-        }
-        .my-slider li {
-            box-sizing: border-box;
-            font-size:30px;
-            position:relative;
-        }
-        .my-slider li div.debug {
-            box-sizing: border-box;
-            position:absolute;
-            bottom:0;
-            height:50px;
-            background:rgba(0,0,0,0.7);
-            color:white;
-            font-size:12px;
-            width:100%;
-            padding:5px;
-        }
-        .my-slider.standard li {
-            text-align:center;
-            padding:20px;
-            font-size:20px;
-        }
-        .big {
-            margin-top:30px;
-            width:100%;
-            font-size:30px;
-        }
-        .controls {
-            width:320px;
-            text-align: center;
-        }
-        .ng-cloak {
-          display:none;
-        }
-        .center {
-            text-align:center;
-        }
-
-    </style>
+    <head>
+        <meta charset="UTF-8">
+        <title>angular-carousel demo</title>
+        <meta name="viewport" content="width=620, user-scalable=no">
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link href='./dist/angular-carousel.css' rel='stylesheet' type='text/css'>
+        <link href='./demo/demo.css' rel='stylesheet' type='text/css'>
+    </head>
     <body ng-controller="DemoCtrl">
         <a href="https://github.com/revolunet/angular-carousel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 
@@ -81,10 +16,14 @@
             Transform your ng-repeat or DOM nodes in a mobile-friendly carousel just by adding a 'rn-carousel' attribute to your HTML; AngularJS directives FTW :)<br><br>
             Carousels are data-bound to your ngRepeat collections and can be DOM buffered (good for performance)
             <br><br>
-            Swipe these demos with your mouse or finger :
+            Swipe these demos with your mouse or finger
         </div>
 
         <h3>ngRepeat demo (buffered carousel)</h3>
+        <div class="details">A simple buffered ng-repeat with a custom template.
+            <br>
+            Swipe 50 slides with only 5 slides in the DOM
+        </div>
         <ul rn-carousel rn-carousel-buffered class="my-slider ng-cloak">
             <li ng-repeat="slide in slides|filter:{odd:true}:true track by slide.label" ng-style="{'background-image': 'url(' + slide.img + ')'}">
                 <div class="debug">
@@ -97,6 +36,10 @@
         </ul>
 
         <h3>template-based demo</h3>
+        <div class="details">Various blocks automagically converted to a carousel.
+            <br>
+            Just add rn-carousel-indicator to display clickable indicators
+        </div>
         <ul rn-carousel rn-carousel-indicator class="my-slider standard ng-cloak">
             <li ng-style="{'background-color': colors[0]}">
                 This is a standard template
@@ -116,11 +59,21 @@
             </li>
         </ul>
 
+        <h3>Standard carousel with thumbs navigation </h3>
+        <div class="details">This one has an initial index and the thumbs controls the rn-carousel-index binding</div>
+        <ul rn-carousel rn-carousel-index="slideIndex2" class="my-slider ng-cloak">
+            <li ng-repeat="slide in slides2" ng-style="{'background-image': 'url(' + slide.img + ')'}"></li>
+        </ul>
+        <div class="ng-cloak thumbs">
+            <div class="thumb" ng-repeat="slide in slides2" ng-click="$parent.slideIndex2=$index" ng-style="{'background-image': 'url(' + slide.img + ')'}" ng-class="{'is-active': ($parent.slideIndex2==$index)}"></div>
+        </div>
+
         <h3>buffered ngRepeat carousel with custom controls</h3>
+        <div class="details">Custom controls demo, just update the rn-carousel-index index binding</div>
         <ul rn-carousel rn-carousel-buffered rn-carousel-indicator rn-carousel-index="slideIndex" class="my-slider ng-cloak">
-            <li ng-repeat="slide in slides2" ng-style="{'background-image': 'url(' + slide.img + ')'}">
+            <li ng-repeat="slide in slides4" ng-style="{'background-image': 'url(' + slide.img + ')'}">
                 <div class="debug">
-                    {{ slide.label }} / {{ slides2.length }}
+                    {{ slide.label }} / {{ slides4.length }}
                     <br>
                     carouselIndex: {{ carouselIndex }}<br>
                     carouselBufferIndex: {{ carouselBufferIndex }}<br>
@@ -128,16 +81,28 @@
             </li>
         </ul>
         <div class="controls ng-cloak">
-            <button ng-disabled="slideIndex==0" ng-click="prev()">prev</button>
-            <span>{{ slideIndex + 1 }} / {{ slides2.length }}</span>
-            <button ng-click="next()" ng-disabled="slideIndex==slides2.length-1" >next</button>
-            <button ng-click="pushSlide()">add 3 slides</button>
+            <button class="button grey" ng-disabled="slideIndex==0" ng-click="prev()">prev</button>
+            <span>{{ slideIndex + 1 }} / {{ slides4.length }}</span>
+            <button class="button grey" ng-click="next()" ng-disabled="slideIndex==slides4.length-1" >next</button>
+            <button class="button grey" ng-click="pushSlide()">add 3 slides</button>
         </div>
 
         <h3>object-based ngRepeat carousel with indicators</h3>
-        <ul rn-carousel rn-carousel-indicator rn-carousel-index="slideIndex" class="my-slider slider3 ng-cloak">
+        <div class="details">Use the object-based ngRepeat syntax. (not compatible with buffering)</div>
+        <ul rn-carousel rn-carousel-indicator rn-carousel-index="slideIndex3" class="my-slider slider3 ng-cloak">
             <li ng-repeat="(label, color) in slides3"  ng-style="{'background-color': color}" class="center">
                 <div class="big">{{ label }}</div>
+            </li>
+        </ul>
+
+        <h3>togglable carousel via ng-if</h3>
+        <div class="details">If you use ng-if, be sure to use the <a target="_blank" href="http://stackoverflow.com/questions/17606936/angularjs-dot-in-ng-model">dot-notation syntax</a> for the index binding.</div>
+        <button class="ng-cloak button grey" ng-click="showCarousel=!showCarousel">toggle carousel - {{ demo.ifIndex }} / {{ slides5.length }}</button>
+        <br><br>
+
+        <ul ng-if="showCarousel" rn-carousel rn-carousel-indicator rn-carousel-index="demo.ifIndex" class="my-slider slider3 ng-cloak ifCarousel">
+            <li ng-repeat="color in slides5"  ng-style="{'background-color': color}" class="center">
+                <div class="big">#{{ $index + 1 }}</div>
             </li>
         </ul>
 
@@ -147,7 +112,7 @@
         </ul>
         <br><br>
     </body>
-    <script src="//code.angularjs.org/1.2.7/angular.js"></script>
+    <script src="//code.angularjs.org/1.2.7/angular.min.js"></script>
     <script src="//code.angularjs.org/1.2.7/angular-touch.min.js"></script>
     <script src="./dist/angular-carousel.js"></script>
     <script>
@@ -162,7 +127,7 @@
                 var i = target.length;
                 target.push({
                     label: 'slide #' + (i + 1),
-                    img: 'http://lorempixel.com/320/250/' + style + '/' + (i % 10) ,
+                    img: 'http://lorempixel.com/450/300/' + style + '/' + (i % 10) ,
                     color: $scope.colors[ (i*10) % $scope.colors.length],
                     odd: (i % 2 === 0)
                 });
@@ -174,10 +139,6 @@
                 }
             }
 
-            $scope.pushSlide = function() {
-                addSlides($scope.slides2, 'city', 3);
-            }
-
             // 1st ngRepeat demo
             $scope.slides = [];
             addSlides($scope.slides, 'sports', 50);
@@ -186,6 +147,14 @@
             $scope.slides2 = [];
             $scope.slideIndex = 0;
             addSlides($scope.slides2, 'city', 5);
+
+
+            // demo with controls
+            $scope.slides4 = [];
+            addSlides($scope.slides4, 'people', 5);
+            $scope.pushSlide = function() {
+                addSlides($scope.slides4, 'people', 3);
+            }
             $scope.prev = function() {
                 $scope.slideIndex--;
             }
@@ -193,7 +162,8 @@
                 $scope.slideIndex++;
             }
 
-            // 4rd demo
+            // 4rd demo, object based iterable
+            $scope.slideIndex3 = 2;
             $scope.slides3 = {
                 '#1': $scope.colors[5],
                 '#2': $scope.colors[15],
@@ -201,6 +171,22 @@
                 '#4': $scope.colors[35],
                 '#5': $scope.colors[45]
             }
+
+            // thumbs demo
+            $scope.slideIndex2 = 2;
+
+            // ngIf demo
+            $scope.showCarousel = false;
+            $scope.demo = {
+                ifIndex: 2
+            }
+            $scope.slides5 = [
+                $scope.colors[5],
+                $scope.colors[15],
+                $scope.colors[25],
+                $scope.colors[35],
+                $scope.colors[45]
+            ]
 
         });
 

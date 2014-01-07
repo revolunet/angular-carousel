@@ -1,0 +1,118 @@
+html, body { 
+  height:100%; 
+  padding:0;
+  margin:0;
+}
+body {
+  margin: 0;
+  background: #333;
+  color:white;
+  padding: 10px;
+}
+a {
+  color:white;
+}
+* {
+  font-family: 'Droid Sans', sans-serif;
+}
+h1 {
+  margin-top: 5px;
+}
+h3 {
+  font-size:30px;
+  margin: 30px 0 10px 0;
+}
+.my-slider {
+    width: 450px;
+    height: 300px;
+    font-size:0;
+}
+.my-slider li {
+    box-sizing: border-box;
+    font-size:30px;
+    position:relative;
+}
+.my-slider li div.debug {
+    box-sizing: border-box;
+    position:absolute;
+    bottom:0;
+    height:50px;
+    background:rgba(0,0,0,0.7);
+    color:white;
+    font-size:12px;
+    width:100%;
+    padding:5px;
+}
+.my-slider.standard li {
+    text-align:center;
+    padding:20px;
+    font-size:20px;
+}
+.big {
+    margin-top:30px;
+    width:100%;
+    font-size:30px;
+}
+.controls {
+    margin-top:-15px;
+    width:450px;
+    text-align: center;
+}
+.ng-cloak {
+  display:none;
+}
+.center {
+    text-align:center;
+}
+.thumbs {
+    width:450px;
+    text-align:center;
+}
+.thumb {
+    display: inline-block;
+    background-size:cover;
+    border:1px solid transparent;
+    margin:2px 4px;
+    width:60px;
+    height:40px;
+    transition: border 0.2s ease-in;
+}
+.is-active {
+    border:1px solid red;
+}
+.details {
+    color:white;
+    font-size:12px;
+    margin-bottom:10px;
+}
+.button{
+    display: inline-block;
+    text-decoration: none;
+    font: bold 12px/12px HelveticaNeue, Arial;
+    padding: 8px 11px;
+    color: #555;
+    border: 1px solid #dedede;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    cursor:pointer;
+}
+.button:disabled {
+    cursor: default !important;
+    color: #aaa !important;
+}
+.button.grey{
+    background: #bdbdbd;
+    background: -webkit-gradient(linear, left top, left bottom, from(#cacaca), to(#aeaeae)); /*  WebKit */
+    background: -moz-linear-gradient(top,  #cacaca, #aeaeae);
+    border-color: #b5b5b5 #a1a1a1 #8f8f8f;
+    color: #555;
+    text-shadow: 0 1px 0 #d4d4d4;
+}
+.button.grey:hover{
+    background: #c2c2c2;
+    background: -webkit-gradient(linear, left top, left bottom, from(#bcbcbc), to(#c2c2c2)); /*  WebKit */
+    background: -moz-linear-gradient(top,  #bcbcbc, #c2c2c2);
+    border-color: #989898 #8e8e8e #878787;
+    text-shadow: 0 1px 0 #dadada;
+}

@@ -21,6 +21,7 @@ Carousel v2:
     Bugs:
         ✔ bug when rn-carousel-index change while animation from outside @done (14-01-05 02:19)
         ☐ handle touch cancel
+        ✔ initial index position not respected @done (14-01-07 23:51)
     Advanced:
         ☐ optional cycle
         ☐ infinite carousels with slide generators
