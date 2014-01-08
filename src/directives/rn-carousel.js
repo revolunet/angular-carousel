@@ -57,11 +57,6 @@
                     }
                     return true;
                 });
-                if (!isRepeatBased) {
-                    // basic template based carousel
-                    var liChilds = tElement.children();
-                    slidesCount = tElement.children().length;
-                }
 
                 return function(scope, iElement, iAttributes, containerCtrl) {
 
@@ -74,6 +69,7 @@
                         amplitude,
                         offset = 0,
                         destination,
+                        slidesCount = 0,
                         // javascript based animation easing
                         timestamp;
 
@@ -134,6 +130,7 @@
                             goToSlide(scope.carouselIndex);
                         });
                     } else {
+                        slidesCount = iElement.children().length;
                         updateContainerWidth();
                     }
 
@@ -271,8 +268,6 @@
                         amplitude = 0;
                         timestamp = Date.now();
 
-                        event.preventDefault();
-                        event.stopPropagation();
                         return false;
                     }
 
@@ -289,8 +284,6 @@
                                 });
                             }
                         }
-                        event.preventDefault();
-                        event.stopPropagation();
                         return false;
                     }
 
@@ -323,10 +316,6 @@
                         }
                         requestAnimationFrame(autoScroll);
 
-                        if (event) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
                         return false;
                     }
 
