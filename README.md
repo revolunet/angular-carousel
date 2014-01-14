@@ -42,6 +42,8 @@ angular.module('MyApp', ['angular-carousel']);
 </ul>
 ```
 
+**NOTE :** if you use older Android (<4) please include the [requestAnimationFrame polyfill](https://github.com/darius/requestAnimationFrame/blob/master/requestAnimationFrame.js) in your application.
+
 ## Features :
  - Mobile friendly, tested on webkit+firefox
  - use CSS 3D transformations and `requestAnimationFrame`.
