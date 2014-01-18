@@ -327,14 +327,17 @@
                         return false;
                     }
 
-                    $swipe.bind(carousel, {
-                        start: swipeStart,
-                        move: swipeMove,
-                        end: swipeEnd,
-                        cancel: function(event) {
-                          swipeEnd({}, event);
-                        }
-                    });
+                    // only bind swipe when it's not switched off
+                    if(tAttributes['rnCarousel'] !== 'false') {
+                        $swipe.bind(carousel, {
+                            start: swipeStart,
+                            move: swipeMove,
+                            end: swipeEnd,
+                            cancel: function(event) {
+                              swipeEnd({}, event);
+                            }
+                        });
+                    }
 
                     // initialise first slide only if no binding
                     // if so, the binding will trigger the first init
