@@ -131,11 +131,12 @@
                         });
                     } else {
                         slidesCount = iElement.children().length;
+                        updateIndicatorArray();
                         updateContainerWidth();
                     }
 
                     function updateIndicatorArray() {
-                        // generate an arrat to be used by the indicators
+                        // generate an array to be used by the indicators
                         var items = [];
                         for (var i = 0; i < slidesCount; i++) items[i] = i;
                         scope.carouselIndicatorArray = items;
@@ -327,12 +328,20 @@
                         return false;
                     }
 
-                    $swipe.bind(carousel, {
-                        start: swipeStart,
-                        move: swipeMove,
-                        end: swipeEnd,
-                        cancel: function(event) {
-                          swipeEnd({}, event);
+                    iAttributes.$observe('rnCarouselSwipe', function(newValue, oldValue) {
+                        // only bind swipe when it's not switched off
+                        if(newValue !== 'false' && newValue !== 'off') {
+                            $swipe.bind(carousel, {
+                                start: swipeStart,
+                                move: swipeMove,
+                                end: swipeEnd,
+                                cancel: function(event) {
+                                  swipeEnd({}, event);
+                                }
+                            });
+                        } else {
+                            // unbind swipe when it's switched off
+                            carousel.unbind();
                         }
                     });
 

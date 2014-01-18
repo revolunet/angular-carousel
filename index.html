@@ -70,7 +70,7 @@
 
         <h3>buffered ngRepeat carousel with custom controls</h3>
         <div class="details">Custom controls demo, just update the rn-carousel-index index binding</div>
-        <ul rn-carousel rn-carousel-buffered rn-carousel-indicator rn-carousel-index="slideIndex" class="my-slider ng-cloak">
+        <ul rn-carousel rn-carousel-buffered rn-carousel-indicator rn-carousel-index="slideIndex" rn-carousel-swipe="{{swipe}}" class="my-slider ng-cloak">
             <li ng-repeat="slide in slides4" ng-style="{'background-image': 'url(' + slide.img + ')'}">
                 <div class="debug">
                     {{ slide.label }} / {{ slides4.length }}
@@ -85,6 +85,7 @@
             <span>{{ slideIndex + 1 }} / {{ slides4.length }}</span>
             <button class="button grey" ng-click="next()" ng-disabled="slideIndex==slides4.length-1" >next</button>
             <button class="button grey" ng-click="pushSlide()">add 3 slides</button>
+            <button class="button grey" ng-click="toggleSwipe()">toggle swipe ({{ swipe?'on':'off' }})</button>
         </div>
 
         <h3>object-based ngRepeat carousel with indicators</h3>
@@ -112,9 +113,13 @@
         </ul>
         <br><br>
     </body>
-    <script src="//code.angularjs.org/1.2.7/angular.min.js"></script>
-    <script src="//code.angularjs.org/1.2.7/angular-touch.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-touch.min.js"></script>
     <script src="./dist/angular-carousel.js"></script>
+    <!--<script src="./src/angular-carousel.js"></script>
+    <script src="./src/directives/rn-carousel.js"></script>
+    <script src="./src/directives/rn-carousel-indicators.js"></script>
+    <script src="./src/directives/sliceFilter.js"></script>-->
     <script>
         angular.module('DemoApp', [
             'angular-carousel'
@@ -160,6 +165,10 @@
             }
             $scope.next = function() {
                 $scope.slideIndex++;
+            }
+            $scope.swipe = true;
+            $scope.toggleSwipe = function() {
+                $scope.swipe = !$scope.swipe;
             }
 
             // 4rd demo, object based iterable
