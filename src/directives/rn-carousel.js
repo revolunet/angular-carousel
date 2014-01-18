@@ -328,7 +328,7 @@
                     }
 
                     // only bind swipe when it's not switched off
-                    if(tAttributes['rnCarousel'] !== 'false') {
+                    if(tAttributes['rnSwipe'] !== 'false' && tAttributes['rnSwipe'] !== 'off') {
                         $swipe.bind(carousel, {
                             start: swipeStart,
                             move: swipeMove,
