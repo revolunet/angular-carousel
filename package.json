@@ -25,6 +25,7 @@
     "grunt-contrib-jshint": "*",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-connect": "*",
+    "grunt-contrib-sass": "~0.6.0",
     "grunt-contrib-cssmin": "~0.6.0",
     "grunt-contrib-watch": "~0.4.4",
     "grunt-contrib-copy": "~0.5.0",
