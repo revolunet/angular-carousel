@@ -94,6 +94,7 @@
                     scope.carouselBufferSize = 5;
                     scope.carouselIndex = 0;
 
+
                     // handle index databinding
                     if (iAttributes.rnCarouselIndex) {
                         var indexModel = $parse(iAttributes.rnCarouselIndex);
@@ -327,17 +328,22 @@
                         return false;
                     }
 
-                    // only bind swipe when it's not switched off
-                    if(tAttributes['rnSwipe'] !== 'false' && tAttributes['rnSwipe'] !== 'off') {
-                        $swipe.bind(carousel, {
-                            start: swipeStart,
-                            move: swipeMove,
-                            end: swipeEnd,
-                            cancel: function(event) {
-                              swipeEnd({}, event);
-                            }
-                        });
-                    }
+                    iAttributes.$observe('rnCarouselSwipe', function(newValue, oldValue) {
+                        // only bind swipe when it's not switched off
+                        if(newValue !== 'false' && newValue !== 'off') {
+                            $swipe.bind(carousel, {
+                                start: swipeStart,
+                                move: swipeMove,
+                                end: swipeEnd,
+                                cancel: function(event) {
+                                  swipeEnd({}, event);
+                                }
+                            });
+                        } else {
+                            // unbind swipe when it's switched off
+                            carousel.unbind();
+                        }
+                    });
 
                     // initialise first slide only if no binding
                     // if so, the binding will trigger the first init
