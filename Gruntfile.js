@@ -52,6 +52,18 @@ module.exports = function(grunt) {
         dest: '<%= dirs.dest %>/<%= pkg.name %>.js'
       }
     },
+    sass: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: './src/css',
+          src: ['*.scss'],
+          dest: './dist',
+          ext: '.css'
+        }]
+      }
+    },
+
     cssmin: {
       combine: {
         files: {
@@ -59,6 +71,7 @@ module.exports = function(grunt) {
         }
       }
     },
+
     uglify: {
       options: {
         banner: '<%= meta.banner %>'
@@ -114,7 +127,6 @@ module.exports = function(grunt) {
         files: ['test/unit/**'],
         tasks: ['karma:unit:run']
       }
-      
     }
   });
 
@@ -123,13 +135,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-karma');
 
   // Build task.
-  grunt.registerTask('build', ['jshint', 'concat', 'uglify', 'autoprefixer', 'cssmin']);
+  grunt.registerTask('build', ['jshint', 'concat', 'uglify', 'autoprefixer', 'sass', 'cssmin']);
 
   // Default task.
   grunt.registerTask('default', ['build', 'connect', 'karma:unit', 'watch']);

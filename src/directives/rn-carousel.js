@@ -77,8 +77,8 @@
                     var carousel = iElement.wrap("<div id='carousel-" + carouselId +"' class='rn-carousel-container'></div>"),
                         container = carousel.parent();
 
-                    // enable carousel indicator
-                    if (angular.isDefined(iAttributes.rnCarouselIndicator)) {
+                    // if indicator or controls, setup the watch
+                    if(angular.isDefined(iAttributes.rnCarouselIndicator)) {
                         updateIndicatorArray();
                         scope.$watch('carouselIndex', function(newValue) {
                             scope.indicatorIndex = newValue;
@@ -86,8 +86,15 @@
                         scope.$watch('indicatorIndex', function(newValue) {
                             goToSlide(newValue, true);
                         });
+
                         var indicator = $compile("<div id='carousel-" + carouselId +"-indicator' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
                         container.append(indicator);
+                    }
+
+                    // enable carousel controls
+                    if (angular.isDefined(iAttributes.rnCarouselControl)) {
+                        var controls = $compile("<div id='carousel-" + carouselId +"-controls' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-controls class='rn-carousel-controls'></div>")(scope);
+                        container.append(controls);
                     }
 
                     scope.carouselBufferIndex = 0;
