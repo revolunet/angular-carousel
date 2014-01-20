@@ -59,12 +59,12 @@ $rn-carousel-control-height: 30px;
 .rn-carousel-indicator {
   width: 100%;
   text-align:center;
-  position:relative;
   height: $rn-carousel-indicator-height;
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.6);
   position: absolute;
   bottom: 0;
+  cursor: pointer;
 
   span {
     @include transition(color .2s ease-out);
