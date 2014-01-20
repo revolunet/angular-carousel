@@ -37,6 +37,7 @@ describe('carousel', function () {
     var options = {
       useIndex: false,
       useIndicator: false,
+      useControl: false,
       useBuffer: false,
       nbItems: 25,
       useWatch: false
@@ -56,6 +57,7 @@ describe('carousel', function () {
     }
     var tpl = '<ul rn-carousel ';
     if (options.useIndicator) tpl += ' rn-carousel-indicator ';
+    if (options.useControl) tpl += ' rn-carousel-control ';
     if (options.useBuffer) tpl += ' rn-carousel-buffered ';
     if (options.useWatch) tpl += ' rn-carousel-watch ';
     if (options.useIndex) tpl += ' rn-carousel-index="' + options.useIndex + '" ';
@@ -196,6 +198,31 @@ describe('carousel', function () {
         scope.localIndex = 2;
         scope.$digest();
         expect(elm.parent().find('.rn-carousel-indicator span:nth-of-type(' + (scope.localIndex + 1) + ')').hasClass('active')).toBe(true);
+    });
+  });
+
+  describe('controls directive', function () {
+    it('should add an controls div', function () {
+        var elm = compileTpl({useControl: true});
+        expect(elm.parent().find('.rn-carousel-controls').length).toBe(1);
+    });
+    it('should have next control but not back', function () {
+        var elm = compileTpl({useControl: true});
+        expect(elm.parent().find('.rn-carousel-control-next').length).toBe(1);
+        expect(elm.parent().find('.rn-carousel-control-back').length).toBe(0);
+    });
+    it('should have next and back controls when local index changes', function () {
+        var elm = compileTpl({useControl: true, useIndex: 'localIndex'});
+        scope.localIndex = 1;
+        scope.$digest();
+        expect(elm.parent().find('.rn-carousel-control').length).toBe(2);
+    });
+    it('should have only back controls when local index is at the end', function () {
+        var elm = compileTpl({useControl: true, useIndex: 'localIndex'});
+        scope.localIndex = scope.items.length - 1;
+        scope.$digest();
+        expect(elm.parent().find('.rn-carousel-control-next').length).toBe(0);
+        expect(elm.parent().find('.rn-carousel-control-back').length).toBe(1);
     });
   });
 
@@ -570,5 +597,27 @@ describe('carousel', function () {
   //});
 
 */
+  describe('directive with no index defined', function () {
+    it('should add a wrapper div around the ul/li', function () {
+        var elm = compileTpl({useIndex:false});
+        expect(elm.parent().hasClass('rn-carousel-container')).toBe(true);
+    });
+    it('should add a class to the ul', function () {
+        var elm = compileTpl({useIndex:false});
+        expect(elm.hasClass('rn-carousel-slides')).toBe(true);
+    });
+    it('should have enough slides', function () {
+        var elm = compileTpl({useIndex:false});
+        expect(elm.find('li').length).toBe(scope.items.length);
+    });
+    it('generated container outerWidth should match the ul outerWidth', function () {
+        var elm = compileTpl({useIndex:false});
+        expect(elm.parent().outerWidth()).toBe(elm.outerWidth());
+    });
+    it('the index attribute should be used to position the first visible slide', function () {
+        var elm = compileTpl({useIndex:false});
+        validCSStransform(elm);
+    });
+  });
 });
 

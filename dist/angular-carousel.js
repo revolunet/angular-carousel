@@ -36,8 +36,8 @@ angular.module('angular-carousel')
       }
     },
     template: '<div class="rn-carousel-controls">' +
-                '<span class="rn-carousel-control rn-carousel-control-back" ng-click="back()" ng-if="index > 0">&#60;</span>' +
-                '<span class="rn-carousel-control rn-carousel-control-next" ng-click="next()" ng-if="index < items.length - 1">&#62;</span>' +
+                '<span class="rn-carousel-control rn-carousel-control-back" ng-click="back()" ng-if="index > 0"></span>' +
+                '<span class="rn-carousel-control rn-carousel-control-next" ng-click="next()" ng-if="index < items.length - 1"></span>' +
               '</div>'
   };
 }]);
@@ -52,7 +52,7 @@ angular.module('angular-carousel')
       index: '='
     },
     template: '<div class="rn-carousel-indicator">' +
-                '<span ng-repeat="item in items" ng-click="$parent.index=$index" ng-class="{active: $index==$parent.index}">●</span>' +
+                '<span ng-repeat="item in items" ng-click="$parent.index=$index" ng-class="{active: $index==$parent.index}"></span>' +
               '</div>'
   };
 }]);
