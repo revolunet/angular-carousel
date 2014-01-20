@@ -36,10 +36,10 @@ module.exports = function(grunt) {
     },
     autoprefixer: {
       source: {
-        options: {
-          //browsers: ['last 2 version', '> 1%', 'android', 'chrome', 'firefox']
-        },
-        src: '<%= dirs.src %>/css/<%= pkg.name %>.css',
+        //options: {
+          //browsers: ['last 2 version']
+        //},
+        src: '<%= dirs.dest %>/<%= pkg.name %>.css',
         dest: '<%= dirs.dest %>/<%= pkg.name %>.css'
       }
     },
@@ -52,6 +52,7 @@ module.exports = function(grunt) {
         dest: '<%= dirs.dest %>/<%= pkg.name %>.js'
       }
     },
+
     sass: {
       dist: {
         files: [{
@@ -142,7 +143,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
 
   // Build task.
-  grunt.registerTask('build', ['jshint', 'concat', 'uglify', 'autoprefixer', 'sass', 'cssmin']);
+  grunt.registerTask('build', ['jshint', 'concat', 'uglify', 'sass', 'autoprefixer', 'cssmin']);
 
   // Default task.
   grunt.registerTask('default', ['build', 'connect', 'karma:unit', 'watch']);

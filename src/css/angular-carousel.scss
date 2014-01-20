@@ -2,34 +2,6 @@
 $rn-carousel-indicator-height: 20px;
 $rn-carousel-control-height: 30px;
 
-/* mixins */
-@function compact($var-1, $var-2: false, $var-3: false, $var-4: false, $var-5: false, $var-6: false,
-                  $var-7: false, $var-8: false, $var-9: false, $var-10: false) {
-  $full: $var-1;
-  $vars: $var-2, $var-3, $var-4, $var-5,
-         $var-6, $var-7, $var-8, $var-9, $var-10;
-  @each $var in $vars {
-    @if $var { $full: $full, $var; }
-  }
-  @return $full;
-}
-@mixin transition($tran-1, $tran-2: false, $tran-3: false, $tran-4: false, $tran-5: false,
-                  $tran-6: false, $tran-7: false, $tran-8: false, $tran-9: false, $tran-10: false) {
-  $list: compact($tran-1, $tran-2, $tran-3, $tran-4, $tran-5, $tran-6, $tran-7, $tran-8, $tran-9, $tran-10);
-  -webkit-transition: $list;
-  -moz-transition: $list;
-  -ms-transition: $list;
-  -o-transition: $list;
-  transition: $list;
-}
-@mixin translate3d($x:0, $y:0, $z:0) {
-  -webkit-transform: translate3d($x, $y, $z);
-  -moz-transform: translate3d($x, $y, $z);
-  -ms-transform: translate3d($x, $y, $z);
-  -o-transform: translate3d($x, $y, $z);
-  transform: translate3d($x, $y, $z);
-}
-
 /* general */
 .rn-carousel-container {
     overflow: hidden;
@@ -37,7 +9,7 @@ $rn-carousel-control-height: 30px;
     padding-bottom: $rn-carousel-indicator-height;
 }
 .rn-carousel-slides {
-    @include translate3d(0,0,0);
+    transform: translate3d(0,0,0);
     position: relative;
     white-space: nowrap;
     overflow: visible;
@@ -50,8 +22,6 @@ $rn-carousel-control-height: 30px;
     display: inline-block;
     width: 100%;
     height: 100%;
-    -webkit-backface-visibility: hidden;
-    -ms-backface-visibility: hidden;
     backface-visibility: hidden;
 }
 
@@ -67,7 +37,7 @@ $rn-carousel-control-height: 30px;
   cursor: pointer;
 
   span {
-    @include transition(color .2s ease-out);
+    transition: color .2s ease-out;
     padding: 0 5px;
     color: #333;
     &:before {
@@ -82,7 +52,7 @@ $rn-carousel-control-height: 30px;
 
 /* controls */
 .rn-carousel-control {
-  @include transition(opacity 0.2s ease-out);
+  transition: opacity 0.2s ease-out;
   font-size: $rn-carousel-control-height;
   position: absolute;
   top: 50%;

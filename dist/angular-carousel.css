@@ -1,5 +1,4 @@
 /* variables */
-/* mixins */
 /* general */
 .rn-carousel-container {
   overflow: hidden;
@@ -8,9 +7,7 @@
 
 .rn-carousel-slides {
   -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
   -ms-transform: translate3d(0, 0, 0);
-  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   position: relative;
   white-space: nowrap;
@@ -39,11 +36,8 @@
   bottom: 0;
   cursor: pointer; }
   .rn-carousel-indicator span {
-    -webkit-transition: color 0.2s ease-out;
-    -moz-transition: color 0.2s ease-out;
-    -ms-transition: color 0.2s ease-out;
-    -o-transition: color 0.2s ease-out;
-    transition: color 0.2s ease-out;
+    -webkit-transition: color .2s ease-out;
+    transition: color .2s ease-out;
     padding: 0 5px;
     color: #333; }
     .rn-carousel-indicator span:before {
@@ -54,9 +48,6 @@
 /* controls */
 .rn-carousel-control {
   -webkit-transition: opacity 0.2s ease-out;
-  -moz-transition: opacity 0.2s ease-out;
-  -ms-transition: opacity 0.2s ease-out;
-  -o-transition: opacity 0.2s ease-out;
   transition: opacity 0.2s ease-out;
   font-size: 30px;
   position: absolute;
