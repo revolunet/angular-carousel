@@ -78,7 +78,7 @@
                         container = carousel.parent();
 
                     // if indicator or controls, setup the watch
-                    if(angular.isDefined(iAttributes.rnCarouselIndicator)) {
+                    if (angular.isDefined(iAttributes.rnCarouselIndicator) || angular.isDefined(iAttributes.rnCarouselControl)) {
                         updateIndicatorArray();
                         scope.$watch('carouselIndex', function(newValue) {
                             scope.indicatorIndex = newValue;
@@ -87,6 +87,10 @@
                             goToSlide(newValue, true);
                         });
 
+                    }
+
+                    // enable carousel indicator
+                    if (angular.isDefined(iAttributes.rnCarouselIndicator)) {
                         var indicator = $compile("<div id='carousel-" + carouselId +"-indicator' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
                         container.append(indicator);
                     }
