@@ -94,7 +94,6 @@
                     scope.carouselBufferSize = 5;
                     scope.carouselIndex = 0;
 
-
                     // handle index databinding
                     if (iAttributes.rnCarouselIndex) {
                         var indexModel = $parse(iAttributes.rnCarouselIndex);
@@ -132,11 +131,12 @@
                         });
                     } else {
                         slidesCount = iElement.children().length;
+                        updateIndicatorArray();
                         updateContainerWidth();
                     }
 
                     function updateIndicatorArray() {
-                        // generate an arrat to be used by the indicators
+                        // generate an array to be used by the indicators
                         var items = [];
                         for (var i = 0; i < slidesCount; i++) items[i] = i;
                         scope.carouselIndicatorArray = items;
