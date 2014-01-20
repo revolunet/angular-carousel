@@ -5,14 +5,14 @@ describe('carousel', function () {
 
   var scope, $compile, $sandbox;
 
-/*
+
   //$('body').append("<link href='/base/dist/angular-carousel.min.css' rel='stylesheet' type='text/css'>");
-  $('body').append("<style>ul,li {padding:0;margin:0;width:200px !important} " +
+  /*$('body').append("<style>ul,li {padding:0;margin:0;width:200px !important} " +
       ".rn-carousel-animate { -webkit-transition: -webkit-transform 0.001s ease-out; " +
       "-moz-transition: -moz-transform 0.001s ease-out; transition: transform 0.001s ease-out;} "+
       ".rn-carousel-noanimate {-webkit-transition: none;-moz-transition: none;-ms-transition: none;" +
-      "-o-transition: none;transition: none;}</style>");
-*/
+      "-o-transition: none;transition: none;}</style>");*/
+
   //console.log(document.location);
   beforeEach(
     module('angular-carousel')
@@ -75,16 +75,16 @@ describe('carousel', function () {
     return curMatrix;
   }
   function validCSStransform(elm) {
-    var expectedPosition = (elm.outerWidth() * elm.scope().carouselCollection.index * -1),
+    var expectedPosition = (elm.offsetWidth * elm.scope().carouselCollection.index * -1),
         expectedMatrix = 'matrix(1, 0, 0, 1, ' + expectedPosition + ', 0)',
         curMatrix = getElmTransform(elm);
     expect(curMatrix).toBe(expectedMatrix);
   }
-
+/*
   it('should load test', function() {
     expect(1).toBe(1);
   });
-/*
+
   describe('directive', function () {
     it('should add a wrapper div around the ul/li', function () {
         var elm = compileTpl();
@@ -100,7 +100,7 @@ describe('carousel', function () {
     });
     it('generated container outerWidth should match the ul outerWidth', function () {
         var elm = compileTpl();
-        expect(elm.parent().outerWidth()).toBe(elm.outerWidth());
+        expect(elm.parent()[0].offsetWidth).toBe(elm[0].offsetWidth);
     });
   });
 
@@ -223,6 +223,29 @@ describe('carousel', function () {
         scope.$digest();
         expect(elm.parent().find('.rn-carousel-control-next').length).toBe(0);
         expect(elm.parent().find('.rn-carousel-control-back').length).toBe(1);
+    });
+  });
+
+  describe('directive with no index defined', function () {
+    it('should add a wrapper div around the ul/li', function () {
+        var elm = compileTpl({useIndex:false});
+        expect(elm.parent().hasClass('rn-carousel-container')).toBe(true);
+    });
+    it('should add a class to the ul', function () {
+        var elm = compileTpl({useIndex:false});
+        expect(elm.hasClass('rn-carousel-slides')).toBe(true);
+    });
+    it('should have enough slides', function () {
+        var elm = compileTpl({useIndex:false});
+        expect(elm.find('li').length).toBe(scope.items.length);
+    });
+    it('generated container outerWidth should match the ul outerWidth', function () {
+        var elm = compileTpl({useIndex:false});
+        expect(elm.parent().outerWidth()).toBe(elm.outerWidth());
+    });
+    it('the index attribute should be used to position the first visible slide', function () {
+        var elm = compileTpl({useIndex:false});
+        validCSStransform(elm);
     });
   });
 
@@ -595,29 +618,7 @@ describe('carousel', function () {
     //     });
     // });
   //});
-
 */
-  describe('directive with no index defined', function () {
-    it('should add a wrapper div around the ul/li', function () {
-        var elm = compileTpl({useIndex:false});
-        expect(elm.parent().hasClass('rn-carousel-container')).toBe(true);
-    });
-    it('should add a class to the ul', function () {
-        var elm = compileTpl({useIndex:false});
-        expect(elm.hasClass('rn-carousel-slides')).toBe(true);
-    });
-    it('should have enough slides', function () {
-        var elm = compileTpl({useIndex:false});
-        expect(elm.find('li').length).toBe(scope.items.length);
-    });
-    it('generated container outerWidth should match the ul outerWidth', function () {
-        var elm = compileTpl({useIndex:false});
-        expect(elm.parent().outerWidth()).toBe(elm.outerWidth());
-    });
-    it('the index attribute should be used to position the first visible slide', function () {
-        var elm = compileTpl({useIndex:false});
-        validCSStransform(elm);
-    });
-  });
+
 });
 
