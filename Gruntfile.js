@@ -121,6 +121,11 @@ module.exports = function(grunt) {
           singleRun: true
       }
     },
+    changelog: {
+      options: {
+        dest: 'CHANGELOG.md'
+      }
+    },
     watch: {
       dev: {
         files: ['<%= dirs.src %>/**'],
