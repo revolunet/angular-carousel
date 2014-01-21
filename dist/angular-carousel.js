@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.1.5 - 2014-01-21
+ * @version v0.1.6 - 2014-01-21
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -19,6 +19,31 @@ angular.module('angular-carousel', [
 
 angular.module('angular-carousel')
 
+.directive('rnCarouselControls', [function() {
+  return {
+    restrict: 'A',
+    replace: true,
+    scope: {
+      items: '=',
+      index: '='
+    },
+    link: function(scope, element, attrs) {
+      scope.prev = function() {
+        scope.index--;
+      };
+      scope.next = function() {
+        scope.index++;
+      };
+    },
+    template: '<div class="rn-carousel-controls">' +
+                '<span class="rn-carousel-control rn-carousel-control-prev" ng-click="prev()" ng-if="index > 0"></span>' +
+                '<span class="rn-carousel-control rn-carousel-control-next" ng-click="next()" ng-if="index < items.length - 1"></span>' +
+              '</div>'
+  };
+}]);
+
+angular.module('angular-carousel')
+
 .directive('rnCarouselIndicators', [function() {
   return {
     restrict: 'A',
@@ -28,7 +53,7 @@ angular.module('angular-carousel')
       index: '='
     },
     template: '<div class="rn-carousel-indicator">' +
-                '<span ng-repeat="item in items" ng-click="$parent.index=$index" ng-class="{active: $index==$parent.index}">●</span>' +
+                '<span ng-repeat="item in items" ng-click="$parent.index=$index" ng-class="{active: $index==$parent.index}"></span>' +
               '</div>'
   };
 }]);
@@ -112,8 +137,8 @@ angular.module('angular-carousel')
                     var carousel = iElement.wrap("<div id='carousel-" + carouselId +"' class='rn-carousel-container'></div>"),
                         container = carousel.parent();
 
-                    // enable carousel indicator
-                    if (angular.isDefined(iAttributes.rnCarouselIndicator)) {
+                    // if indicator or controls, setup the watch
+                    if (angular.isDefined(iAttributes.rnCarouselIndicator) || angular.isDefined(iAttributes.rnCarouselControl)) {
                         updateIndicatorArray();
                         scope.$watch('carouselIndex', function(newValue) {
                             scope.indicatorIndex = newValue;
@@ -121,8 +146,19 @@ angular.module('angular-carousel')
                         scope.$watch('indicatorIndex', function(newValue) {
                             goToSlide(newValue, true);
                         });
+
+                    }
+
+                    // enable carousel indicator
+                    if (angular.isDefined(iAttributes.rnCarouselIndicator)) {
                         var indicator = $compile("<div id='carousel-" + carouselId +"-indicator' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
                         container.append(indicator);
+                    }
+
+                    // enable carousel controls
+                    if (angular.isDefined(iAttributes.rnCarouselControl)) {
+                        var controls = $compile("<div id='carousel-" + carouselId +"-controls' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-controls class='rn-carousel-controls'></div>")(scope);
+                        container.append(controls);
                     }
 
                     scope.carouselBufferIndex = 0;

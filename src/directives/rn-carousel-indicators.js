@@ -9,7 +9,7 @@ angular.module('angular-carousel')
       index: '='
     },
     template: '<div class="rn-carousel-indicator">' +
-                '<span ng-repeat="item in items" ng-click="$parent.index=$index" ng-class="{active: $index==$parent.index}">●</span>' +
+                '<span ng-repeat="item in items" ng-click="$parent.index=$index" ng-class="{active: $index==$parent.index}"></span>' +
               '</div>'
   };
 }]);

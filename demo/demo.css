@@ -54,7 +54,7 @@ h3 {
     font-size:30px;
 }
 .controls {
-    margin-top:-15px;
+    margin-top:5px;
     width:450px;
     text-align: center;
 }
@@ -115,4 +115,17 @@ h3 {
     background: -moz-linear-gradient(top,  #bcbcbc, #c2c2c2);
     border-color: #989898 #8e8e8e #878787;
     text-shadow: 0 1px 0 #dadada;
+}
+
+/* override default controls */
+.rn-carousel-control {
+    font-size:50px !important;
+    color:white;
+    opacity: 1;
+}
+.rn-carousel-control.rn-carousel-control-prev {
+    left: 5px;
+}
+.rn-carousel-control.rn-carousel-control-next {
+    right: 5px;
 }

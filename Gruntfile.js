@@ -36,10 +36,10 @@ module.exports = function(grunt) {
     },
     autoprefixer: {
       source: {
-        options: {
-          //browsers: ['last 2 version', '> 1%', 'android', 'chrome', 'firefox']
-        },
-        src: '<%= dirs.src %>/css/<%= pkg.name %>.css',
+        //options: {
+          //browsers: ['last 2 version']
+        //},
+        src: '<%= dirs.dest %>/<%= pkg.name %>.css',
         dest: '<%= dirs.dest %>/<%= pkg.name %>.css'
       }
     },
@@ -52,6 +52,19 @@ module.exports = function(grunt) {
         dest: '<%= dirs.dest %>/<%= pkg.name %>.js'
       }
     },
+
+    sass: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: './src/css',
+          src: ['*.scss'],
+          dest: './dist',
+          ext: '.css'
+        }]
+      }
+    },
+
     cssmin: {
       combine: {
         files: {
@@ -59,6 +72,7 @@ module.exports = function(grunt) {
         }
       }
     },
+
     uglify: {
       options: {
         banner: '<%= meta.banner %>'
@@ -114,7 +128,6 @@ module.exports = function(grunt) {
         files: ['test/unit/**'],
         tasks: ['karma:unit:run']
       }
-      
     }
   });
 
@@ -123,13 +136,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-karma');
 
   // Build task.
-  grunt.registerTask('build', ['jshint', 'concat', 'uglify', 'autoprefixer', 'cssmin']);
+  grunt.registerTask('build', ['jshint', 'concat', 'uglify', 'sass', 'autoprefixer', 'cssmin']);
 
   // Default task.
   grunt.registerTask('default', ['build', 'connect', 'karma:unit', 'watch']);

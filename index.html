@@ -68,6 +68,16 @@
             <div class="thumb" ng-repeat="slide in slides2" ng-click="$parent.slideIndex2=$index" ng-style="{'background-image': 'url(' + slide.img + ')'}" ng-class="{'is-active': ($parent.slideIndex2==$index)}"></div>
         </div>
 
+        <h3>carousel with builtin prev/next controls</h3>
+        <div class="details">just add rn-carousel-control attribute to enable builtin controls</div>
+        <ul rn-carousel rn-carousel-buffered rn-carousel-indicator rn-carousel-control class="my-slider ng-cloak">
+            <li ng-repeat="slide in slides|limitTo:5" ng-style="{'background-image': 'url(' + slide.img + ')'}">
+                <div class="debug">
+                    {{ slide.label }} / {{ slides.length }}
+                </div>
+            </li>
+        </ul>
+
         <h3>buffered ngRepeat carousel with custom controls</h3>
         <div class="details">Custom controls demo, just update the rn-carousel-index index binding</div>
         <ul rn-carousel rn-carousel-buffered rn-carousel-indicator rn-carousel-index="slideIndex" rn-carousel-swipe="{{swipe}}" class="my-slider ng-cloak">
@@ -97,7 +107,7 @@
         </ul>
 
         <h3>togglable carousel via ng-if</h3>
-        <div class="details">If you use ng-if, be sure to use the <a target="_blank" href="http://stackoverflow.com/questions/17606936/angularjs-dot-in-ng-model">dot-notation syntax</a> for the index binding.</div>
+        <div class="details">If you use ng-if, be sure to use the <a target="_blank" href="http://stackoverflow.com/questions/17606936/angularjs-dot-in-ng-model">dot-notation syntax</a> for the index binding as it creates a child scope.</div>
         <button class="ng-cloak button grey" ng-click="showCarousel=!showCarousel">toggle carousel - {{ demo.ifIndex }} / {{ slides5.length }}</button>
         <br><br>
 
