@@ -55,9 +55,15 @@ angular.module('MyApp', ['angular-carousel']);
  - `rn-carousel-index` two way binding to control the carousel position.
  - `rn-carousel-indicator` to turn on the indicator, see demo page.
  - `rn-carousel-buffered` to buffer the carousel, good to minimize the DOM. (works only with arrays)
+ - `rn-carousel-swipe` boolean value to enable/disable swiping (default true) 
 
 ## Todo :
  - see the [TODO file](./TODO)
+
+## Contributing 
+ - Please follow [AngularJS GIT conventions](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#)
+ - Please add tests
+ - Please update the README and demo (index.html)
 
 ## Inspirations
  - https://github.com/ajoslin/angular-mobile-nav

@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.1.3 - 2014-01-08
+ * @version v0.1.5 - 2014-01-21
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -92,11 +92,6 @@ angular.module('angular-carousel')
                     }
                     return true;
                 });
-                if (!isRepeatBased) {
-                    // basic template based carousel
-                    var liChilds = tElement.children();
-                    slidesCount = tElement.children().length;
-                }
 
                 return function(scope, iElement, iAttributes, containerCtrl) {
 
@@ -109,6 +104,7 @@ angular.module('angular-carousel')
                         amplitude,
                         offset = 0,
                         destination,
+                        slidesCount = 0,
                         // javascript based animation easing
                         timestamp;
 
@@ -169,11 +165,13 @@ angular.module('angular-carousel')
                             goToSlide(scope.carouselIndex);
                         });
                     } else {
+                        slidesCount = iElement.children().length;
+                        updateIndicatorArray();
                         updateContainerWidth();
                     }
 
                     function updateIndicatorArray() {
-                        // generate an arrat to be used by the indicators
+                        // generate an array to be used by the indicators
                         var items = [];
                         for (var i = 0; i < slidesCount; i++) items[i] = i;
                         scope.carouselIndicatorArray = items;
@@ -365,12 +363,20 @@ angular.module('angular-carousel')
                         return false;
                     }
 
-                    $swipe.bind(carousel, {
-                        start: swipeStart,
-                        move: swipeMove,
-                        end: swipeEnd,
-                        cancel: function(event) {
-                          swipeEnd({}, event);
+                    iAttributes.$observe('rnCarouselSwipe', function(newValue, oldValue) {
+                        // only bind swipe when it's not switched off
+                        if(newValue !== 'false' && newValue !== 'off') {
+                            $swipe.bind(carousel, {
+                                start: swipeStart,
+                                move: swipeMove,
+                                end: swipeEnd,
+                                cancel: function(event) {
+                                  swipeEnd({}, event);
+                                }
+                            });
+                        } else {
+                            // unbind swipe when it's switched off
+                            carousel.unbind();
                         }
                     });
 
