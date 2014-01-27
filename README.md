@@ -8,6 +8,8 @@ Comments and contributions welcome :)
 
 Proudly brought to you by the [@revolunet](http://twitter.com/revolunet) team.
 
+**NOTE :** if you use iOS<7 or Android<4 please include the [requestAnimationFrame polyfill](https://github.com/darius/requestAnimationFrame/blob/master/requestAnimationFrame.js) in your application.
+
 ## Usage :
 
  1. If you use bower, just `bower install angular-rn-carousel`. If not, download files [from the github repo](./dist)
@@ -42,7 +44,6 @@ angular.module('MyApp', ['angular-carousel']);
 </ul>
 ```
 
-**NOTE :** if you use older Android (<4) please include the [requestAnimationFrame polyfill](https://github.com/darius/requestAnimationFrame/blob/master/requestAnimationFrame.js) in your application.
 
 ## Features :
  - Mobile friendly, tested on webkit+firefox
