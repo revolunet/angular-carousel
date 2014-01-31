@@ -3,3 +3,9 @@
 node_modules
 bower_components
 coverage
+
+dist/angular-carousel.min.js
+
+dist/angular-carousel.js
+
+dist/angular-carousel.min.css

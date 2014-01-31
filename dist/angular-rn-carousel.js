@@ -1,3 +1,63 @@
+/**
+ * Angular Carousel - Mobile friendly touch carousel for AngularJS
+ * @version v0.1.6 - 2014-01-31
+ * @link http://revolunet.github.com/angular-carousel
+ * @author Julien Bouquillon <julien@revolunet.com>
+ * @license MIT License, http://www.opensource.org/licenses/MIT
+ */
+/*global angular */
+
+/*
+Angular touch carousel with CSS GPU accel and slide buffering
+http://github.com/revolunet/angular-carousel
+
+*/
+
+angular.module('angular-carousel', [
+    'ngTouch'
+]);
+
+angular.module('angular-carousel')
+
+.directive('rnCarouselControls', [function() {
+  return {
+    restrict: 'A',
+    replace: true,
+    scope: {
+      items: '=',
+      index: '='
+    },
+    link: function(scope, element, attrs) {
+      scope.prev = function() {
+        scope.index--;
+      };
+      scope.next = function() {
+        scope.index++;
+      };
+    },
+    template: '<div class="rn-carousel-controls">' +
+                '<span class="rn-carousel-control rn-carousel-control-prev" ng-click="prev()" ng-if="index > 0"></span>' +
+                '<span class="rn-carousel-control rn-carousel-control-next" ng-click="next()" ng-if="index < items.length - 1"></span>' +
+              '</div>'
+  };
+}]);
+
+angular.module('angular-carousel')
+
+.directive('rnCarouselIndicators', [function() {
+  return {
+    restrict: 'A',
+    replace: true,
+    scope: {
+      items: '=',
+      index: '='
+    },
+    template: '<div class="rn-carousel-indicator">' +
+                '<span ng-repeat="item in items" ng-click="$parent.index=$index" ng-class="{active: $index==$parent.index}"></span>' +
+              '</div>'
+  };
+}]);
+
 (function() {
     "use strict";
 
@@ -412,5 +472,22 @@
             }
         };
     }]);
+
+})();
+(function() {
+    "use strict";
+
+    angular.module('angular-carousel')
+
+    .filter('carouselSlice', function() {
+        return function(collection, start, size) {
+            if (angular.isArray(collection)) {
+                return collection.slice(start, start + size);
+            } else if (angular.isObject(collection)) {
+                // dont try to slice collections :)
+                return collection;
+            }
+        };
+    });
 
 })();
