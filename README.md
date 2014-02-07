@@ -12,7 +12,7 @@ Proudly brought to you by the [@revolunet](http://twitter.com/revolunet) team.
 
 ## Usage :
 
- 1. If you use bower, just `bower install angular-rn-carousel`. If not, download files [from the github repo](./dist)
+ 1. If you use bower, just `bower install angular-carousel`. If not, download files [from the github repo](./dist)
  2. Add `angular-carousel.css`, `angular-carousel.js` to your code:
 ```html
 <link href="angular-carousel.css" rel="stylesheet" type="text/css" />
