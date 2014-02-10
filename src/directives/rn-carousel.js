@@ -272,6 +272,7 @@
                     }
 
                     function swipeStart(coords, event) {
+                        if (event.srcElement.attributes['rn-noslide']) return;
                         //console.log('swipeStart', coords, event);
                         $document.bind('mouseup', documentMouseUpEvent);
                         pressed = true;
