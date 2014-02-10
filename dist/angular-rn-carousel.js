@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.1.6 - 2014-01-21
+ * @version v0.1.6 - 2014-01-31
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -216,6 +216,7 @@ angular.module('angular-carousel')
                     function getCarouselWidth() {
                        // container.css('width', 'auto');
                         var slides = carousel.children();
+
                         if (slides.length === 0) {
                             containerWidth = carousel[0].getBoundingClientRect().width;
                         } else {
@@ -282,10 +283,28 @@ angular.module('angular-carousel')
                         scope.carouselBufferIndex = bufferIndex;
                     }
 
+                    // resets the scrollTop position of each slide @xperiments
+                    function resetScrolls( index )
+                    {
+                        if( index==scope.carouselIndex ) return;
+                        angular.forEach(carousel.children(), function(value){
+                            angular.element(value)[0].scrollTop = 0;
+                        });
+                    }
+
                     function goToSlide(i, animate) {
+
                         if (isNaN(i)) {
                             i = scope.carouselIndex;
                         }
+
+                        // added rn-reset-scroll to indicate that this carousel
+                        // needs to reset the scrollTop property of each slide
+                        // before each slide animation
+
+                        // pre reset scroll position to top;
+                        iAttributes.rnResetScroll && resetScrolls( i );
+
                         if (animate) {
                             // simulate a swipe so we have the standard animation
                             // used when external binding index is updated or touch canceed
@@ -455,7 +474,6 @@ angular.module('angular-carousel')
     }]);
 
 })();
-
 (function() {
     "use strict";
 
