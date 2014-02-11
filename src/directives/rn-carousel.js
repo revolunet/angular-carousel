@@ -282,7 +282,6 @@
                         amplitude = 0;
                         timestamp = Date.now();
 
-                        event.preventDefault();
                         return false;
                     }
 
@@ -300,7 +299,6 @@
                                 });
                             }
                         }
-                        event.preventDefault();
                         return false;
                     }
 
@@ -340,9 +338,6 @@
                         }
                         requestAnimationFrame(autoScroll);
 
-                        if (event) {
-                            event.preventDefault();
-                        }
                         return false;
                     }
 

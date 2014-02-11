@@ -342,7 +342,6 @@ angular.module('angular-carousel')
                         amplitude = 0;
                         timestamp = Date.now();
 
-                        event.preventDefault();
                         return false;
                     }
 
@@ -360,7 +359,6 @@ angular.module('angular-carousel')
                                 });
                             }
                         }
-                        event.preventDefault();
                         return false;
                     }
 
@@ -400,9 +398,6 @@ angular.module('angular-carousel')
                         }
                         requestAnimationFrame(autoScroll);
 
-                        if (event) {
-                            event.preventDefault();
-                        }
                         return false;
                     }
 
