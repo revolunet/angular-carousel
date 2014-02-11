@@ -70,6 +70,7 @@
                         offset = 0,
                         destination,
                         slidesCount = 0,
+                        swipeMoved = false,
                         // javascript based animation easing
                         timestamp;
 
@@ -254,6 +255,7 @@
 
                     function documentMouseUpEvent(event) {
                         // in case we click outside the carousel, trigger a fake swipeEnd
+                        swipeMoved = true;
                         swipeEnd({
                             x: event.clientX,
                             y: event.clientY
@@ -292,6 +294,7 @@
                             x = coords.x;
                             delta = startX - x;
                             if (delta > 2 || delta < -2) {
+                                swipeMoved = true;
                                 startX = x;
                                 requestAnimationFrame(function() {
                                     scroll(capPosition(offset + delta));
@@ -305,8 +308,15 @@
 
                     function swipeEnd(coords, event, forceAnimation) {
                         //console.log('swipeEnd', 'scope.carouselIndex', scope.carouselIndex);
+
+                        // Prevent clicks on buttons inside slider to trigger "swipeEnd" event on touchend/mouseup
+                        if(event && !swipeMoved) {
+                            return;
+                        }
+
                         $document.unbind('mouseup', documentMouseUpEvent);
                         pressed = false;
+                        swipeMoved = false;
 
                         destination = offset;
 
