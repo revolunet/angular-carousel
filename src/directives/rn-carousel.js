@@ -283,7 +283,6 @@
                         timestamp = Date.now();
 
                         event.preventDefault();
-                        event.stopPropagation();
                         return false;
                     }
 
@@ -302,7 +301,6 @@
                             }
                         }
                         event.preventDefault();
-                        event.stopPropagation();
                         return false;
                     }
 
@@ -344,7 +342,6 @@
 
                         if (event) {
                             event.preventDefault();
-                            event.stopPropagation();
                         }
                         return false;
                     }
