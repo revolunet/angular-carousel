@@ -282,8 +282,6 @@
                         amplitude = 0;
                         timestamp = Date.now();
 
-                        event.preventDefault();
-                        event.stopPropagation();
                         return false;
                     }
 
@@ -301,8 +299,6 @@
                                 });
                             }
                         }
-                        event.preventDefault();
-                        event.stopPropagation();
                         return false;
                     }
 
@@ -342,10 +338,6 @@
                         }
                         requestAnimationFrame(autoScroll);
 
-                        if (event) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
                         return false;
                     }
 

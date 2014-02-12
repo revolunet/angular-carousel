@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.1.6 - 2014-01-21
+ * @version v0.1.7 - 2014-02-11
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -130,6 +130,7 @@ angular.module('angular-carousel')
                         offset = 0,
                         destination,
                         slidesCount = 0,
+                        swipeMoved = false,
                         // javascript based animation easing
                         timestamp;
 
@@ -314,6 +315,7 @@ angular.module('angular-carousel')
 
                     function documentMouseUpEvent(event) {
                         // in case we click outside the carousel, trigger a fake swipeEnd
+                        swipeMoved = true;
                         swipeEnd({
                             x: event.clientX,
                             y: event.clientY
@@ -340,8 +342,6 @@ angular.module('angular-carousel')
                         amplitude = 0;
                         timestamp = Date.now();
 
-                        event.preventDefault();
-                        event.stopPropagation();
                         return false;
                     }
 
@@ -352,21 +352,27 @@ angular.module('angular-carousel')
                             x = coords.x;
                             delta = startX - x;
                             if (delta > 2 || delta < -2) {
+                                swipeMoved = true;
                                 startX = x;
                                 requestAnimationFrame(function() {
                                     scroll(capPosition(offset + delta));
                                 });
                             }
                         }
-                        event.preventDefault();
-                        event.stopPropagation();
                         return false;
                     }
 
                     function swipeEnd(coords, event, forceAnimation) {
                         //console.log('swipeEnd', 'scope.carouselIndex', scope.carouselIndex);
+
+                        // Prevent clicks on buttons inside slider to trigger "swipeEnd" event on touchend/mouseup
+                        if(event && !swipeMoved) {
+                            return;
+                        }
+
                         $document.unbind('mouseup', documentMouseUpEvent);
                         pressed = false;
+                        swipeMoved = false;
 
                         destination = offset;
 
@@ -392,10 +398,6 @@ angular.module('angular-carousel')
                         }
                         requestAnimationFrame(autoScroll);
 
-                        if (event) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
                         return false;
                     }
 
