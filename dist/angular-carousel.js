@@ -177,6 +177,10 @@ angular.module('angular-carousel')
                             scope.$parent.$watch(indexModel, function(newValue, oldValue) {
                               if (newValue!==undefined) {
                                 // todo: ensure valid
+                                if (newValue >= slidesCount || newValue < 0) {
+                                    newValue = 0
+                                    indexModel.assign(scope.$parent, newValue)
+                                }
                                 goToSlide(newValue, true);
                               }
                             });
