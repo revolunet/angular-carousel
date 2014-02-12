@@ -273,6 +273,8 @@ angular.module('angular-carousel')
                         if (isBuffered) {
                             if (scope.carouselIndex <= bufferEdgeSize) {
                                 bufferIndex = 0;
+                            } else if (slidesCount < scope.carouselBufferSize) {
+                                bufferIndex = scope.carouselIndex - bufferEdgeSize;    
                             } else if (scope.carouselIndex > slidesCount - scope.carouselBufferSize) {
                                 bufferIndex = slidesCount - scope.carouselBufferSize;
                             } else {
