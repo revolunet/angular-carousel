@@ -108,18 +108,27 @@
 
                     // handle index databinding
                     if (iAttributes.rnCarouselIndex) {
+                        var updateParentIndex = function(value) {
+                            indexModel.assign(scope.$parent, value);
+                        };
                         var indexModel = $parse(iAttributes.rnCarouselIndex);
                         if (angular.isFunction(indexModel.assign)) {
                             /* check if this property is assignable then watch it */
                             scope.$watch('carouselIndex', function(newValue) {
-                                indexModel.assign(scope.$parent, newValue);
+                                updateParentIndex(newValue);
                             });
                             scope.carouselIndex = indexModel(scope);
                             scope.$parent.$watch(indexModel, function(newValue, oldValue) {
-                              if (newValue!==undefined) {
-                                // todo: ensure valid
-                                goToSlide(newValue, true);
-                              }
+                                if (newValue!==undefined) {
+                                    if (newValue >= slidesCount) {
+                                        newValue = slidesCount - 1;
+                                        updateParentIndex(newValue);
+                                    } else if (newValue < 0) {
+                                        newValue = 0;
+                                        updateParentIndex(newValue);
+                                    }
+                                    goToSlide(newValue, true);
+                                }
                             });
                             isIndexBound = true;
                         } else if (!isNaN(iAttributes.rnCarouselIndex)) {
@@ -213,6 +222,8 @@
                         var bufferEdgeSize = (scope.carouselBufferSize - 1) / 2;
                         if (isBuffered) {
                             if (scope.carouselIndex <= bufferEdgeSize) {
+                                bufferIndex = 0;
+                            } else if (slidesCount < scope.carouselBufferSize) {
                                 bufferIndex = 0;
                             } else if (scope.carouselIndex > slidesCount - scope.carouselBufferSize) {
                                 bufferIndex = slidesCount - scope.carouselBufferSize;
