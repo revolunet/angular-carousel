@@ -177,6 +177,10 @@ angular.module('angular-carousel')
                             scope.$parent.$watch(indexModel, function(newValue, oldValue) {
                               if (newValue!==undefined) {
                                 // todo: ensure valid
+                                if (newValue >= slidesCount || newValue < 0) {
+                                    newValue = 0
+                                    indexModel.assign(scope.$parent, newValue)
+                                }
                                 goToSlide(newValue, true);
                               }
                             });
@@ -273,6 +277,8 @@ angular.module('angular-carousel')
                         if (isBuffered) {
                             if (scope.carouselIndex <= bufferEdgeSize) {
                                 bufferIndex = 0;
+                            } else if (slidesCount < scope.carouselBufferSize) {
+                                bufferIndex = scope.carouselIndex - bufferEdgeSize;    
                             } else if (scope.carouselIndex > slidesCount - scope.carouselBufferSize) {
                                 bufferIndex = slidesCount - scope.carouselBufferSize;
                             } else {
