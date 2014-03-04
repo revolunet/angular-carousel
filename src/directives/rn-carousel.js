@@ -147,6 +147,7 @@
                                 slidesCount = Object.keys(newValue).length;
                             }
                             updateIndicatorArray();
+                            updateSlidePosition();
                             if (!containerWidth) updateContainerWidth();
                             goToSlide(scope.carouselIndex);
                         });
