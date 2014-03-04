@@ -154,6 +154,7 @@
                         slidesCount = iElement.children().length;
                         updateIndicatorArray();
                         updateContainerWidth();
+                        updateSlidePosition();
                     }
 
                     function updateIndicatorArray() {
@@ -161,6 +162,13 @@
                         var items = [];
                         for (var i = 0; i < slidesCount; i++) items[i] = i;
                         scope.carouselIndicatorArray = items;
+                    }
+                    
+                    function updateSlidePosition() {
+                        //reset SlidePosition to the first slide, if you are on an "invalid" slide
+                        if (scope.carouselIndex > slidesCount) {
+                            goToSlide(0, true);
+                        }
                     }
 
                     function getCarouselWidth() {
