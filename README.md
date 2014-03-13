@@ -44,7 +44,7 @@ angular.module('MyApp', ['angular-carousel']);
 </ul>
 ```
 
- 5. Add a `rn-carousel-ie9support` attribute to your `<ul>` block to enable compatibility with the browser Internet Explorer 9
+ 5. Add a `rn-carousel-ie9support` attribute to your `<ul>` block to enable compatibility with the browser Internet Explorer 9. For this to work, you need to instal any requestAnimationFrame polyfill, for example the raf.js module ( "bower install raf.js")
  
  ```html
 <ul rn-carousel rn-carousel-ie9support class="image">
