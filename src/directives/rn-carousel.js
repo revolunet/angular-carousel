@@ -192,13 +192,15 @@
                         var move = -Math.round(offset);
                         move += (scope.carouselBufferIndex * containerWidth);
 
-						/* Check Internet Explorer 9 Compatibility */		
-						if(angular.isDefined(iAttributes.rnCarouselIe9support) && typeof(requestAnimationFrame) != 'function'){
-							carousel[0].style[transformProperty] = 'translate(' + move + 'px, 0)';
-						}
-						else {
-							carousel[0].style[transformProperty] = 'translate3d(' + move + 'px, 0, 0)';
-						}
+                        /* Check Internet Explorer 9 Compatibility */       
+                        if( angular.isDefined(iAttributes.rnCarouselIe9support) && 
+                            $.browser.msie && parseFloat($.browser.version)<= 9
+                        ){
+                            carousel[0].style[transformProperty] = 'translate(' + move + 'px, 0)';
+                        }
+                        else {
+                            carousel[0].style[transformProperty] = 'translate3d(' + move + 'px, 0, 0)';
+                        }
                     }
 
                     function autoScroll() {
@@ -210,17 +212,10 @@
                             elapsed = Date.now() - timestamp;
                             delta = amplitude * Math.exp(-elapsed / timeConstant);
                             if (delta > rubberTreshold || delta < -rubberTreshold) {
-								
                                 scroll(destination - delta);
-
-								/* Check Internet Explorer 9 Compatibility */					
-								if(angular.isDefined(iAttributes.rnCarouselIe9support) && typeof(requestAnimationFrame) != 'function'){
-									setTimeout( autoScroll, 1000 / 60 );
-								}
-								else {
-									requestAnimationFrame(autoScroll);
-								}
-                                
+                                /* We are using raf.js, a requestAnimationFrame polyfill, so
+                                this will work on IE9 */
+                                requestAnimationFrame(autoScroll);
                             } else {
                                 goToSlide(destination / containerWidth);
                             }
@@ -322,18 +317,11 @@
                                 swipeMoved = true;
                                 startX = x;
 
-								/* Check Internet Explorer 9 Compatibility */					
-								if(angular.isDefined(iAttributes.rnCarouselIe9support) && typeof(requestAnimationFrame) != 'function'){
-									setTimeout(function(){ 
-										scroll(capPosition(offset + delta)) 
-									}, 1000 / 60 );
-								}
-								else {
-									requestAnimationFrame(function() {
-										scroll(capPosition(offset + delta));
-									});
-								}    
-                                
+                                /* We are using raf.js, a requestAnimationFrame polyfill, so
+                                this will work on IE9 */
+                                requestAnimationFrame(function() {
+                                    scroll(capPosition(offset + delta));
+                                });                                
                             }
                         }
                         return false;
@@ -373,14 +361,9 @@
                         if (forceAnimation) {
                             amplitude = offset - currentOffset;
                         }
-
-						/* Check Internet Explorer 9 Compatibility */					
-						if(angular.isDefined(iAttributes.rnCarouselIe9support) && typeof(requestAnimationFrame) != 'function'){
-							setTimeout( autoScroll, 1000 / 60 );
-						}
-						else {
-							requestAnimationFrame(autoScroll);
-						}
+                        /* We are using raf.js, a requestAnimationFrame polyfill, so
+                        this will work on IE9 */
+                        requestAnimationFrame(autoScroll);
 
                         return false;
                     }

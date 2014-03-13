@@ -17,7 +17,8 @@
   ],
   "dependencies": {
     "angular": "~1.2.10",
-    "angular-touch": "~1.2.10"
+    "angular-touch": "~1.2.10",
+    "raf.js": "~0.0.3"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.10"
