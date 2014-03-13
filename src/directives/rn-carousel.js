@@ -194,7 +194,7 @@
 
                         /* Check Internet Explorer 9 Compatibility */       
                         if( angular.isDefined(iAttributes.rnCarouselIe9support) && 
-                            !3dAvailable
+                            !(is3dAvailable)
                         ){
                             carousel[0].style[transformProperty] = 'translate(' + move + 'px, 0)';
                         }
@@ -429,7 +429,7 @@
                         return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
                     }
 
-                    3dAvailable = has3d();
+                    var is3dAvailable = has3d();
 
                     function onOrientationChange() {
                         updateContainerWidth();
