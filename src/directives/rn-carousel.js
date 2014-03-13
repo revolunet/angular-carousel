@@ -194,7 +194,7 @@
 
                         /* Check Internet Explorer 9 Compatibility */       
                         if( angular.isDefined(iAttributes.rnCarouselIe9support) && 
-                            3dAvailable
+                            !3dAvailable
                         ){
                             carousel[0].style[transformProperty] = 'translate(' + move + 'px, 0)';
                         }
