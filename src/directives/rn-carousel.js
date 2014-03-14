@@ -429,11 +429,7 @@
                         return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
                     }
 
-<<<<<<< HEAD
                     var is3dAvailable = has3d();
-=======
-                    is3dAvailable = has3d();
->>>>>>> 0fc4f13e0f5e04508a1167a1c2a2599d47094a90
 
                     function onOrientationChange() {
                         updateContainerWidth();
