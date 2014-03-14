@@ -191,7 +191,16 @@
                         offset = x;
                         var move = -Math.round(offset);
                         move += (scope.carouselBufferIndex * containerWidth);
-                        carousel[0].style[transformProperty] = 'translate3d(' + move + 'px, 0, 0)';
+
+                        /* Check Internet Explorer 9 Compatibility */       
+                        if( angular.isDefined(iAttributes.rnCarouselIe9support) && 
+                            !(is3dAvailable)
+                        ){
+                            carousel[0].style[transformProperty] = 'translate(' + move + 'px, 0)';
+                        }
+                        else {
+                            carousel[0].style[transformProperty] = 'translate3d(' + move + 'px, 0, 0)';
+                        }
                     }
 
                     function autoScroll() {
@@ -204,6 +213,8 @@
                             delta = amplitude * Math.exp(-elapsed / timeConstant);
                             if (delta > rubberTreshold || delta < -rubberTreshold) {
                                 scroll(destination - delta);
+                                /* We are using raf.js, a requestAnimationFrame polyfill, so
+                                this will work on IE9 */
                                 requestAnimationFrame(autoScroll);
                             } else {
                                 goToSlide(destination / containerWidth);
@@ -305,9 +316,12 @@
                             if (delta > 2 || delta < -2) {
                                 swipeMoved = true;
                                 startX = x;
+
+                                /* We are using raf.js, a requestAnimationFrame polyfill, so
+                                this will work on IE9 */
                                 requestAnimationFrame(function() {
                                     scroll(capPosition(offset + delta));
-                                });
+                                });                                
                             }
                         }
                         return false;
@@ -347,6 +361,8 @@
                         if (forceAnimation) {
                             amplitude = offset - currentOffset;
                         }
+                        /* We are using raf.js, a requestAnimationFrame polyfill, so
+                        this will work on IE9 */
                         requestAnimationFrame(autoScroll);
 
                         return false;
@@ -385,6 +401,35 @@
                         }
                         return true;
                     });
+
+                    //Detect support of translate3d
+                    function has3d(){
+                        var el = document.createElement('p'),
+                        has3d,
+                        transforms = {
+                            'webkitTransform':'-webkit-transform',
+                            'OTransform':'-o-transform',
+                            'msTransform':'-ms-transform',
+                            'MozTransform':'-moz-transform',
+                            'transform':'transform'
+                        };
+                     
+                        // Add it to the body to get the computed style
+                        document.body.insertBefore(el, null);
+                     
+                        for(var t in transforms){
+                            if( el.style[t] !== undefined ){
+                                el.style[t] = 'translate3d(1px,1px,1px)';
+                                has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
+                            }
+                        }
+                     
+                        document.body.removeChild(el);
+                     
+                        return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
+                    }
+
+                    var is3dAvailable = has3d();
 
                     function onOrientationChange() {
                         updateContainerWidth();
