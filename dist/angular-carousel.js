@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.2.0 - 2014-02-18
+ * @version v0.2.0 - 2014-03-17
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -63,7 +63,7 @@ angular.module('angular-carousel')
 
     angular.module('angular-carousel')
 
-    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', function($swipe, $window, $document, $parse, $compile) {
+    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$rootScope', function($swipe, $window, $document, $parse, $compile, $rootScope) {
         // internal ids to allow multiple instances
         var carouselId = 0,
             // used to compute the sliding speed
@@ -309,7 +309,7 @@ angular.module('angular-carousel')
                         updateBufferIndex();
                         // if outside of angular scope, trigger angular digest cycle
                         // use local digest only for perfs if no index bound
-                        if (scope.$$phase!=='$apply' && scope.$$phase!=='$digest') {
+                        if ($rootScope.$$phase!=='$apply' && $rootScope.$$phase!=='$digest') {
                             if (isIndexBound) {
                                 scope.$apply();
                             } else {
