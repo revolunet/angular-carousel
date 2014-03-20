@@ -183,7 +183,6 @@
 
                     function scroll(x) {
                         // use CSS 3D transform to move the carousel
-                        //console.log('scroll', x, 'index', scope.carouselIndex);
                         if (isNaN(x)) {
                             x = scope.carouselIndex * containerWidth;
                         }
@@ -192,13 +191,9 @@
                         var move = -Math.round(offset);
                         move += (scope.carouselBufferIndex * containerWidth);
 
-                        /* Check Internet Explorer 9 Compatibility */       
-                        if( angular.isDefined(iAttributes.rnCarouselIe9support) && 
-                            !(is3dAvailable)
-                        ){
+                        if(!is3dAvailable) {
                             carousel[0].style[transformProperty] = 'translate(' + move + 'px, 0)';
-                        }
-                        else {
+                        } else {
                             carousel[0].style[transformProperty] = 'translate3d(' + move + 'px, 0, 0)';
                         }
                     }
@@ -321,7 +316,7 @@
                                 this will work on IE9 */
                                 requestAnimationFrame(function() {
                                     scroll(capPosition(offset + delta));
-                                });                                
+                                });
                             }
                         }
                         return false;
@@ -403,7 +398,7 @@
                     });
 
                     //Detect support of translate3d
-                    function has3d(){
+                    function detect3dSupport(){
                         var el = document.createElement('p'),
                         has3d,
                         transforms = {
@@ -413,23 +408,19 @@
                             'MozTransform':'-moz-transform',
                             'transform':'transform'
                         };
-                     
                         // Add it to the body to get the computed style
                         document.body.insertBefore(el, null);
-                     
                         for(var t in transforms){
                             if( el.style[t] !== undefined ){
                                 el.style[t] = 'translate3d(1px,1px,1px)';
                                 has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
                             }
                         }
-                     
                         document.body.removeChild(el);
-                     
                         return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
                     }
 
-                    var is3dAvailable = has3d();
+                    var is3dAvailable = detect3dSupport();
 
                     function onOrientationChange() {
                         updateContainerWidth();

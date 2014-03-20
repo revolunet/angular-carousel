@@ -8,7 +8,7 @@ Comments and contributions welcome :)
 
 Proudly brought to you by the [@revolunet](http://twitter.com/revolunet) team.
 
-**NOTE :** if you use iOS<7 or Android<4 please include the [requestAnimationFrame polyfill](https://github.com/darius/requestAnimationFrame/blob/master/requestAnimationFrame.js) in your application.
+**NOTE :** if you use IE<=9, iOS<7 or Android<4 please include the [requestAnimationFrame polyfill](https://github.com/darius/requestAnimationFrame/blob/master/requestAnimationFrame.js) in your application.
 
 ## Usage :
 
@@ -44,25 +44,14 @@ angular.module('MyApp', ['angular-carousel']);
 </ul>
 ```
 
- 5. Add a `rn-carousel-ie9support` attribute to your `<ul>` block to enable compatibility with the browser Internet Explorer 9. For this to work, you need to instal any requestAnimationFrame polyfill, for example the raf.js module ( "bower install raf.js")
- 
- ```html
-<ul rn-carousel rn-carousel-ie9support class="image">
-  <li ng-repeat="image in sportImages" style="background-image:url({{ image }});">
-    <div class="layer">{{ image }}</div>
-  </li>
-</ul>
-```
-
 
 
 ## Features :
  - Mobile friendly, tested on webkit+firefox
- - use CSS 3D transformations and `requestAnimationFrame`. (disabled for IE9)
+ - use CSS 3D transformations and `requestAnimationFrame`. (fallback to CSS 2D if 3D support not available)
  - DOM buffering
  - index data-binding
  - optional indicators
- - optional support for Internet Explorer 9
 
 ### Regular carousel :
  - `rn-carousel-index` two way binding to control the carousel position.
