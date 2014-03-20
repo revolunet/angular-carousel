@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.2.0 - 2014-03-20
+ * @version v0.2.1 - 2014-03-20
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -468,19 +468,15 @@ angular.module('angular-carousel')
                             'MozTransform':'-moz-transform',
                             'transform':'transform'
                         };
-                     
                         // Add it to the body to get the computed style
                         document.body.insertBefore(el, null);
-                     
                         for(var t in transforms){
                             if( el.style[t] !== undefined ){
                                 el.style[t] = 'translate3d(1px,1px,1px)';
                                 has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
                             }
                         }
-                     
                         document.body.removeChild(el);
-                     
                         return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
                     }
 
