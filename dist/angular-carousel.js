@@ -73,6 +73,8 @@ angular.module('angular-carousel')
             // in absolute pixels, at which distance the slide stick to the edge on release
             rubberTreshold = 3;
 
+        var requestAnimationFrame = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame;     
+
         return {
             restrict: 'A',
             scope: true,
