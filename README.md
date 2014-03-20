@@ -44,13 +44,25 @@ angular.module('MyApp', ['angular-carousel']);
 </ul>
 ```
 
+ 5. Add a `rn-carousel-ie9support` attribute to your `<ul>` block to enable compatibility with the browser Internet Explorer 9. For this to work, you need to instal any requestAnimationFrame polyfill, for example the raf.js module ( "bower install raf.js")
+ 
+ ```html
+<ul rn-carousel rn-carousel-ie9support class="image">
+  <li ng-repeat="image in sportImages" style="background-image:url({{ image }});">
+    <div class="layer">{{ image }}</div>
+  </li>
+</ul>
+```
+
+
 
 ## Features :
  - Mobile friendly, tested on webkit+firefox
- - use CSS 3D transformations and `requestAnimationFrame`.
+ - use CSS 3D transformations and `requestAnimationFrame`. (disabled for IE9)
  - DOM buffering
  - index data-binding
  - optional indicators
+ - optional support for Internet Explorer 9
 
 ### Regular carousel :
  - `rn-carousel-index` two way binding to control the carousel position.
