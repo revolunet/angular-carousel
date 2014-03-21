@@ -432,14 +432,48 @@
                     // handle orientation change
                     var winEl = angular.element($window);
                     winEl.bind('orientationchange', onOrientationChange);
-                    winEl.bind('resize', onOrientationChange);
 
                     scope.$on('$destroy', function() {
                         $document.unbind('mouseup', documentMouseUpEvent);
                         winEl.unbind('orientationchange', onOrientationChange);
-                        winEl.unbind('resize', onOrientationChange);
                     });
 
+                    (function () {
+                        var activeSize, sizeLog = [], i = 0, interval;
+
+                        function getSize() {
+                            return carousel.width();
+                        }
+
+                        function isSizeStable(log) {
+                            var output;
+
+                            if (log.length === 2) {
+                                output = log[0] === log[1];
+                            } else {
+                                output = true;
+                            }
+
+                            return output;
+                        }
+
+                        activeSize = getSize();
+
+                        interval = setInterval(function () {
+                            sizeLog[i % 2] = getSize();
+
+                            if (isSizeStable(sizeLog) && activeSize !== sizeLog[0]) {
+                                onOrientationChange();
+                                activeSize = sizeLog[0];
+                            }
+
+                            i += 1;
+                        }, 100);
+
+                        scope.$on('$destroy', function () {
+                            clearInterval(interval);
+                        });
+                    }());
                 };
             }
         };
