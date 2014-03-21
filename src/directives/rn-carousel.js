@@ -174,7 +174,7 @@
                             containerWidth = slides[0].getBoundingClientRect().width;
                         }
                         // console.log('getCarouselWidth', containerWidth);
-                        return Math.floor(containerWidth);
+                        return containerWidth;
                     }
 
                     function updateContainerWidth() {
