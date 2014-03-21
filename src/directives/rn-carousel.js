@@ -13,6 +13,8 @@
             // in absolute pixels, at which distance the slide stick to the edge on release
             rubberTreshold = 3;
 
+        var requestAnimationFrame = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame || $window.mozRequestAnimationFrame;
+
         return {
             restrict: 'A',
             scope: true,
