@@ -182,7 +182,7 @@
                         container.css('width', '100%');
                         var width = getCarouselWidth();
                         if (width) {
-                            container.css('width', getCarouselWidth() + 'px');
+                            container.css('width', width + 'px');
                         }
                     }
 
