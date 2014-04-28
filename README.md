@@ -48,10 +48,10 @@ angular.module('MyApp', ['angular-carousel']);
 
 ## Features :
  - Mobile friendly, tested on webkit+firefox
- - use CSS 3D transformations and `requestAnimationFrame`. (fallback to CSS 2D if 3D support not available)
+ - Use CSS 3D transformations and `requestAnimationFrame`. (fallback to CSS 2D if 3D support not available)
  - DOM buffering
- - index data-binding
- - optional indicators
+ - Index data-binding
+ - Optional indicators
 
 ### Regular carousel :
  - `rn-carousel-index` two way binding to control the carousel position.
@@ -74,5 +74,5 @@ angular.module('MyApp', ['angular-carousel']);
  - http://ariya.ofilabs.com/2013/08/javascript-kinetic-scrolling-part-1.html
  - Thanks to all angular folks for all the tips :)
 
-## Licence
+## License
 As AngularJS itself, this module is released under the permissive [MIT license](http://revolunet.mit-license.org). Your contributions are always welcome.
