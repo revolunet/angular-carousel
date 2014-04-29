@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.2.2 - 2014-04-02
+ * @version v0.2.3 - 2014-04-29
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -357,6 +357,10 @@ angular.module('angular-carousel')
 
                     function swipeStart(coords, event) {
                         //console.log('swipeStart', coords, event);
+
+                        // stop events from propagating to handle nested carousels
+                        event.stopPropagation();
+
                         $document.bind('mouseup', documentMouseUpEvent);
                         pressed = true;
                         startX = coords.x;
@@ -374,6 +378,9 @@ angular.module('angular-carousel')
                             x = coords.x;
                             delta = startX - x;
                             if (delta > 2 || delta < -2) {
+                                // stop events from propagating to handle nested carousels
+                                event.stopPropagation();
+
                                 swipeMoved = true;
                                 startX = x;
 
@@ -394,6 +401,9 @@ angular.module('angular-carousel')
                         if(event && !swipeMoved) {
                             return;
                         }
+
+                        // stop events from propagating to handle nested carousels
+                        event.stopPropagation();
 
                         $document.unbind('mouseup', documentMouseUpEvent);
                         pressed = false;
@@ -468,9 +478,7 @@ angular.module('angular-carousel')
                         has3d,
                         transforms = {
                             'webkitTransform':'-webkit-transform',
-                            'OTransform':'-o-transform',
                             'msTransform':'-ms-transform',
-                            'MozTransform':'-moz-transform',
                             'transform':'transform'
                         };
                         // Add it to the body to get the computed style

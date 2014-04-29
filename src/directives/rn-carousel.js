@@ -297,6 +297,10 @@
 
                     function swipeStart(coords, event) {
                         //console.log('swipeStart', coords, event);
+
+                        // stop events from propagating to handle nested carousels
+                        event.stopPropagation();
+
                         $document.bind('mouseup', documentMouseUpEvent);
                         pressed = true;
                         startX = coords.x;
@@ -314,6 +318,9 @@
                             x = coords.x;
                             delta = startX - x;
                             if (delta > 2 || delta < -2) {
+                                // stop events from propagating to handle nested carousels
+                                event.stopPropagation();
+
                                 swipeMoved = true;
                                 startX = x;
 
@@ -334,6 +341,9 @@
                         if(event && !swipeMoved) {
                             return;
                         }
+
+                        // stop events from propagating to handle nested carousels
+                        event.stopPropagation();
 
                         $document.unbind('mouseup', documentMouseUpEvent);
                         pressed = false;
