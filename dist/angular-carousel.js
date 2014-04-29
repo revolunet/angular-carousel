@@ -359,7 +359,9 @@ angular.module('angular-carousel')
                         //console.log('swipeStart', coords, event);
 
                         // stop events from propagating to handle nested carousels
-                        event.stopPropagation();
+                        if(event) {
+                            event.stopPropagation();
+                        }
 
                         $document.bind('mouseup', documentMouseUpEvent);
                         pressed = true;
@@ -379,7 +381,9 @@ angular.module('angular-carousel')
                             delta = startX - x;
                             if (delta > 2 || delta < -2) {
                                 // stop events from propagating to handle nested carousels
-                                event.stopPropagation();
+                                if(event) {
+                                    event.stopPropagation();
+                                }
 
                                 swipeMoved = true;
                                 startX = x;
@@ -403,7 +407,9 @@ angular.module('angular-carousel')
                         }
 
                         // stop events from propagating to handle nested carousels
-                        event.stopPropagation();
+                        if(event) {
+                            event.stopPropagation();
+                        }
 
                         $document.unbind('mouseup', documentMouseUpEvent);
                         pressed = false;
