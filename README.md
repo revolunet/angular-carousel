@@ -12,21 +12,20 @@ Proudly brought to you by the [@revolunet](http://twitter.com/revolunet) team.
 
 ## Usage :
 
- 1. If you use bower, just `bower install angular-carousel`. If not, download files [from the github repo](./dist)
- 2. Add `angular-carousel.css`, `angular-carousel.js` to your code:
+ - If you use bower, just `bower install angular-carousel`. If not, download files [from the github repo](./dist)
+ - Add `angular-touch.js`, `angular-carousel.css`, and `angular-carousel.js` to your code:
 ```html
 <link href="angular-carousel.css" rel="stylesheet" type="text/css" />
 <script src="angular.js"></script>
 <script src="angular-touch.js"></script>
 <script src="angular-carousel.js"></script>
 ```
-
- 2. Add a dependency to the `angular-carousel` module in your application.
+ - Add a dependency to the `angular-carousel` module in your application.
 ```js
 angular.module('MyApp', ['angular-carousel']);
 ```
 
- 3. Add a `rn-carousel` attribute to your `<ul>` block and your `<li>`'s become magically swipable ;)
+ - Add a `rn-carousel` attribute to your `<ul>` block and your `<li>`'s become magically swipable ;)
 ```html
 <ul rn-carousel class="image">
   <li ng-repeat="image in sportImages" style="background-image:url({{ image }});">
@@ -35,7 +34,7 @@ angular.module('MyApp', ['angular-carousel']);
 </ul>
 ```
 
- 4. You can also use `rn-carousel` without ng-repeat ;)
+ - You can also use `rn-carousel` without ng-repeat ;)
 ```html
 <ul rn-carousel class="image">
   <li>slide #1</li>
