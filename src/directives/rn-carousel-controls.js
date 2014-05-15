@@ -10,10 +10,10 @@ angular.module('angular-carousel')
     },
     link: function(scope, element, attrs) {
       scope.prev = function() {
-        scope.index--;
+        if (scope.index > 0) scope.index--;
       };
       scope.next = function() {
-        scope.index++;
+        if (scope.index < scope.items.length-1) scope.index++;
       };
     },
     template: '<div class="rn-carousel-controls">' +
