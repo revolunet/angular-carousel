@@ -15,6 +15,20 @@
 
         var requestAnimationFrame = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame || $window.mozRequestAnimationFrame;
 
+        //fallback for the browers which doesn't support requestAnimationFrame
+        if(requestAnimationFrame == undefined || requestAnimationFrame == null){
+          var animationQueue = [];
+          requestAnimationFrame = function(frameFunc){
+            animationQueue.push(frameFunc);
+          }
+          setInterval(function(){
+            if(animationQueue.length > 0){
+              animationQueue[0]();
+              animationQueue.shift();
+            }
+          },10);
+        }
+
         return {
             restrict: 'A',
             scope: true,
