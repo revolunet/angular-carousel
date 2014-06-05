@@ -73,6 +73,7 @@
                         destination,
                         slidesCount = 0,
                         swipeMoved = false,
+                        animOnIndexChange = true,
                         // javascript based animation easing
                         timestamp;
 
@@ -90,6 +91,10 @@
                             goToSlide(newValue, true);
                         });
 
+                    }
+
+                    if (angular.isDefined(iAttributes.rnCarouselPreventAnimation)) {
+                        animOnIndexChange = false;
                     }
 
                     // enable carousel indicator
@@ -129,7 +134,7 @@
                                         newValue = 0;
                                         updateParentIndex(newValue);
                                     }
-                                    goToSlide(newValue, true);
+                                    goToSlide(newValue, animOnIndexChange);
                                 }
                             });
                             isIndexBound = true;
