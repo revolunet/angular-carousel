@@ -129,3 +129,14 @@ h3 {
 .rn-carousel-control.rn-carousel-control-next {
     right: 5px;
 }
+
+#alpha-changing{
+
+}
+#alpha-changing li{
+  float:left;
+  opacity: 0;
+  margin: 5px;
+  font-size: 30px;
+  list-style-type: none;
+}
