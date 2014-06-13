@@ -3,7 +3,7 @@
 
     angular.module('angular-carousel')
 
-    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$rootScope', function($swipe, $window, $document, $parse, $compile, $rootScope) {
+    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$rootScope', '$timeout', function($swipe, $window, $document, $parse, $compile, $rootScope, $timeout) {
         // internal ids to allow multiple instances
         var carouselId = 0,
             // used to compute the sliding speed
@@ -13,7 +13,7 @@
             // in absolute pixels, at which distance the slide stick to the edge on release
             rubberTreshold = 3;
 
-        var requestAnimationFrame = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame || $window.mozRequestAnimationFrame;
+        var requestAnimationFrame = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame || $window.mozRequestAnimationFrame  || function(callback){ $timeout(callback, 1000 / 60);};
 
         return {
             restrict: 'A',
