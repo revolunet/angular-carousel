@@ -28,7 +28,7 @@ angular.module('MyApp', ['angular-carousel']);
  - Add a `rn-carousel` attribute to your `<ul>` block and your `<li>`'s become magically swipable ;)
 ```html
 <ul rn-carousel class="image">
-  <li ng-repeat="image in sportImages" style="background-image:url({{ image }});">
+  <li ng-repeat="image in sportImages" ng-style="{ backgroundImage: 'url(' + image + ')' }">
     <div class="layer">{{ image }}</div>
   </li>
 </ul>
