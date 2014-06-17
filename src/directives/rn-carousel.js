@@ -297,6 +297,12 @@
 
                     function swipeStart(coords, event) {
                         //console.log('swipeStart', coords, event);
+
+                        // stop events from propagating to handle nested carousels
+                        if(event) {
+                            event.stopPropagation();
+                        }
+
                         $document.bind('mouseup', documentMouseUpEvent);
                         pressed = true;
                         startX = coords.x;
@@ -314,6 +320,11 @@
                             x = coords.x;
                             delta = startX - x;
                             if (delta > 2 || delta < -2) {
+                                // stop events from propagating to handle nested carousels
+                                if(event) {
+                                    event.stopPropagation();
+                                }
+
                                 swipeMoved = true;
                                 startX = x;
 
@@ -333,6 +344,11 @@
                         // Prevent clicks on buttons inside slider to trigger "swipeEnd" event on touchend/mouseup
                         if(event && !swipeMoved) {
                             return;
+                        }
+
+                        // stop events from propagating to handle nested carousels
+                        if(event) {
+                            event.stopPropagation();
                         }
 
                         $document.unbind('mouseup', documentMouseUpEvent);
