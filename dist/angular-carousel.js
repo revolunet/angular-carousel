@@ -160,14 +160,22 @@ angular.module('angular-carousel')
                     }
 
                     // check if the indicator should be docked to a specific element
-                    iAttributes.$observe('dockIn', function(value) {
-                        //console.log('dockIn=', value);
+                    iAttributes.$observe('rnCarouselIndicatorDock', function(value) {
                         // check if target dock element actually exists
                         if(angular.element('#' + value).length) {
                             // move the indicator to the dock element
                             var dock = angular.element('#' + value);
                             indicator.css('position', 'absolute');
                             indicator.appendTo(dock);
+                        }
+                    });
+
+                    // check for the indicator-autohide attribute, which
+                    // hides the indicators if there is no need for them
+                    // i.e. if there are less than 2 elements to show
+                    iAttributes.$observe('rnCarouselIndicatorAutohide', function(value) {
+                        if(slidesCount < 2) {
+                            indicator.remove();
                         }
                     });
 
