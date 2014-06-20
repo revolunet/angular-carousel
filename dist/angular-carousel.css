@@ -42,7 +42,7 @@
   height: 20px;
   background-color: black;
   background-color: rgba(0, 0, 0, 0.3);
-  position: absolute;
+  position: relative;
   bottom: 0;
   cursor: pointer; }
   .rn-carousel-indicator span {

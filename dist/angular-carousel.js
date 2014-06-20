@@ -166,6 +166,7 @@ angular.module('angular-carousel')
                         if(angular.element('#' + value).length) {
                             // move the indicator to the dock element
                             var dock = angular.element('#' + value);
+                            indicator.css('position', 'absolute');
                             indicator.appendTo(dock);
                         }
                     });
