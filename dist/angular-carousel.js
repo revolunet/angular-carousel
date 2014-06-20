@@ -134,7 +134,8 @@ angular.module('angular-carousel')
                         slidesCount = 0,
                         swipeMoved = false,
                         // javascript based animation easing
-                        timestamp;
+                        timestamp,
+                        indicator;
 
                     // add a wrapper div that will hide the overflow
                     var carousel = iElement.wrap("<div id='carousel-" + carouselId +"' class='rn-carousel-container'></div>"),
@@ -154,9 +155,20 @@ angular.module('angular-carousel')
 
                     // enable carousel indicator
                     if (angular.isDefined(iAttributes.rnCarouselIndicator)) {
-                        var indicator = $compile("<div id='carousel-" + carouselId +"-indicator' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
-                        container.append(indicator);
+                        indicator = $compile("<div id='carousel-" + carouselId +"-indicator' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
+                        indicator.appendTo(container);
                     }
+
+                    // check if the indicator should be docked to a specific element
+                    iAttributes.$observe('dockIn', function(value) {
+                        //console.log('dockIn=', value);
+                        // check if target dock element actually exists
+                        if(angular.element('#' + value).length) {
+                            // move the indicator to the dock element
+                            var dock = angular.element('#' + value);
+                            indicator.appendTo(dock);
+                        }
+                    });
 
                     // enable carousel controls
                     if (angular.isDefined(iAttributes.rnCarouselControl)) {
