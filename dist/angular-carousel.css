@@ -41,7 +41,7 @@
   text-align: center;
   height: 20px;
   background-color: black;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.3);
   position: relative;
   bottom: 0;
   cursor: pointer; }

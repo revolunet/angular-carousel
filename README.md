@@ -58,7 +58,11 @@ angular.module('MyApp', ['angular-carousel']);
  - `rn-carousel-buffered` boolean value to enable the carousel buffering, good to minimize the DOM, defaults to 5 slides. (works only with arrays)
  - `rn-carousel-swipe` boolean value to enable/disable swiping (default true)
  - `rn-carousel-control` boolean value to enable builtin prev/next buttons (you can override by CSS)
-
+ 
+### Additional Options:
+ - `rn-carousel-indicator-dock="#elementID"` Add this attribute to dock the carousel indicators to an element with the specified ID, useful when the carousel is inside a container with "overflow: hidden".
+ - `rn-carousel-indicator-autohide` Add this attribute to hide the carousel indicators if there are less than 2 elements to show.
+ 
 ## Todo :
  - see the [TODO file](./TODO)
 
