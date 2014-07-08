@@ -45,7 +45,6 @@ angular.module('angular-carousel')
         };
 
         timer = $interval(increment, delay);
-        console.log('attrs.rnCarouselPauseOnHover',attrs.rnCarouselPauseOnHover);
         if (attrs.rnCarouselPauseOnHover && attrs.rnCarouselPauseOnHover != 'false'){
             element.on('mouseenter', function(){
                 stopAutoplay();
