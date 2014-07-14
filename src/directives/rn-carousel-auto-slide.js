@@ -1,38 +1,47 @@
 angular.module('angular-carousel')
 
-.directive('rnCarouselAutoSlide', ['$interval', function($interval) {
+.directive('rnCarouselAutoSlide', ['$timeout', function($timeout) {
   return {
     restrict: 'A',
     link: function (scope, element, attrs) {
         var delay = Math.round(parseFloat(attrs.rnCarouselAutoSlide) * 1000),
-            timer = isPaused = increment = false;
+            timer = increment = false, slidesCount = element.children().length;
 
+        if(!scope.carouselExposedIndex){
+            scope.carouselExposedIndex = 0;
+        }
         stopAutoplay = function () {
             if (angular.isDefined(timer)) {
-                $interval.cancel(timer);
+                $timeout.cancel(timer);
             }
             timer = undefined;
         };
 
         increment = function () {
-            if(!isPaused){
-                if (scope.indicatorIndex < scope.carouselIndicatorArray.length - 1) {
-                    scope.indicatorIndex++;
-                } else {
-                    scope.indicatorIndex = 0;
-                }
+            if (scope.carouselExposedIndex < slidesCount - 1) {
+                scope.carouselExposedIndex =  scope.carouselExposedIndex + 1;
+            } else {
+                scope.carouselExposedIndex = 0;
             }
-
         };
 
-        timer = $interval(increment, delay);
+        restartTimer = function (){
+            stopAutoplay();
+            timer = $timeout(increment, delay);
+        };
+
+        scope.$watch('carouselIndex', function(){
+           restartTimer();
+        });
+
+        restartTimer();
         if (attrs.rnCarouselPauseOnHover && attrs.rnCarouselPauseOnHover != 'false'){
             element.on('mouseenter', function(){
                 stopAutoplay();
             });
 
             element.on('mouseleave', function(){
-                timer = $interval(increment, delay);
+                restartTimer();
             });
         }
 
