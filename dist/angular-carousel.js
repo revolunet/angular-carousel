@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.2.3 - 2014-07-14
+ * @version v0.2.3 - 2014-07-21
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -55,16 +55,17 @@ angular.module('angular-carousel')
 
         restartTimer();
         if (attrs.rnCarouselPauseOnHover && attrs.rnCarouselPauseOnHover != 'false'){
-            element.on('mouseenter', function(){
-                stopAutoplay();
-            });
+            element.on('mouseenter', stopAutoplay);
 
-            element.on('mouseleave', function(){
-                restartTimer();
-            });
+            element.on('mouseleave', restartTimer);
         }
 
-        scope.$on('$destroy', stopAutoplay);
+        scope.$on('$destroy', function(){
+            stopAutoplay();
+            element.off('mouseenter', stopAutoplay);
+            element.off('mouseleave', restartTimer);
+        });
+
 
     }
   };
