@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.2.2 - 2014-04-02
+ * @version v0.2.3 - 2014-07-21
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -19,6 +19,59 @@ angular.module('angular-carousel', [
 
 angular.module('angular-carousel')
 
+.directive('rnCarouselAutoSlide', ['$timeout', function($timeout) {
+  return {
+    restrict: 'A',
+    link: function (scope, element, attrs) {
+        var delay = Math.round(parseFloat(attrs.rnCarouselAutoSlide) * 1000),
+            timer = increment = false, slidesCount = element.children().length;
+
+        if(!scope.carouselExposedIndex){
+            scope.carouselExposedIndex = 0;
+        }
+        stopAutoplay = function () {
+            if (angular.isDefined(timer)) {
+                $timeout.cancel(timer);
+            }
+            timer = undefined;
+        };
+
+        increment = function () {
+            if (scope.carouselExposedIndex < slidesCount - 1) {
+                scope.carouselExposedIndex =  scope.carouselExposedIndex + 1;
+            } else {
+                scope.carouselExposedIndex = 0;
+            }
+        };
+
+        restartTimer = function (){
+            stopAutoplay();
+            timer = $timeout(increment, delay);
+        };
+
+        scope.$watch('carouselIndex', function(){
+           restartTimer();
+        });
+
+        restartTimer();
+        if (attrs.rnCarouselPauseOnHover && attrs.rnCarouselPauseOnHover != 'false'){
+            element.on('mouseenter', stopAutoplay);
+
+            element.on('mouseleave', restartTimer);
+        }
+
+        scope.$on('$destroy', function(){
+            stopAutoplay();
+            element.off('mouseenter', stopAutoplay);
+            element.off('mouseleave', restartTimer);
+        });
+
+
+    }
+  };
+}]);
+angular.module('angular-carousel')
+
 .directive('rnCarouselControls', [function() {
   return {
     restrict: 'A',
@@ -35,13 +88,18 @@ angular.module('angular-carousel')
         if (scope.index < scope.items.length-1) scope.index++;
       };
     },
-    template: '<div class="rn-carousel-controls">' +
-                '<span class="rn-carousel-control rn-carousel-control-prev" ng-click="prev()" ng-if="index > 0"></span>' +
-                '<span class="rn-carousel-control rn-carousel-control-next" ng-click="next()" ng-if="index < items.length - 1"></span>' +
-              '</div>'
+    templateUrl: 'carousel-controls.html'
   };
 }]);
 
+angular.module('angular-carousel').run(['$templateCache', function($templateCache) {
+  $templateCache.put('carousel-controls.html',
+    '<div class="rn-carousel-controls">\n' +
+    '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prev()" ng-if="index > 0"></span>\n' +
+    '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="next()" ng-if="index < items.length - 1"></span>\n' +
+    '</div>'
+  );
+}]);
 angular.module('angular-carousel')
 
 .directive('rnCarouselIndicators', [function() {
@@ -52,10 +110,16 @@ angular.module('angular-carousel')
       items: '=',
       index: '='
     },
-    template: '<div class="rn-carousel-indicator">' +
-                '<span ng-repeat="item in items" ng-click="$parent.index=$index" ng-class="{active: $index==$parent.index}"></span>' +
-              '</div>'
+    templateUrl: 'carousel-indicators.html'
   };
+}]);
+
+angular.module('angular-carousel').run(['$templateCache', function($templateCache) {
+  $templateCache.put('carousel-indicators.html',
+      '<div class="rn-carousel-indicator">\n' +
+      ' <span ng-repeat="item in items" ng-click="$parent.index=$index" ng-class="{active: $index==$parent.index}"></span>\n' +
+      '</div>'
+  );
 }]);
 
 (function() {
@@ -145,13 +209,16 @@ angular.module('angular-carousel')
                         updateIndicatorArray();
                         scope.$watch('carouselIndex', function(newValue) {
                             scope.indicatorIndex = newValue;
+                            scope.carouselExposedIndex = newValue;
                         });
                         scope.$watch('indicatorIndex', function(newValue) {
                             goToSlide(newValue, true);
                         });
-
                     }
 
+                    scope.$watch('carouselExposedIndex', function(newValue) {
+                        goToSlide(newValue, true);
+                    });
                     // enable carousel indicator
                     if (angular.isDefined(iAttributes.rnCarouselIndicator)) {
                         var indicator = $compile("<div id='carousel-" + carouselId +"-indicator' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
@@ -468,9 +535,7 @@ angular.module('angular-carousel')
                         has3d,
                         transforms = {
                             'webkitTransform':'-webkit-transform',
-                            'OTransform':'-o-transform',
                             'msTransform':'-ms-transform',
-                            'MozTransform':'-moz-transform',
                             'transform':'transform'
                         };
                         // Add it to the body to get the computed style
