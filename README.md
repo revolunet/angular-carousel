@@ -58,7 +58,9 @@ angular.module('MyApp', ['angular-carousel']);
  - `rn-carousel-buffered` boolean value to enable the carousel buffering, good to minimize the DOM, defaults to 5 slides. (works only with arrays)
  - `rn-carousel-swipe` boolean value to enable/disable swiping (default true)
  - `rn-carousel-control` boolean value to enable builtin prev/next buttons (you can override by CSS)
-
+ - `rn-carousel-auto-slide` integer value will make the slider automatically change the visible slide after given seconds
+ - `rn-carousel-pause-on-hover="true"` prevent auto-slide on hover
+ 
 ## Todo :
  - see the [TODO file](./TODO)
 
