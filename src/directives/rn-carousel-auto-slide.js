@@ -36,16 +36,17 @@ angular.module('angular-carousel')
 
         restartTimer();
         if (attrs.rnCarouselPauseOnHover && attrs.rnCarouselPauseOnHover != 'false'){
-            element.on('mouseenter', function(){
-                stopAutoplay();
-            });
+            element.on('mouseenter', stopAutoplay);
 
-            element.on('mouseleave', function(){
-                restartTimer();
-            });
+            element.on('mouseleave', restartTimer);
         }
 
-        scope.$on('$destroy', stopAutoplay);
+        scope.$on('$destroy', function(){
+            stopAutoplay();
+            element.off('mouseenter', stopAutoplay);
+            element.off('mouseleave', restartTimer);
+        });
+
 
     }
   };
