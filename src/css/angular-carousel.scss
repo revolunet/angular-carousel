@@ -53,6 +53,10 @@ $rn-carousel-control-height: 30px;
     &:before {
       content: "\25cf";
     }
+    &.ng-leave {
+      // see https://github.com/revolunet/angular-carousel/issues/179
+      transition: none !important;
+    }
   }
 
   .active {
