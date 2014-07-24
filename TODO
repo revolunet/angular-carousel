@@ -17,15 +17,16 @@ Carousel v2:
     Animations:
         ☐ should have some builtin animations
         ☐ should be able to customise animations
-        ☐ animation should occur on slides instead of container
+        ☐ animation should occur on individual slides instead of container
+        ☐ use % instead of pixels
     Bugs:
         ✔ bug when rn-carousel-index change while animation from outside @done (14-01-05 02:19)
         ☐ handle touch cancel
         ✔ initial index position not respected @done (14-01-07 23:51)
     Advanced:
-        ☐ optional cycle
-        ☐ infinite carousels with slide generators
-        ☐ optional auto-slide
+        ☐ optional loop
+        ☐ infinite carousels with slide generators (prev/next+load)
+        ✔ optional auto-slide @done (14-07-24 23:35)
     Tests:
         ✔ setup karma @done (14-01-05 00:15)
     Tooling:

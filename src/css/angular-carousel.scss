@@ -6,6 +6,8 @@ $rn-carousel-control-height: 30px;
 .rn-carousel-container {
     overflow: hidden;
     position: relative;
+    -ms-touch-action: none;
+    touch-action: none;
 }
 .rn-carousel-slides {
     transform: translate3d(0,0,0);

@@ -2,7 +2,9 @@
 /* general */
 .rn-carousel-container {
   overflow: hidden;
-  position: relative; }
+  position: relative;
+  -ms-touch-action: none;
+  touch-action: none; }
 
 .rn-carousel-slides {
   -webkit-transform: translate3d(0, 0, 0);

@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.2.3 - 2014-07-21
+ * @version v0.2.4 - 2014-07-25
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -197,6 +197,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         destination,
                         slidesCount = 0,
                         swipeMoved = false,
+                        animOnIndexChange = true,
                         // javascript based animation easing
                         timestamp;
 
@@ -214,11 +215,17 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         scope.$watch('indicatorIndex', function(newValue) {
                             goToSlide(newValue, true);
                         });
+
+                    }
+
+                    if (angular.isDefined(iAttributes.rnCarouselPreventAnimation)) {
+                        animOnIndexChange = false;
                     }
 
                     scope.$watch('carouselExposedIndex', function(newValue) {
                         goToSlide(newValue, true);
                     });
+
                     // enable carousel indicator
                     if (angular.isDefined(iAttributes.rnCarouselIndicator)) {
                         var indicator = $compile("<div id='carousel-" + carouselId +"-indicator' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
@@ -256,7 +263,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                         newValue = 0;
                                         updateParentIndex(newValue);
                                     }
-                                    goToSlide(newValue, true);
+                                    goToSlide(newValue, animOnIndexChange);
                                 }
                             });
                             isIndexBound = true;
