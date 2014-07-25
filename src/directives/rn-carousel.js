@@ -176,13 +176,15 @@
                     }
 
                     function getCarouselWidth() {
-                       // container.css('width', 'auto');
+                        // container.css('width', 'auto');
                         var slides = carousel.children();
+                        var rect = {};
                         if (slides.length === 0) {
-                            containerWidth = carousel[0].getBoundingClientRect().width;
+                            rect = carousel[0].getBoundingClientRect();
                         } else {
-                            containerWidth = slides[0].getBoundingClientRect().width;
+                            rect = slides[0].getBoundingClientRect();
                         }
+                        containerWidth = rect.width ? rect.width : rect.right - rect.left;
                         // console.log('getCarouselWidth', containerWidth);
                         return containerWidth;
                     }
@@ -206,10 +208,14 @@
                         var move = -Math.round(offset);
                         move += (scope.carouselBufferIndex * containerWidth);
 
-                        if(!is3dAvailable) {
-                            carousel[0].style[transformProperty] = 'translate(' + move + 'px, 0)';
+                        if (transformProperty !== undefined) {
+                            if (!is3dAvailable) {
+                                carousel[0].style[transformProperty] = 'translate(' + move + 'px, 0)';
+                            } else {
+                                carousel[0].style[transformProperty] = 'translate3d(' + move + 'px, 0, 0)';
+                            }
                         } else {
-                            carousel[0].style[transformProperty] = 'translate3d(' + move + 'px, 0, 0)';
+                            carousel[0].style.marginLeft = move + 'px';
                         }
                     }
 
@@ -402,8 +408,12 @@
                     }
 
                     // detect supported CSS property
-                    transformProperty = 'transform';
-                    ['webkit', 'Moz', 'O', 'ms'].every(function (prefix) {
+                    if (typeof document.body.style['transform'] !== 'undefined') {
+                        transformProperty = 'transform';
+                    } else {
+                        transformProperty = undefined;
+                    }
+                    ['webkit', 'Moz', 'O', 'ms'].every(function(prefix) {
                         var e = prefix + 'Transform';
                         if (typeof document.body.style[e] !== 'undefined') {
                             transformProperty = e;
