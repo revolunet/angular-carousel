@@ -123,7 +123,7 @@
             <br/>
             By adding <strong>rn-carousel-pause-on-hover="true"</strong>  the slide will pause on mouse hover and start on mouse leave
         </div>
-        <ul rn-carousel rn-carousel-indicator rn-carousel-auto-slide="3" rn-carousel-control="true" rn-carousel-pause-on-hover="true" class="my-slider standard ng-cloak">
+        <ul rn-carousel rn-carousel-auto-slide="3" rn-carousel-control="true" id="defaultSlider" rn-carousel-pause-on-hover="true" class="my-slider standard ng-cloak">
             <li ng-style="{'background-color': colors[0]}">
                 This is a standard template
                 <div class="big">slide #1</div>
@@ -139,6 +139,22 @@
             <li ng-style="{'background-color': colors[40]}">
                 And to finish :
                 <iframe width="100%" height="80%" src="//www.youtube.com/embed/OQSNhk5ICTI" frameborder="0" allowfullscreen></iframe>
+            </li>
+        </ul>
+
+        <h3>Autoplay slider with <strong>ng-repeat</strong></h3>
+
+        <div class="details">
+            <strong>rn-carousel-auto-slide</strong> works with ng-repeat
+        </div>
+        <ul rn-carousel rn-carousel-auto-slide="3" id="repeatSlider" rn-carousel-pause-on-hover="true" class="my-slider standard ng-cloak">
+            <li ng-repeat="slide in slides4" ng-style="{'background-image': 'url(' + slide.img + ')'}">
+                <div class="debug">
+                    {{ slide.label }} / {{ slides4.length }}
+                    <br>
+                    carouselIndex: {{ carouselIndex }}<br>
+                    carouselBufferIndex: {{ carouselBufferIndex }}<br>
+                </div>
             </li>
         </ul>
         <br/><br/>

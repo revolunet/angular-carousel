@@ -151,6 +151,7 @@
                             } else if (angular.isObject(newValue)) {
                                 slidesCount = Object.keys(newValue).length;
                             }
+                            scope.$emit('rnCarousel:CollectionUpdated', slidesCount);
                             updateIndicatorArray();
                             if (!containerWidth) updateContainerWidth();
                             goToSlide(scope.carouselIndex);

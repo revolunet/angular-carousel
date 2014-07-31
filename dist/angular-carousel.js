@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.2.3 - 2014-07-21
+ * @version v0.2.3 - 2014-07-31
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -23,31 +23,41 @@ angular.module('angular-carousel')
   return {
     restrict: 'A',
     link: function (scope, element, attrs) {
+
         var delay = Math.round(parseFloat(attrs.rnCarouselAutoSlide) * 1000),
-            timer = increment = false, slidesCount = element.children().length;
+            timer =  false, slidesCount = element.children().length;
+        notrepeat = true;
+
+        scope.$on('rnCarousel:CollectionUpdated', function($parentscope, newSlidesCount){
+            slidesCount = newSlidesCount;
+            notrepeat = false
+        });
 
         if(!scope.carouselExposedIndex){
             scope.carouselExposedIndex = 0;
         }
-        stopAutoplay = function () {
+
+        function stopAutoplay() {
             if (angular.isDefined(timer)) {
                 $timeout.cancel(timer);
             }
             timer = undefined;
-        };
+        }
 
-        increment = function () {
+        function increment() {
             if (scope.carouselExposedIndex < slidesCount - 1) {
                 scope.carouselExposedIndex =  scope.carouselExposedIndex + 1;
             } else {
                 scope.carouselExposedIndex = 0;
             }
-        };
+        }
 
-        restartTimer = function (){
+        function restartTimer(){
             stopAutoplay();
-            timer = $timeout(increment, delay);
-        };
+            timer = $timeout(function(){
+                increment()
+            }, delay);
+        }
 
         scope.$watch('carouselIndex', function(){
            restartTimer();
@@ -56,7 +66,6 @@ angular.module('angular-carousel')
         restartTimer();
         if (attrs.rnCarouselPauseOnHover && attrs.rnCarouselPauseOnHover != 'false'){
             element.on('mouseenter', stopAutoplay);
-
             element.on('mouseleave', restartTimer);
         }
 
@@ -275,6 +284,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             } else if (angular.isObject(newValue)) {
                                 slidesCount = Object.keys(newValue).length;
                             }
+                            scope.$emit('rnCarousel:CollectionUpdated', slidesCount);
                             updateIndicatorArray();
                             if (!containerWidth) updateContainerWidth();
                             goToSlide(scope.carouselIndex);
