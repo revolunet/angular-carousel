@@ -2,7 +2,9 @@
 /* general */
 .rn-carousel-container {
   overflow: hidden;
-  position: relative; }
+  position: relative;
+  -ms-touch-action: none;
+  touch-action: none; }
 
 .rn-carousel-slides {
   -webkit-transform: translate3d(0, 0, 0);
@@ -52,6 +54,9 @@
     color: #333; }
     .rn-carousel-indicator span:before {
       content: "\25cf"; }
+    .rn-carousel-indicator span.ng-leave {
+      -webkit-transition: none !important;
+      transition: none !important; }
   .rn-carousel-indicator .active {
     color: white; }
 

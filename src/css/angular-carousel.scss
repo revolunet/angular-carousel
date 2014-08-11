@@ -6,6 +6,8 @@ $rn-carousel-control-height: 30px;
 .rn-carousel-container {
     overflow: hidden;
     position: relative;
+    -ms-touch-action: none;
+    touch-action: none;
 }
 .rn-carousel-slides {
     transform: translate3d(0,0,0);
@@ -52,6 +54,10 @@ $rn-carousel-control-height: 30px;
     color: #333;
     &:before {
       content: "\25cf";
+    }
+    &.ng-leave {
+      // see https://github.com/revolunet/angular-carousel/issues/179
+      transition: none !important;
     }
   }
 
