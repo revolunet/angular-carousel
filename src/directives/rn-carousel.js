@@ -205,6 +205,9 @@
                         offset = x;
                         var move = -Math.round(offset);
                         move += (scope.carouselBufferIndex * containerWidth);
+                        if (angular.isDefined(iAttributes.rnCarouselMoveEvent)){
+                          scope.$emit("CarouselMove", -move);
+                        }
 
                         if(!is3dAvailable) {
                             carousel[0].style[transformProperty] = 'translate(' + move + 'px, 0)';
