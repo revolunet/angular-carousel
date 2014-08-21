@@ -160,7 +160,15 @@
                             }
                             updateIndicatorArray();
                             if (!containerWidth) updateContainerWidth();
-                            goToSlide(scope.carouselIndex);
+
+                            //if elements have been added to repeatCollections head, ensure that we stay on the
+                            //element that was selected prior to the modification of the repeatCollection
+                            if (angular.isArray(newValue)) {
+                                var activeElement = oldValue[scope.carouselIndex];
+                                var indexOfActiveElement = newValue.indexOf(activeElement);
+                                goToSlide(indexOfActiveElement != -1 ? indexOfActiveElement : scope.carouselIndex);
+                            } else
+                                goToSlide(scope.carouselIndex);
                         });
                     } else {
                         slidesCount = iElement.children().length;
