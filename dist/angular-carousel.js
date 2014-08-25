@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.2.3 - 2014-07-31
+ * @version v0.2.3 - 2014-08-25
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -26,37 +26,36 @@ angular.module('angular-carousel')
 
         var delay = Math.round(parseFloat(attrs.rnCarouselAutoSlide) * 1000),
             timer =  false, slidesCount = element.children().length;
-        notrepeat = true;
 
-        scope.$on('rnCarousel:CollectionUpdated', function($parentscope, newSlidesCount){
-            slidesCount = newSlidesCount;
-            notrepeat = false
-        });
 
-        if(!scope.carouselExposedIndex){
-            scope.carouselExposedIndex = 0;
-        }
-
-        function stopAutoplay() {
+        var stopAutoPlay = function () {
             if (angular.isDefined(timer)) {
                 $timeout.cancel(timer);
             }
             timer = undefined;
-        }
+        };
 
-        function increment() {
+        var increment = function () {
             if (scope.carouselExposedIndex < slidesCount - 1) {
                 scope.carouselExposedIndex =  scope.carouselExposedIndex + 1;
             } else {
                 scope.carouselExposedIndex = 0;
             }
-        }
+        };
 
-        function restartTimer(){
-            stopAutoplay();
+        var restartTimer =function (){
+            stopAutoPlay();
             timer = $timeout(function(){
                 increment()
             }, delay);
+        };
+
+        scope.$on('rnCarousel:CollectionUpdated', function($parentscope, newSlidesCount){
+            slidesCount = newSlidesCount;
+        });
+
+        if(!scope.carouselExposedIndex){
+            scope.carouselExposedIndex = 0;
         }
 
         scope.$watch('carouselIndex', function(){
@@ -65,13 +64,13 @@ angular.module('angular-carousel')
 
         restartTimer();
         if (attrs.rnCarouselPauseOnHover && attrs.rnCarouselPauseOnHover != 'false'){
-            element.on('mouseenter', stopAutoplay);
+            element.on('mouseenter', stopAutoPlay);
             element.on('mouseleave', restartTimer);
         }
 
         scope.$on('$destroy', function(){
-            stopAutoplay();
-            element.off('mouseenter', stopAutoplay);
+            stopAutoPlay();
+            element.off('mouseenter', stopAutoPlay);
             element.off('mouseleave', restartTimer);
         });
 
