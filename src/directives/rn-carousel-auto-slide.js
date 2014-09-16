@@ -5,7 +5,11 @@ angular.module('angular-carousel')
     restrict: 'A',
     link: function (scope, element, attrs) {
         var delay = Math.round(parseFloat(attrs.rnCarouselAutoSlide) * 1000),
-            timer = increment = false, slidesCount = element.children().length;
+            timer = increment = false, slidesCount = 0;
+
+        $timeout(function(){
+            slidesCount = element.children().length
+        });
 
         if(!scope.carouselExposedIndex){
             scope.carouselExposedIndex = 0;
