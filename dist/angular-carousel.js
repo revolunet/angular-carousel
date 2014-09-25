@@ -147,6 +147,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                 var firstChildAttributes = tElement.children()[0].attributes,
                     isRepeatBased = false,
                     isBuffered = false,
+                    inBlendMode = false,
                     slidesCount = 0,
                     isIndexBound = false,
                     repeatItem,
@@ -202,7 +203,10 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         timestamp;
 
                     // add a wrapper div that will hide the overflow
-                    var carousel = iElement.wrap("<div id='carousel-" + carouselId +"' class='rn-carousel-container'></div>"),
+                    if (angular.isDefined(iAttributes.rnCarouselBlend)) {
+                        inBlendMode = true;
+                    }
+                    var carousel = iElement.wrap("<div id='carousel-" + carouselId +"' class='rn-carousel-container "+(inBlendMode ? "rn-carousel-container-blend" : "")+"'></div>"),
                         container = carousel.parent();
 
                     // if indicator or controls, setup the watch
@@ -221,7 +225,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                     if (angular.isDefined(iAttributes.rnCarouselPreventAnimation)) {
                         animOnIndexChange = false;
                     }
-
+                    
+                    
                     scope.$watch('carouselExposedIndex', function(newValue) {
                         goToSlide(newValue, true);
                     });
@@ -317,7 +322,13 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         var width = getCarouselWidth();
                         if (width) {
                             container.css('width', width + 'px');
+
+
+                            
                         }
+
+
+
                     }
 
                     function scroll(x) {
@@ -333,7 +344,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         if(!is3dAvailable) {
                             carousel[0].style[transformProperty] = 'translate(' + move + 'px, 0)';
                         } else {
-                            carousel[0].style[transformProperty] = 'translate3d(' + move + 'px, 0, 0)';
+                            if(!inBlendMode){
+                                carousel[0].style[transformProperty] = 'translate3d(' + move + 'px, 0, 0)';
+                            }else{
+                                var index_ani = Math.round((x/containerWidth));
+                                carousel[0].setAttribute("data-index", index_ani)
+                            }
                         }
                     }
 
