@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.2.4 - 2014-07-25
+ * @version v0.2.5 - 2014-10-10
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -505,7 +505,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                     iAttributes.$observe('rnCarouselSwipe', function(newValue, oldValue) {
                         // only bind swipe when it's not switched off
                         if(newValue !== 'false' && newValue !== 'off') {
-                            $swipe.bind(carousel, {
+                            $swipe.bind(container, {
                                 start: swipeStart,
                                 move: swipeMove,
                                 end: swipeEnd,

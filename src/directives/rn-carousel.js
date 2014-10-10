@@ -381,7 +381,7 @@
                     iAttributes.$observe('rnCarouselSwipe', function(newValue, oldValue) {
                         // only bind swipe when it's not switched off
                         if(newValue !== 'false' && newValue !== 'off') {
-                            $swipe.bind(carousel, {
+                            $swipe.bind(container, {
                                 start: swipeStart,
                                 move: swipeMove,
                                 end: swipeEnd,
