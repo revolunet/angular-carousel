@@ -31,15 +31,8 @@ ul[rn-carousel] {
     list-style-type: none;
     width: 100%;
     height: 100%;
-    display: inline-block;
-    background: purple; }
-    ul[rn-carousel] li:nth-child(1) {
-      background: #ff6666; }
-    ul[rn-carousel] li:nth-child(2) {
-      background: #ffff66; }
-    ul[rn-carousel] li:nth-child(3) {
-      background: #00e600; }
-    ul[rn-carousel] li:nth-child(4) {
-      background: #6666ff; }
-    ul[rn-carousel] li:nth-child(5) {
-      background: #ffdae0; }
+    display: inline-block; }
+
+ul[rn-carousel].big {
+  width: 500px;
+  height: 100px; }

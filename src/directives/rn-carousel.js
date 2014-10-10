@@ -1,6 +1,19 @@
 
 
+/*
 
+TODO :
+
+ - buffering
+ - non repeat-based
+ - iOS8
+ - loop
+ - custom indicators
+ - custom control
+
+
+
+*/
 
 (function() {
     "use strict";
@@ -72,7 +85,7 @@
         } else if (transitionType == 'hexagon') {
           var transformFrom = 100,
               degrees = 0,
-              maxDegrees = 70 * (distance - 1);
+              maxDegrees = 60 * (distance - 1);
         
           transformFrom = offset < (slideIndex * -100)?100:0;
           degrees = offset < (slideIndex * -100)?maxDegrees:-maxDegrees;
@@ -80,7 +93,7 @@
           return {
             'transform': 'rotateY(' + degrees + 'deg)',
             'left': absoluteLeft + '%',
-            '-webkit-transform-origin': transformFrom + '% 50%'
+            'transform-origin': transformFrom + '% 50%'
           };
         }
       };
@@ -90,7 +103,7 @@
     .service('getCarouselSlidesStyles', function(computeCarouselSlideStyle) {
       // compute given slides styles and add a 'style' key to the slides objects
       return function(slides, offset, transitionType) {
-        var styles = []
+        var styles = [];
         angular.forEach(slides, function(slide, slideIndex) {
           styles.push(computeCarouselSlideStyle(slideIndex, offset, transitionType));
         });
@@ -208,13 +221,17 @@
                     var transformProperty,
                         pressed,
                         startX,
+                        isIndexBound = false,
                         offset = 0,
                         destination,
                         swipeMoved = false,
-                        animOnIndexChange = true,
-                        currentSlides,
+                        //animOnIndexChange = true,
+                        currentSlides = [],
                         elWidth = null,
-                        elX = null;
+                        elX = null,
+                        animateTransitions = true,
+                        intialState = true,
+                        animating;
 
                     iElement.addClass('rn-carousel');
 
@@ -236,18 +253,30 @@
                         }, event);
                     }
 
-
                     function updateSlidesPosition(offset) {
                         // apply transformation to carousel childrens
-                        var style;
+                        //console.log('updateSlidesPosition', offset);
+                        var style, x;
                         angular.forEach(iElement.children(), function(child, index) {
-                            style = createStyleString(computeCarouselSlideStyle(index, offset, 'slide'));
+                            x = scope.carouselBufferIndex * 100 + offset;
+                            style = createStyleString(computeCarouselSlideStyle(index, x, 'hexagon'));
                             child.setAttribute('style', style);
                         });
                     }
 
-                     function goToSlide(index) {
-                        // animate slides transition using Tweenable
+                     function goToSlide(index, options) {
+                        // move a to the given slide index
+                        options = options || {};
+                        if (options.animate===false) {
+                            animating = false;
+                            offset = index * -100;
+                            //updateSlidesPosition(offset);
+                            scope.carouselIndex = index;
+                            updateSlidesPosition(offset);
+                            return;
+                        }
+
+                        animating = true;
                         var tweenable = new Tweenable();
                         tweenable.tween({
                           from:     {
@@ -259,12 +288,12 @@
                           duration: 300,
                           easing: 'easeTo',
                           step : function (state) {
-                            scope.$apply(function() {
-                              updateSlidesPosition(state.x);
-                            });
+                            updateSlidesPosition(state.x);
                           },
                           finish: function() {
                             scope.$apply(function() {
+                                updateBufferIndex();
+                                animating = false;
                                 scope.carouselIndex = index;
                                 offset = index * -100;
                             });
@@ -286,10 +315,9 @@
                         return false;
                     }
 
-                    var delta=0;
                     function swipeMove(coords, event) {
                         //console.log('swipeMove', coords, event);
-                        var x;
+                        var x, delta;
                         if (pressed) {
                             x = coords.x;
                             delta = startX - x;
@@ -302,12 +330,54 @@
                         return false;
                     }
 
-                    scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
-                        updateSlidesPosition(0);
-                        currentSlides = newValue;
-                    });
-
+                    var init = true;
                     scope.carouselIndex = 0;
+
+                    if (iAttributes.rnCarouselIndex) {
+                        var updateParentIndex = function(value) {
+                            indexModel.assign(scope.$parent, value);
+                        };
+                        var indexModel = $parse(iAttributes.rnCarouselIndex);
+                        if (angular.isFunction(indexModel.assign)) {
+                            /* check if this property is assignable then watch it */
+                            scope.$watch('carouselIndex', function(newValue) {
+                                if (!animating) {
+                                    updateParentIndex(newValue);
+                                }
+                                
+                            });
+                            //scope.carouselIndex = indexModel(scope.$parent);
+                            //goToSlide(scope.carouselIndex);
+                            scope.$parent.$watch(indexModel, function(newValue, oldValue) {
+                                if (newValue!==undefined && newValue!==null) {
+                                    // if (newValue >= currentSlides.length) {
+                                    //     newValue = currentSlides.length - 1;
+                                    //     updateParentIndex(newValue);
+                                    // } else if (newValue < 0) {
+                                    //     newValue = 0;
+                                    //     updateParentIndex(newValue);
+                                    // }
+                                    if (!animating) {
+                                        goToSlide(newValue, {
+                                            animate: !init
+                                        });
+                                    }
+                                    init = true;
+                                }
+                            });
+                            isIndexBound = true;
+                        } else if (!isNaN(iAttributes.rnCarouselIndex)) {
+                          /* if user just set an initial number, set it */
+                          goToSlide(parseInt(iAttributes.rnCarouselIndex, 10), {animate: false});
+                        }
+                    }
+
+                    scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
+                        console.log('repeatCollection', arguments);
+                        currentSlides = newValue;
+                        goToSlide(scope.carouselIndex);
+                        
+                    });
 
                     function swipeEnd(coords, event, forceAnimation) {
                         console.log('swipeEnd', 'scope.carouselIndex', scope.carouselIndex);
@@ -343,7 +413,32 @@
 
                     }
 
+                    scope.$on('$destroy', function() {
+                         $document.unbind('mouseup', documentMouseUpEvent);
+                    });
 
+                    scope.carouselBufferIndex = 0;
+                    scope.carouselBufferSize = 5;
+
+                    function updateBufferIndex() {
+                        // update and cap te buffer index
+                        var bufferIndex = 0;
+                        var bufferEdgeSize = (scope.carouselBufferSize - 1) / 2;
+                        if (isBuffered) {
+                            if (scope.carouselIndex <= bufferEdgeSize) {
+                                bufferIndex = 0;
+                            } else if (currentSlides.length < scope.carouselBufferSize) {
+                                bufferIndex = 0;
+                            } else if (scope.carouselIndex > currentSlides.length - scope.carouselBufferSize) {
+                                bufferIndex = currentSlides.length - scope.carouselBufferSize;
+                            } else {
+                                bufferIndex = scope.carouselIndex - bufferEdgeSize;
+                            }
+                        }
+                        var diff = scope.carouselBufferIndex - bufferIndex;
+                        //offset = diff * 100;
+                        scope.carouselBufferIndex = bufferIndex;
+                    }
                 };
             }
         };
@@ -390,36 +485,6 @@
 //                     scope.carouselBufferSize = 5;
 //                     scope.carouselIndex = 0;
 
-//                     // handle index databinding
-//                     if (iAttributes.rnCarouselIndex) {
-//                         var updateParentIndex = function(value) {
-//                             indexModel.assign(scope.$parent, value);
-//                         };
-//                         var indexModel = $parse(iAttributes.rnCarouselIndex);
-//                         if (angular.isFunction(indexModel.assign)) {
-//                             /* check if this property is assignable then watch it */
-//                             scope.$watch('carouselIndex', function(newValue) {
-//                                 updateParentIndex(newValue);
-//                             });
-//                             scope.carouselIndex = indexModel(scope);
-//                             scope.$parent.$watch(indexModel, function(newValue, oldValue) {
-//                                 if (newValue!==undefined) {
-//                                     if (newValue >= slidesCount) {
-//                                         newValue = slidesCount - 1;
-//                                         updateParentIndex(newValue);
-//                                     } else if (newValue < 0) {
-//                                         newValue = 0;
-//                                         updateParentIndex(newValue);
-//                                     }
-//                                     goToSlide(newValue, animOnIndexChange);
-//                                 }
-//                             });
-//                             isIndexBound = true;
-//                         } else if (!isNaN(iAttributes.rnCarouselIndex)) {
-//                           /* if user just set an initial number, set it */
-//                           scope.carouselIndex = parseInt(iAttributes.rnCarouselIndex, 10);
-//                         }
-//                     }
 
 //                     // watch the given collection
 //                     if (isRepeatBased) {
@@ -447,62 +512,6 @@
 //                         scope.carouselIndicatorArray = items;
 //                     }
 
-//                     function getCarouselWidth() {
-//                        // container.css('width', 'auto');
-//                         var slides = carousel.children();
-//                         if (slides.length === 0) {
-//                             containerWidth = carousel[0].getBoundingClientRect().width;
-//                         } else {
-//                             containerWidth = slides[0].getBoundingClientRect().width;
-//                         }
-//                         // console.log('getCarouselWidth', containerWidth);
-//                         return containerWidth;
-//                     }
-
-//                     function updateContainerWidth() {
-//                         // force the carousel container width to match the first slide width
-//                         container.css('width', '100%');
-//                         var width = getCarouselWidth();
-//                         if (width) {
-//                             container.css('width', width + 'px');
-//                         }
-//                     }
-
-//                     function scroll(x) {
-//                         // use CSS 3D transform to move the carousel
-//                         if (isNaN(x)) {
-//                             x = scope.carouselIndex * containerWidth;
-//                         }
-
-//                         offset = x;
-//                         var move = -Math.round(offset);
-//                         move += (scope.carouselBufferIndex * containerWidth);
-
-//                         if(!is3dAvailable) {
-//                             carousel[0].style[transformProperty] = 'translate(' + move + 'px, 0)';
-//                         } else {
-//                             carousel[0].style[transformProperty] = 'translate3d(' + move + 'px, 0, 0)';
-//                         }
-//                     }
-
-//                     function autoScroll() {
-//                         // scroll smoothly to "destination" until we reach it
-//                         // using requestAnimationFrame
-//                         var elapsed, delta;
-
-//                         if (amplitude) {
-//                             elapsed = Date.now() - timestamp;
-//                             delta = amplitude * Math.exp(-elapsed / timeConstant);
-//                             if (delta > rubberTreshold || delta < -rubberTreshold) {
-//                                 scroll(destination - delta);
-//                                 /* We are using raf.js, a requestAnimationFrame polyfill, so
-//                                 this will work on IE9 */
-//                                 requestAnimationFrame(autoScroll);
-//                             } else {
-//                                 goToSlide(destination / containerWidth);
-//                             }
-//                         }
-//                     }
 
 //                     function capIndex(idx) {
 //                         // ensure given index it inside bounds
@@ -551,104 +560,7 @@
 //                         }
 //                         scroll();
 //                     }
-
-//                     function getAbsMoveTreshold() {
-//                         // return min pixels required to move a slide
-//                         return moveTreshold * containerWidth;
-//                     }
-
-//                     function documentMouseUpEvent(event) {
-//                         // in case we click outside the carousel, trigger a fake swipeEnd
-//                         swipeMoved = true;
-//                         swipeEnd({
-//                             x: event.clientX,
-//                             y: event.clientY
-//                         }, event);
-//                     }
-
-//                     function capPosition(x) {
-//                         // limit position if start or end of slides
-//                         var position = x;
-//                         if (scope.carouselIndex===0) {
-//                             position = Math.max(-getAbsMoveTreshold(), position);
-//                         } else if (scope.carouselIndex===slidesCount-1) {
-//                             position = Math.min(((slidesCount-1)*containerWidth + getAbsMoveTreshold()), position);
-//                         }
-//                         return position;
-//                     }
-
-//                     function swipeStart(coords, event) {
-//                         //console.log('swipeStart', coords, event);
-//                         $document.bind('mouseup', documentMouseUpEvent);
-//                         pressed = true;
-//                         startX = coords.x;
-
-//                         amplitude = 0;
-//                         timestamp = Date.now();
-
-//                         return false;
-//                     }
-
-//                     function swipeMove(coords, event) {
-//                         //console.log('swipeMove', coords, event);
-//                         var x, delta;
-//                         if (pressed) {
-//                             x = coords.x;
-//                             delta = startX - x;
-//                             if (delta > 2 || delta < -2) {
-//                                 swipeMoved = true;
-//                                 startX = x;
-
-//                                 /* We are using raf.js, a requestAnimationFrame polyfill, so
-//                                 this will work on IE9 */
-//                                 requestAnimationFrame(function() {
-//                                     scroll(capPosition(offset + delta));
-//                                 });
-//                             }
-//                         }
-//                         return false;
-//                     }
-
-//                     function swipeEnd(coords, event, forceAnimation) {
-//                         //console.log('swipeEnd', 'scope.carouselIndex', scope.carouselIndex);
-
-//                         // Prevent clicks on buttons inside slider to trigger "swipeEnd" event on touchend/mouseup
-//                         if(event && !swipeMoved) {
-//                             return;
-//                         }
-
-//                         $document.unbind('mouseup', documentMouseUpEvent);
-//                         pressed = false;
-//                         swipeMoved = false;
-
-//                         destination = offset;
-
-//                         var minMove = getAbsMoveTreshold(),
-//                             currentOffset = (scope.carouselIndex * containerWidth),
-//                             absMove = currentOffset - destination,
-//                             slidesMove = -Math[absMove>=0?'ceil':'floor'](absMove / containerWidth),
-//                             shouldMove = Math.abs(absMove) > minMove;
-
-//                         if ((slidesMove + scope.carouselIndex) >= slidesCount ) {
-//                             slidesMove = slidesCount - 1 - scope.carouselIndex;
-//                         }
-//                         if ((slidesMove + scope.carouselIndex) < 0) {
-//                             slidesMove = -scope.carouselIndex;
-//                         }
-//                         var moveOffset = shouldMove?slidesMove:0;
-
-//                         destination = (moveOffset + scope.carouselIndex) * containerWidth;
-//                         amplitude = destination - offset;
-//                         timestamp = Date.now();
-//                         if (forceAnimation) {
-//                             amplitude = offset - currentOffset;
-//                         }
-//                         /* We are using raf.js, a requestAnimationFrame polyfill, so
-//                         this will work on IE9 */
-//                         requestAnimationFrame(autoScroll);
-
-//                         return false;
-//                     }
+ 
 
 //                     iAttributes.$observe('rnCarouselSwipe', function(newValue, oldValue) {
 //                         // only bind swipe when it's not switched off
@@ -673,39 +585,6 @@
 //                         goToSlide(scope.carouselIndex);
 //                     }
 
-//                     // detect supported CSS property
-//                     transformProperty = 'transform';
-//                     ['webkit', 'Moz', 'O', 'ms'].every(function (prefix) {
-//                         var e = prefix + 'Transform';
-//                         if (typeof document.body.style[e] !== 'undefined') {
-//                             transformProperty = e;
-//                             return false;
-//                         }
-//                         return true;
-//                     });
-
-//                     //Detect support of translate3d
-//                     function detect3dSupport(){
-//                         var el = document.createElement('p'),
-//                         has3d,
-//                         transforms = {
-//                             'webkitTransform':'-webkit-transform',
-//                             'msTransform':'-ms-transform',
-//                             'transform':'transform'
-//                         };
-//                         // Add it to the body to get the computed style
-//                         document.body.insertBefore(el, null);
-//                         for(var t in transforms){
-//                             if( el.style[t] !== undefined ){
-//                                 el.style[t] = 'translate3d(1px,1px,1px)';
-//                                 has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
-//                             }
-//                         }
-//                         document.body.removeChild(el);
-//                         return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
-//                     }
-
-//                     var is3dAvailable = detect3dSupport();
 
 //                     function onOrientationChange() {
 //                         updateContainerWidth();

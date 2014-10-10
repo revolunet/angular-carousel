@@ -11,15 +11,52 @@
     <body ng-controller="DemoCtrl2">
         <a href="https://github.com/revolunet/angular-carousel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 
-<div style="margin-left:230px">
+        <div style="margin-left:230px">
+            <input type=number ng-model="carouselIndex">
+            <ul rn-carousel rn-carousel-index="carouselIndex">
+                <li ng-repeat="slide in slides" >
+                    <div ng-style="{'background-color': slide.color, 'height': '100%'}">
+                      id: {{ slide.id }}<br>
+                      {{ slide.color }}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <br>
+        <div style="margin-left:100px">
+            <ul rn-carousel class="big">
+                <li ng-repeat="slide in slides">
+                    <div ng-style="{'background-color': slide.color, 'height': '100%'}">
+                      id: {{ slide.id }}<br>
+                      {{ slide.color }}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <br>
+        <div style="margin-left:100px">
+            <ul rn-carousel class="big" rn-carousel-buffered>
+                <li ng-repeat="slide in slides2">
+                    <div ng-style="{'background-color': slide.color, 'height': '100%'}">
+                      id: {{ slide.id }} / {{ slides2.length }}<br>
+                      {{ slide.color }}
+                    </div>
+                </li>
+            </ul>
+        </div>
 
-        <ul rn-carousel>
-            <li ng-repeat="slide in slides" ng-style="slide.style">
-              id: {{ slide.id }}<br>
-              {{ slide.style }}
-            </li>
-        </ul>
-</div>
+        <br>
+        <div style="margin-left:100px">
+            <input type=number ng-model="carouselIndex2">
+            <ul rn-carousel class="big" rn-carousel-buffered rn-carousel-index="carouselIndex2">
+                <li ng-repeat="slide in slides2">
+                    <div ng-style="{'background-color': slide.color, 'height': '100%'}">
+                        id: {{ slide.id }} / {{ slides2.length }}<br>
+                        {{ slide.color }}
+                    </div>
+                </li>
+            </ul>
+        </div>
 <!--
 
         <h1>AngularJS Touch Carousel</h1>
@@ -255,26 +292,33 @@
 
 
         .controller('DemoCtrl2', function($scope) {
-          $scope.slideIndex = 1;
-          $scope.cursorPosition = 0;
-          $scope.slides = [
-            {
-              id: 1
-            },{
-              id: 2
-            },{
-              id: 3
-            },{
-              id: 4
-            },{
-              id: 5
-            }
-          ];
 
-        //   function updateSlides(slideIndex, cursorPosition) {
+        $scope.colors = ["#fc0003", "#e3001c", "#c90036", "#b0004f", "#960069", "#7d0082", "#63009c", "#4a00b5", "#3000cf", "#0300fc"];
+
+
+          $scope.carouselIndex = 1;
+          $scope.carouselIndex2 = 5;
+          //$scope.cursorPosition = 0;
+          $scope.slides = [];
+          for (var i=0;i<10;i++) {
+            $scope.slides.push({
+                id: (i+1),
+                color: $scope.colors[i]
+            });
+          }
+
+          $scope.slides2 = [];
+          for (var i=0;i<500;i++) {
+            $scope.slides2.push({
+                id: (i+1),
+                color: $scope.colors[i % $scope.colors.length]
+            });
+          }
+
+        //   function updateSlides(carouselIndex, cursorPosition) {
         // //     setCarouselSlidesStyles(
         // //        $scope.slides,
-        // //        (slideIndex * -100) + cursorPosition || 0,
+        // //        (carouselIndex * -100) + cursorPosition || 0,
         // //        'slide'
         // // //      'fadeAndSlide'
         // //      );       
@@ -288,7 +332,7 @@
 
           //   tweenable.tween({
           //     from:     {
-          //       'x': $scope.slideIndex,
+          //       'x': $scope.carouselIndex,
           //       'pos': $scope.cursorPosition
           //     },
           //     to: {
@@ -305,7 +349,7 @@
           //     },
           //     finish: function() {
           //       $scope.$apply(function() {
-          //         $scope.slideIndex = index;
+          //         $scope.carouselIndex = index;
           //         //$scope.cursorPosition = 0;
           //       });
           //     }
@@ -314,11 +358,11 @@
           // }
           
           // $scope.$watch('cursorPosition', function(newValue, oldValue) {
-          //   updateSlides($scope.slideIndex, parseFloat(newValue || 0));
+          //   updateSlides($scope.carouselIndex, parseFloat(newValue || 0));
           // });
           
           $scope.prev = function() {
-            var destSlide = $scope.slideIndex - 1;
+            var destSlide = $scope.carouselIndex - 1;
             if (destSlide < 0) {
                destSlide = $scope.slides.length - 1;
             }
@@ -326,7 +370,7 @@
           };
           
           $scope.next = function() {
-            var destSlide = $scope.slideIndex + 1;
+            var destSlide = $scope.carouselIndex + 1;
             if (destSlide > $scope.slides.length - 1) {
                destSlide = 0;
             }

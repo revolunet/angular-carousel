@@ -8,7 +8,7 @@ input[type=range] {
 }
 
 ul[rn-carousel] {
- // overflow:hidden;  //TMP
+  //overflow:hidden;  //TMP
   width:300px;
   height:200px;
   background:white;
@@ -32,21 +32,11 @@ ul[rn-carousel] {
     width:100%;
     height:100%;
     display:inline-block;
-    background: purple;
-    &:nth-child(1) {
-      background:lighten(red, 20%);
-    }
-    &:nth-child(2) {
-      background:lighten(yellow, 20%);
-    }
-    &:nth-child(3) {
-      background:lighten(green, 20%);
-    }
-    &:nth-child(4) {
-      background:lighten(blue, 20%);
-    }
-    &:nth-child(5) {
-      background:lighten(pink, 5%);
-    }
   }
+}
+
+
+ul[rn-carousel].big {
+  width:500px;
+  height:100px;
 }
