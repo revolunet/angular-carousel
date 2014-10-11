@@ -13,7 +13,7 @@
 
         <div style="margin-left:230px">
             <input type=number ng-model="carouselIndex">
-            <ul rn-carousel rn-carousel-index="carouselIndex" rn-carousel-buffered>
+            <ul rn-carousel rn-carousel-index="carouselIndex" rn-carousel-buffered class="carousel1">
                 <li ng-repeat="slide in slides" >
                     <div ng-style="{'background-color': slide.color, 'height': '100%'}">
                       id: {{ slide.id }}<br>
@@ -21,10 +21,15 @@
                     </div>
                 </li>
             </ul>
+            <div>
+                <button ng-click="carouselIndex=carouselIndex-1">prev</button>
+                {{ carouselIndex }} / {{ slides.length }}
+                <button ng-click="carouselIndex=carouselIndex+1">next</button>
+            </div>
         </div>
         <br>
         <div style="margin-left:100px">
-            <ul rn-carousel class="big">
+            <ul rn-carousel rn-carousel-transition="hexagon" class="carousel2">
                 <li ng-repeat="slide in slides">
                     <div ng-style="{'background-color': slide.color, 'height': '100%'}">
                       id: {{ slide.id }}<br>
@@ -35,7 +40,7 @@
         </div>
         <br>
         <div style="margin-left:100px">
-            <ul rn-carousel class="big">
+            <ul rn-carousel rn-carousel-transition="parallax" class="carousel3">
                 <li ng-repeat="slide in slides2">
                     <div ng-style="{'background-color': slide.color, 'height': '100%'}">
                       id: {{ slide.id }} / {{ slides2.length }}<br>
@@ -48,7 +53,7 @@
         <br>
         <div style="margin-left:100px">
             <input type=number ng-model="carouselIndex2">
-            <ul rn-carousel class="big" rn-carousel-index="carouselIndex2">
+            <ul rn-carousel rn-carousel-index="carouselIndex2" class="carousel4">
                 <li ng-repeat="slide in slides2">
                     <div ng-style="{'background-color': slide.color, 'height': '100%'}">
                         id: {{ slide.id }} / {{ slides2.length }}<br>
@@ -308,7 +313,7 @@
           }
 
           $scope.slides2 = [];
-          for (var i=0;i<500;i++) {
+          for (var i=0;i<50;i++) {
             $scope.slides2.push({
                 id: (i+1),
                 color: $scope.colors[i % $scope.colors.length]

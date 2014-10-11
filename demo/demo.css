@@ -22,6 +22,43 @@ h3 {
   font-size:30px;
   margin: 30px 0 10px 0;
 }
+
+ul[rn-carousel].tall {
+  width:300px;
+  height:400px;
+}
+
+ul[rn-carousel].long {
+  width:500px;
+  height:100px;
+}
+
+
+.carousel1 {
+    width:400px;
+    height:200px;
+}
+
+
+.carousel2 {
+    width:200px;
+    height:200px;
+}
+
+.carousel3 {
+    width:200px;
+    height:200px;
+}
+
+
+.carousel3 {
+    width:100px;
+    height:100px;
+}
+
+
+/*
+
 .my-slider {
     width: 450px;
     height: 300px;
@@ -103,7 +140,7 @@ h3 {
 }
 .button.grey{
     background: #bdbdbd;
-    background: -webkit-gradient(linear, left top, left bottom, from(#cacaca), to(#aeaeae)); /*  WebKit */
+    background: -webkit-gradient(linear, left top, left bottom, from(#cacaca), to(#aeaeae));
     background: -moz-linear-gradient(top,  #cacaca, #aeaeae);
     border-color: #b5b5b5 #a1a1a1 #8f8f8f;
     color: #555;
@@ -111,13 +148,13 @@ h3 {
 }
 .button.grey:hover{
     background: #c2c2c2;
-    background: -webkit-gradient(linear, left top, left bottom, from(#bcbcbc), to(#c2c2c2)); /*  WebKit */
+    background: -webkit-gradient(linear, left top, left bottom, from(#bcbcbc), to(#c2c2c2)); 
     background: -moz-linear-gradient(top,  #bcbcbc, #c2c2c2);
     border-color: #989898 #8e8e8e #878787;
     text-shadow: 0 1px 0 #dadada;
 }
 
-/* override default controls */
+
 .rn-carousel-control {
     font-size:50px !important;
     color:white;
@@ -129,3 +166,4 @@ h3 {
 .rn-carousel-control.rn-carousel-control-next {
     right: 5px;
 }
+*/

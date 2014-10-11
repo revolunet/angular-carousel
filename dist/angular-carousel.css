@@ -5,9 +5,7 @@ input[type=range] {
   width: 300px; }
 
 ul[rn-carousel] {
-  width: 300px;
-  height: 200px;
-  background: white;
+  overflow: hidden;
   padding: 0;
   margin: 0;
   white-space: nowrap;
@@ -33,6 +31,5 @@ ul[rn-carousel] {
     height: 100%;
     display: inline-block; }
 
-ul[rn-carousel].big {
-  width: 500px;
-  height: 100px; }
+ul[rn-carousel-transition="hexagon"] {
+  overflow: visible; }

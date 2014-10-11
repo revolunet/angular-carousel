@@ -66,11 +66,12 @@ TODO :
 
     .service('computeCarouselSlideStyle', function(DeviceCapabilities) {
       return function(slideIndex, offset, transitionType) {
-        var absoluteLeft = (slideIndex * 100) + (offset);
-        var distance = ((100 - Math.abs(absoluteLeft)) / 100);
+        var style,
+            absoluteLeft = (slideIndex * 100) + (offset),
+            distance = ((100 - Math.abs(absoluteLeft)) / 100);
 
         if (transitionType == 'slide') {
-          return {
+          style = {
             'left': absoluteLeft + '%'
           };
         } else if (transitionType == 'fadeAndSlide') {
@@ -78,7 +79,7 @@ TODO :
           if (Math.abs(absoluteLeft) < 100) {
               opacity = distance;
           }
-          return {
+          style = {
             'left': absoluteLeft + '%',
             'opacity': opacity
           };
@@ -89,14 +90,14 @@ TODO :
         
           transformFrom = offset < (slideIndex * -100)?100:0;
           degrees = offset < (slideIndex * -100)?maxDegrees:-maxDegrees;
-
-          var style = {
+          style = {
             'left': absoluteLeft + '%',
             'transform-origin': transformFrom + '% 50%'
           };
           style[DeviceCapabilities.transformProperty] = 'rotateY(' + degrees + 'deg)';
           return style;
         }
+        return style;
       };
     })
 
@@ -216,7 +217,7 @@ TODO :
                     carouselId++;
 
                     var defaultOptions = {
-                        transitionType: 'slide',
+                        transitionType: iAttributes.rnCarouselTransition || 'slide',
                         transitionEasing: 'easeTo',
                         transitionDuration: 300,
                         isSequential: true,
@@ -233,7 +234,7 @@ TODO :
                         destination,
                         swipeMoved = false,
                         //animOnIndexChange = true,
-                        currentSlides = [],
+                        currentSlides,
                         elWidth = null,
                         elX = null,
                         animateTransitions = true,
@@ -263,8 +264,8 @@ TODO :
                     }
 
                     function updateSlidesPosition(offset) {
-                        // apply transformation to carousel childrens
-                        //console.log('updateSlidesPosition', offset);
+                        // manually apply transformation to carousel childrens
+                        // todo : optim : apply only to visible items
                         var style, x;
                         angular.forEach(iElement[0].querySelectorAll('li'), function(child, index) {
                             x = scope.carouselBufferIndex * 100 + offset;
@@ -358,20 +359,22 @@ TODO :
                             //scope.carouselIndex = indexModel(scope.$parent);
                             //goToSlide(scope.carouselIndex);
                             scope.$parent.$watch(indexModel, function(newValue, oldValue) {
+
                                 if (newValue!==undefined && newValue!==null) {
-                                    // if (newValue >= currentSlides.length) {
-                                    //     newValue = currentSlides.length - 1;
-                                    //     updateParentIndex(newValue);
-                                    // } else if (newValue < 0) {
-                                    //     newValue = 0;
-                                    //     updateParentIndex(newValue);
-                                    // }
+                                    console.log('watch2', animating, init);
+                                    if (currentSlides && newValue >= currentSlides.length) {
+                                        newValue = currentSlides.length - 1;
+                                        updateParentIndex(newValue);
+                                    } else if (currentSlides && newValue < 0) {
+                                        newValue = 0;
+                                        updateParentIndex(newValue);
+                                    }
                                     if (!animating) {
                                         goToSlide(newValue, {
                                             animate: !init
                                         });
                                     }
-                                    init = true;
+                                    init = false;
                                 }
                             });
                             isIndexBound = true;
@@ -408,7 +411,7 @@ TODO :
                                  slidesMove = -Math[absMove>=0?'ceil':'floor'](absMove / elWidth),
                                  shouldMove = Math.abs(absMove) > minMove;
 
-                            if ((slidesMove + scope.carouselIndex) >= currentSlides.length ) {
+                            if (currentSlides && (slidesMove + scope.carouselIndex) >= currentSlides.length ) {
                                 slidesMove = currentSlides.length - 1 - scope.carouselIndex;
                             }
                             if ((slidesMove + scope.carouselIndex) < 0) {
@@ -450,9 +453,9 @@ TODO :
                         if (isBuffered) {
                             if (scope.carouselIndex <= bufferEdgeSize) {
                                 bufferIndex = 0;
-                            } else if (currentSlides.length < scope.carouselBufferSize) {
+                            } else if (currentSlides && currentSlides.length < scope.carouselBufferSize) {
                                 bufferIndex = 0;
-                            } else if (scope.carouselIndex > currentSlides.length - scope.carouselBufferSize) {
+                            } else if (currentSlides && scope.carouselIndex > currentSlides.length - scope.carouselBufferSize) {
                                 bufferIndex = currentSlides.length - scope.carouselBufferSize;
                             } else {
                                 bufferIndex = scope.carouselIndex - bufferEdgeSize;
@@ -503,13 +506,7 @@ TODO :
 //                         var controls = $compile("<div id='carousel-" + carouselId +"-controls' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-controls class='rn-carousel-controls'></div>")(scope);
 //                         container.append(controls);
 //                     }
-
-//                     scope.carouselBufferIndex = 0;
-//                     scope.carouselBufferSize = 5;
-//                     scope.carouselIndex = 0;
-
-
-//                     // watch the given collection
+           // watch the given collection
 //                     if (isRepeatBased) {
 //                         scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
 //                             slidesCount = 0;
@@ -536,54 +533,6 @@ TODO :
 //                     }
 
 
-//                     function capIndex(idx) {
-//                         // ensure given index it inside bounds
-//                         return (idx >= slidesCount) ? slidesCount: (idx <= 0) ? 0 : idx;
-//                     }
-
-//                     function updateBufferIndex() {
-//                         // update and cap te buffer index
-//                         var bufferIndex = 0;
-//                         var bufferEdgeSize = (scope.carouselBufferSize - 1) / 2;
-//                         if (isBuffered) {
-//                             if (scope.carouselIndex <= bufferEdgeSize) {
-//                                 bufferIndex = 0;
-//                             } else if (slidesCount < scope.carouselBufferSize) {
-//                                 bufferIndex = 0;
-//                             } else if (scope.carouselIndex > slidesCount - scope.carouselBufferSize) {
-//                                 bufferIndex = slidesCount - scope.carouselBufferSize;
-//                             } else {
-//                                 bufferIndex = scope.carouselIndex - bufferEdgeSize;
-//                             }
-//                         }
-//                         scope.carouselBufferIndex = bufferIndex;
-//                     }
-
-//                     function goToSlide(i, animate) {
-//                         if (isNaN(i)) {
-//                             i = scope.carouselIndex;
-//                         }
-//                         if (animate) {
-//                             // simulate a swipe so we have the standard animation
-//                             // used when external binding index is updated or touch canceed
-//                             offset = (i * containerWidth);
-//                             swipeEnd(null, null, true);
-//                             return;
-//                         }
-//                         scope.carouselIndex = capIndex(i);
-//                         updateBufferIndex();
-//                         // if outside of angular scope, trigger angular digest cycle
-//                         // use local digest only for perfs if no index bound
-//                         if ($rootScope.$$phase!=='$apply' && $rootScope.$$phase!=='$digest') {
-//                             if (isIndexBound) {
-//                                 scope.$apply();
-//                             } else {
-//                                 scope.$digest();
-//                             }
-//                         }
-//                         scroll();
-//                     }
- 
 
 //                     iAttributes.$observe('rnCarouselSwipe', function(newValue, oldValue) {
 //                         // only bind swipe when it's not switched off
@@ -601,12 +550,6 @@ TODO :
 //                             carousel.unbind();
 //                         }
 //                     });
-
-//                     // initialise first slide only if no binding
-//                     // if so, the binding will trigger the first init
-//                     if (!isIndexBound) {
-//                         goToSlide(scope.carouselIndex);
-//                     }
 
 
 //                     function onOrientationChange() {
