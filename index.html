@@ -11,58 +11,63 @@
     <body ng-controller="DemoCtrl2">
         <a href="https://github.com/revolunet/angular-carousel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 
-        <div style="margin-left:230px">
-            <input type=number ng-model="carouselIndex">
-            <ul rn-carousel rn-carousel-index="carouselIndex" rn-carousel-buffered class="carousel1">
-                <li ng-repeat="slide in slides" >
-                    <div ng-style="{'background-color': slide.color, 'height': '100%'}">
-                      id: {{ slide.id }}<br>
-                      {{ slide.color }}
-                    </div>
-                </li>
-            </ul>
-            <div>
-                <button ng-click="carouselIndex=carouselIndex-1">prev</button>
-                {{ carouselIndex }} / {{ slides.length }}
-                <button ng-click="carouselIndex=carouselIndex+1">next</button>
+        <div class="center">
+            <div >
+                <input type=number ng-model="carouselIndex">
+                <ul rn-carousel rn-carousel-index="carouselIndex" rn-carousel-buffered class="carousel1">
+                    <li ng-repeat="slide in slides" ng-class="'id-' + slide.id">
+                        <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                          id: {{ slide.id }}<br>
+                          {{ slide.color }}
+                        </div>
+                    </li>
+                </ul>
+                <div>
+                    <span ng-repeat="slide in slides" ng-click="$parent.carouselIndex=$index" ng-style="{color: $index==carouselIndex?'white':'#666'}">●</span>
+                </div>
+                <div>
+                    <button ng-click="carouselIndex=carouselIndex-1">prev</button>
+                    {{ (carouselIndex + 1) }} / {{ slides.length }}
+                    <button ng-click="carouselIndex=carouselIndex+1">next</button>
+                </div>
+            </div>
+            <br>
+            <div >
+                <ul rn-carousel rn-carousel-transition="hexagon" class="carousel2">
+                    <li ng-repeat="slide in slides2">
+                        <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                          id: {{ slide.id }}<br>
+                          {{ slide.color }}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <br>
+            <div >
+                <ul rn-carousel rn-carousel-transition="fadeAndSlide" class="carousel3">
+                    <li ng-repeat="slide in slides3">
+                        <div ng-style="{'background-image': 'url(' + slide.img + ')'}" class="bgimage">
+                          id: {{ slide.id }} / {{ slides2.length }}<br>
+                          {{ slide.color }}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <br>
+            <div style="margin-left:100px">
+                <input type=number ng-model="carouselIndex2">
+                <ul rn-carousel rn-carousel-index="carouselIndex2" class="carousel4">
+                    <li ng-repeat="slide in slides2">
+                        <div >
+                            id: {{ slide.id }} / {{ slides2.length }}<br>
+                            {{ slide.color }}
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
-        <br>
-        <div style="margin-left:100px">
-            <ul rn-carousel rn-carousel-transition="hexagon" class="carousel2">
-                <li ng-repeat="slide in slides">
-                    <div ng-style="{'background-color': slide.color, 'height': '100%'}">
-                      id: {{ slide.id }}<br>
-                      {{ slide.color }}
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <br>
-        <div style="margin-left:100px">
-            <ul rn-carousel rn-carousel-transition="parallax" class="carousel3">
-                <li ng-repeat="slide in slides2">
-                    <div ng-style="{'background-color': slide.color, 'height': '100%'}">
-                      id: {{ slide.id }} / {{ slides2.length }}<br>
-                      {{ slide.color }}
-                    </div>
-                </li>
-            </ul>
-        </div>
-
-        <br>
-        <div style="margin-left:100px">
-            <input type=number ng-model="carouselIndex2">
-            <ul rn-carousel rn-carousel-index="carouselIndex2" class="carousel4">
-                <li ng-repeat="slide in slides2">
-                    <div ng-style="{'background-color': slide.color, 'height': '100%'}">
-                        id: {{ slide.id }} / {{ slides2.length }}<br>
-                        {{ slide.color }}
-                    </div>
-                </li>
-            </ul>
-        </div>
-<!--
+    <!--
 
         <h1>AngularJS Touch Carousel</h1>
         <div class='intro'>
@@ -298,27 +303,41 @@
 
         .controller('DemoCtrl2', function($scope) {
 
-        $scope.colors = ["#fc0003", "#e3001c", "#c90036", "#b0004f", "#960069", "#7d0082", "#63009c", "#4a00b5", "#3000cf", "#0300fc"];
+            $scope.colors = ["#fc0003", "#e3001c", "#c90036", "#b0004f", "#960069", "#7d0082", "#63009c", "#4a00b5", "#3000cf", "#0300fc"];
+
+            function addSlide(target, style) {
+                var i = target.length;
+                target.push({
+                    id: i,
+                    label: 'slide #' + (i + 1),
+                    img: 'http://lorempixel.com/450/300/' + style + '/' + (i % 10) ,
+                    color: $scope.colors[ (i*10) % $scope.colors.length],
+                    odd: (i % 2 === 0)
+                });
+            };
+
+              $scope.carouselIndex = 1;
+              $scope.carouselIndex2 = 5;
 
 
-          $scope.carouselIndex = 1;
-          $scope.carouselIndex2 = 5;
-          //$scope.cursorPosition = 0;
-          $scope.slides = [];
-          for (var i=0;i<10;i++) {
-            $scope.slides.push({
-                id: (i+1),
-                color: $scope.colors[i]
-            });
-          }
+            function addSlides(target, style, qty) {
+                for (var i=0; i < qty; i++) {
+                    addSlide(target, style);
+                }
+            }
 
-          $scope.slides2 = [];
-          for (var i=0;i<50;i++) {
-            $scope.slides2.push({
-                id: (i+1),
-                color: $scope.colors[i % $scope.colors.length]
-            });
-          }
+            // 1st ngRepeat demo
+            $scope.slides = [];
+            addSlides($scope.slides, 'sports', 10);
+
+            // 2nd ngRepeat demo
+            $scope.slides2 = [];
+            addSlides($scope.slides2, 'city', 50);
+
+
+            // 2rd ngRepeat demo
+            $scope.slides3 = [];
+            addSlides($scope.slides3, 'people', 50);
 
         //   function updateSlides(carouselIndex, cursorPosition) {
         // //     setCarouselSlidesStyles(

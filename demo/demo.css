@@ -34,27 +34,31 @@ ul[rn-carousel].long {
 }
 
 
+.center {
+    text-align: center;
+}
+.bgimage {
+    background-size:cover;
+    height: 100%;
+}
 .carousel1 {
     width:400px;
     height:200px;
+    margin: 0 auto;
 }
-
 
 .carousel2 {
     width:200px;
     height:200px;
+    margin: 0 auto;
 }
 
 .carousel3 {
-    width:200px;
-    height:200px;
+    width:400px;
+    height:400px;
+    margin: 0 auto;
 }
 
-
-.carousel3 {
-    width:100px;
-    height:100px;
-}
 
 
 /*
