@@ -13,7 +13,7 @@
 
         <div style="margin-left:230px">
             <input type=number ng-model="carouselIndex">
-            <ul rn-carousel rn-carousel-index="carouselIndex">
+            <ul rn-carousel rn-carousel-index="carouselIndex" rn-carousel-buffered>
                 <li ng-repeat="slide in slides" >
                     <div ng-style="{'background-color': slide.color, 'height': '100%'}">
                       id: {{ slide.id }}<br>
@@ -35,7 +35,7 @@
         </div>
         <br>
         <div style="margin-left:100px">
-            <ul rn-carousel class="big" rn-carousel-buffered>
+            <ul rn-carousel class="big">
                 <li ng-repeat="slide in slides2">
                     <div ng-style="{'background-color': slide.color, 'height': '100%'}">
                       id: {{ slide.id }} / {{ slides2.length }}<br>
@@ -48,7 +48,7 @@
         <br>
         <div style="margin-left:100px">
             <input type=number ng-model="carouselIndex2">
-            <ul rn-carousel class="big" rn-carousel-buffered rn-carousel-index="carouselIndex2">
+            <ul rn-carousel class="big" rn-carousel-index="carouselIndex2">
                 <li ng-repeat="slide in slides2">
                     <div ng-style="{'background-color': slide.color, 'height': '100%'}">
                         id: {{ slide.id }} / {{ slides2.length }}<br>
