@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.2.5 - 2014-10-11
+ * @version v0.2.5 - 2014-10-12
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -128,13 +128,10 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
 TODO :
 
- - buffering
  - non repeat-based
  - iOS8
  - loop
- - custom indicators
- - custom control
-
+ - autoslide
 
 
 */
@@ -224,18 +221,7 @@ TODO :
         return style;
       };
     })
-
-    // .service('getCarouselSlidesStyles', function(computeCarouselSlideStyle) {
-    //   // compute given slides styles and add a 'style' key to the slides objects
-    //   return function(slides, offset, transitionType) {
-    //     var styles = [];
-    //     angular.forEach(slides, function(slide, slideIndex) {
-    //       styles.push(computeCarouselSlideStyle(slideIndex, offset, transitionType));
-    //     });
-    //     return styles;
-    //   };
-    // })
-
+ 
     .service('createStyleString', function() {
         return function(object) {
             var styles = [];
@@ -246,47 +232,9 @@ TODO :
         };
     })
 
+ 
 
-
-
-//                     // detect supported CSS property
-//                     transformProperty = 'transform';
-//                     ['webkit', 'Moz', 'O', 'ms'].every(function (prefix) {
-//                         var e = prefix + 'Transform';
-//                         if (typeof document.body.style[e] !== 'undefined') {
-//                             transformProperty = e;
-//                             return false;
-//                         }
-//                         return true;
-//                     });
-
-//                     //Detect support of translate3d
-//                     function detect3dSupport(){
-//                         var el = document.createElement('p'),
-//                         has3d,
-//                         transforms = {
-//                             'webkitTransform':'-webkit-transform',
-//                             'msTransform':'-ms-transform',
-//                             'transform':'transform'
-//                         };
-//                         // Add it to the body to get the computed style
-//                         document.body.insertBefore(el, null);
-//                         for(var t in transforms){
-//                             if( el.style[t] !== undefined ){
-//                                 el.style[t] = 'translate3d(1px,1px,1px)';
-//                                 has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
-//                             }
-//                         }
-//                         document.body.removeChild(el);
-//                         return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
-//                     }
-
-//                     var is3dAvailable = detect3dSupport();
-
-
-
-
-    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$rootScope', 'computeCarouselSlideStyle', 'createStyleString', function($swipe, $window, $document, $parse, $compile, $rootScope, computeCarouselSlideStyle, createStyleString) {
+    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$timeout', 'computeCarouselSlideStyle', 'createStyleString', function($swipe, $window, $document, $parse, $compile, $timeout, computeCarouselSlideStyle, createStyleString) {
         // internal ids to allow multiple instances
         var carouselId = 0,
             // in container % how much we need to drag to trigger the slide change
@@ -400,6 +348,9 @@ TODO :
 
                  function goToSlide(index, slideOptions) {
                     // move a to the given slide index
+                    if (index===undefined) {
+                        index = scope.carouselIndex;
+                    }
                     slideOptions = slideOptions || {};
                     if (slideOptions.animate===false) {
                         animating = false;
@@ -439,10 +390,14 @@ TODO :
                         return iElement[0].getBoundingClientRect().width;
                     }
 
+                    function updateContainerWidth() {
+                        elWidth = getContainerWidth();
+                    }
+
                     function swipeStart(coords, event) {
                         // console.log('swipeStart', coords, event);
                         $document.bind('mouseup', documentMouseUpEvent);
-                        elWidth = getContainerWidth();
+                        updateContainerWidth();
                         elX = iElement[0].querySelector('li').getBoundingClientRect().left;
                         pressed = true;
                         startX = coords.x;
@@ -480,12 +435,9 @@ TODO :
                                 }
                                 
                             });
-                            //scope.carouselIndex = indexModel(scope.$parent);
-                            //goToSlide(scope.carouselIndex);
                             scope.$parent.$watch(indexModel, function(newValue, oldValue) {
 
                                 if (newValue!==undefined && newValue!==null) {
-                                    console.log('watch2', animating, init);
                                     if (currentSlides && newValue >= currentSlides.length) {
                                         newValue = currentSlides.length - 1;
                                         updateParentIndex(newValue);
@@ -512,7 +464,6 @@ TODO :
                         //console.log('repeatCollection', arguments);
                         currentSlides = newValue;
                         goToSlide(scope.carouselIndex);
-                        
                     });
 
                     function swipeEnd(coords, event, forceAnimation) {
@@ -553,13 +504,6 @@ TODO :
                             });
                             
                         }
-                        // } else {
-                        //     animating = false;
-                        //     offset += (-destination * 100 / elWidth);
-                        //     console.log('offset', offset);
-                        //     scope.carouselIndex = parseInt(offset / 100, 10);
-                        //     console.log('scope.carouselIndex = ', parseInt(-offset / 100, 10));
-                        // }
 
                     }
 
@@ -576,128 +520,47 @@ TODO :
                         var bufferEdgeSize = (scope.carouselBufferSize - 1) / 2;
                         if (isBuffered) {
                             if (scope.carouselIndex <= bufferEdgeSize) {
+                                // first buffer part
                                 bufferIndex = 0;
                             } else if (currentSlides && currentSlides.length < scope.carouselBufferSize) {
+                                // smaller than buffer
                                 bufferIndex = 0;
                             } else if (currentSlides && scope.carouselIndex > currentSlides.length - scope.carouselBufferSize) {
+                                // last buffer part
                                 bufferIndex = currentSlides.length - scope.carouselBufferSize;
                             } else {
+                                console.log('compute buffer');
+                                // compute buffer start
                                 bufferIndex = scope.carouselIndex - bufferEdgeSize;
                             }
-                            var diff = scope.carouselBufferIndex - bufferIndex;
-                            //offset = diff * 100;
                             scope.carouselBufferIndex = bufferIndex;
+                            $timeout(function() {
+                                updateSlidesPosition(offset);
+                            }, 0);
                         }
                     }
+
+                    function onOrientationChange() {
+                        updateContainerWidth();
+                        goToSlide();
+                    }
+
+                    // handle orientation change
+                    var winEl = angular.element($window);
+                    winEl.bind('orientationchange', onOrientationChange);
+                    winEl.bind('resize', onOrientationChange);
+
+                    scope.$on('$destroy', function() {
+                        $document.unbind('mouseup', documentMouseUpEvent);
+                        winEl.unbind('orientationchange', onOrientationChange);
+                        winEl.unbind('resize', onOrientationChange);
+                    });
                 };
             }
         };
     }]);
 })();
 
-
-
-
-//                     // if indicator or controls, setup the watch
-//                     if (angular.isDefined(iAttributes.rnCarouselIndicator) || angular.isDefined(iAttributes.rnCarouselControl)) {
-//                         updateIndicatorArray();
-//                         scope.$watch('carouselIndex', function(newValue) {
-//                             scope.indicatorIndex = newValue;
-//                             scope.carouselExposedIndex = newValue;
-//                         });
-//                         scope.$watch('indicatorIndex', function(newValue) {
-//                             goToSlide(newValue, true);
-//                         });
-
-//                     }
-
-//                     if (angular.isDefined(iAttributes.rnCarouselPreventAnimation)) {
-//                         animOnIndexChange = false;
-//                     }
-
-//                     scope.$watch('carouselExposedIndex', function(newValue) {
-//                         goToSlide(newValue, true);
-//                     });
-
-//                     // enable carousel indicator
-//                     if (angular.isDefined(iAttributes.rnCarouselIndicator)) {
-//                         var indicator = $compile("<div id='carousel-" + carouselId +"-indicator' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-indicators class='rn-carousel-indicator'></div>")(scope);
-//                         container.append(indicator);
-//                     }
-
-//                     // enable carousel controls
-//                     if (angular.isDefined(iAttributes.rnCarouselControl)) {
-//                         var controls = $compile("<div id='carousel-" + carouselId +"-controls' index='indicatorIndex' items='carouselIndicatorArray' rn-carousel-controls class='rn-carousel-controls'></div>")(scope);
-//                         container.append(controls);
-//                     }
-           // watch the given collection
-//                     if (isRepeatBased) {
-//                         scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
-//                             slidesCount = 0;
-//                             if (angular.isArray(newValue)) {
-//                                 slidesCount = newValue.length;
-//                             } else if (angular.isObject(newValue)) {
-//                                 slidesCount = Object.keys(newValue).length;
-//                             }
-//                             updateIndicatorArray();
-//                             if (!containerWidth) updateContainerWidth();
-//                             goToSlide(scope.carouselIndex);
-//                         });
-//                     } else {
-//                         slidesCount = iElement.children().length;
-//                         updateIndicatorArray();
-//                         updateContainerWidth();
-//                     }
-
-//                     function updateIndicatorArray() {
-//                         // generate an array to be used by the indicators
-//                         var items = [];
-//                         for (var i = 0; i < slidesCount; i++) items[i] = i;
-//                         scope.carouselIndicatorArray = items;
-//                     }
-
-
-
-//                     iAttributes.$observe('rnCarouselSwipe', function(newValue, oldValue) {
-//                         // only bind swipe when it's not switched off
-//                         if(newValue !== 'false' && newValue !== 'off') {
-//                             $swipe.bind(carousel, {
-//                                 start: swipeStart,
-//                                 move: swipeMove,
-//                                 end: swipeEnd,
-//                                 cancel: function(event) {
-//                                   swipeEnd({}, event);
-//                                 }
-//                             });
-//                         } else {
-//                             // unbind swipe when it's switched off
-//                             carousel.unbind();
-//                         }
-//                     });
-
-
-//                     function onOrientationChange() {
-//                         updateContainerWidth();
-//                         goToSlide();
-//                     }
-
-//                     // handle orientation change
-//                     var winEl = angular.element($window);
-//                     winEl.bind('orientationchange', onOrientationChange);
-//                     winEl.bind('resize', onOrientationChange);
-
-//                     scope.$on('$destroy', function() {
-//                         $document.unbind('mouseup', documentMouseUpEvent);
-//                         winEl.unbind('orientationchange', onOrientationChange);
-//                         winEl.unbind('resize', onOrientationChange);
-//                     });
-
-//                 };
-//             }
-//         };
-//     }]);
-
-// })();
 
 
 (function() {
