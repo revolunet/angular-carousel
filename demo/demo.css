@@ -27,6 +27,8 @@ h3 {
     text-align: center;
 }
 .bgimage {
+    text-align:right;
+    color:white;
     background-size:cover;
     height: 100%;
 }
@@ -44,4 +46,18 @@ ul[rn-carousel] {
     background-color: #ccc;
 }
 
+div.carousel-demo {
+    margin-top:20px;
+    display:inline-block;
+    text-align: center;
+}
 
+input.tiny {
+    width:50px;
+    text-align:center;
+}
+
+
+ul[rn-carousel-transition="hexagon"] {
+  margin-left:100px;
+}

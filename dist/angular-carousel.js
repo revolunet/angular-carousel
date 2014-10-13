@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.2.5 - 2014-10-13
+ * @version v0.3.0 - 2014-10-13
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -73,22 +73,27 @@ angular.module('angular-carousel')
 }]);
 angular.module('angular-carousel')
 
-.directive('rnCarouselIndicators', [function() {
+.directive('rnCarouselIndicators', ['$parse', function($parse) {
   return {
     restrict: 'A',
-    replace: true,
     scope: {
       slides: '=',
       index: '=rnCarouselIndex'
     },
-    templateUrl: 'carousel-indicators.html'
+    templateUrl: 'carousel-indicators.html',
+    link: function(scope, iElement, iAttributes) {
+      var indexModel = $parse(iAttributes.rnCarouselIndex);
+      scope.goToSlide = function(index) {
+        indexModel.assign(scope.$parent.$parent, index);
+      };
+    }
   };
 }]);
 
 angular.module('angular-carousel').run(['$templateCache', function($templateCache) {
   $templateCache.put('carousel-indicators.html',
       '<div class="carousel-indicator">\n' +
-        '<span ng-class="{active: $index==index}" ng-repeat="slide in slides" ng-click="$parent.index=$index">●</span>' +
+        '<span ng-repeat="slide in slides" ng-class="{active: $index==index}" ng-click="goToSlide($index)">●</span>' +
       '</div>'
   );
 }]);
@@ -278,7 +283,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             elX = null,
                             animateTransitions = true,
                             intialState = true,
-                            animating;
+                            animating = false;
 
                         if(iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
@@ -326,11 +331,16 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         }
 
                         scope.nextSlide = function(slideOptions) {
+                            if (carouselId===1) {
+                                console.log('nextSlide, scope.carouselIndex', scope.carouselIndex);
+                            }
                             var index = scope.carouselIndex + 1;
                             if (index > currentSlides.length - 1) {
                                 index = 0;
                             }
-                            goToSlide(index, slideOptions);
+                            if (!animating) {
+                                goToSlide(index, slideOptions);
+                            }
                         };
 
                         scope.prevSlide = function(slideOptions) {
@@ -342,11 +352,14 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         };
 
                         function goToSlide(index, slideOptions) {
-                            //console.log('goToSlide', arguments);
+                            if (carouselId===1) {
+                                console.log('goToSlide', arguments, animating);
+                            }
                             // move a to the given slide index
                             if (index === undefined) {
                                 index = scope.carouselIndex;
                             }
+
                             slideOptions = slideOptions || {};
                             if (slideOptions.animate === false || options.transitionType === 'none') {
                                 animating = false;
@@ -371,8 +384,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     updateSlidesPosition(state.x);
                                 },
                                 finish: function() {
+                                    animating = false;
                                     scope.$apply(function() {
-                                        animating = false;
                                         scope.carouselIndex = index;
                                         offset = index * -100;
                                         updateBufferIndex();
@@ -443,6 +456,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             if (angular.isFunction(indexModel.assign)) {
                                 /* check if this property is assignable then watch it */
                                 scope.$watch('carouselIndex', function(newValue) {
+                                    console.log('watch carouselIndex', newValue);
                                     if (!animating) {
                                         updateParentIndex(newValue);
                                     }
@@ -501,9 +515,10 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             pressed = false;
                             swipeMoved = false;
                             destination = startX - coords.x;
-
+                            if (destination===0) {
+                                return;
+                            }
                             offset += (-destination * 100 / elWidth);
-
                             if (options.isSequential) {
                                 var minMove = moveTreshold * elWidth,
                                     absMove = -destination,
@@ -1970,8 +1985,6 @@ angular.module('angular-carousel.shifty', [])
     } (Tweenable));
 
   }(this));
-
-  console.log(this);
 
   return this.Tweenable;
 });

@@ -183,7 +183,7 @@
                             elX = null,
                             animateTransitions = true,
                             intialState = true,
-                            animating;
+                            animating = false;
 
                         if(iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
@@ -231,11 +231,16 @@
                         }
 
                         scope.nextSlide = function(slideOptions) {
+                            if (carouselId===1) {
+                                console.log('nextSlide, scope.carouselIndex', scope.carouselIndex);
+                            }
                             var index = scope.carouselIndex + 1;
                             if (index > currentSlides.length - 1) {
                                 index = 0;
                             }
-                            goToSlide(index, slideOptions);
+                            if (!animating) {
+                                goToSlide(index, slideOptions);
+                            }
                         };
 
                         scope.prevSlide = function(slideOptions) {
@@ -247,11 +252,14 @@
                         };
 
                         function goToSlide(index, slideOptions) {
-                            //console.log('goToSlide', arguments);
+                            if (carouselId===1) {
+                                console.log('goToSlide', arguments, animating);
+                            }
                             // move a to the given slide index
                             if (index === undefined) {
                                 index = scope.carouselIndex;
                             }
+
                             slideOptions = slideOptions || {};
                             if (slideOptions.animate === false || options.transitionType === 'none') {
                                 animating = false;
@@ -276,8 +284,8 @@
                                     updateSlidesPosition(state.x);
                                 },
                                 finish: function() {
+                                    animating = false;
                                     scope.$apply(function() {
-                                        animating = false;
                                         scope.carouselIndex = index;
                                         offset = index * -100;
                                         updateBufferIndex();
@@ -348,6 +356,7 @@
                             if (angular.isFunction(indexModel.assign)) {
                                 /* check if this property is assignable then watch it */
                                 scope.$watch('carouselIndex', function(newValue) {
+                                    console.log('watch carouselIndex', newValue);
                                     if (!animating) {
                                         updateParentIndex(newValue);
                                     }
@@ -406,9 +415,10 @@
                             pressed = false;
                             swipeMoved = false;
                             destination = startX - coords.x;
-
+                            if (destination===0) {
+                                return;
+                            }
                             offset += (-destination * 100 / elWidth);
-
                             if (options.isSequential) {
                                 var minMove = moveTreshold * elWidth,
                                     absMove = -destination,

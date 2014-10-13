@@ -11,91 +11,98 @@
     <body ng-controller="DemoCtrl">
         <a href="https://github.com/revolunet/angular-carousel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 
-        <div class="center">
+        <h1>AngularJS Touch Carousel</h1>
+        <div class='intro'>
+            Transform your ng-repeat or DOM nodes in a mobile-friendly carousel just by adding a 'rn-carousel' attribute to your HTML; AngularJS directives FTW :)<br><br>
+            Carousels are data-bound to your ngRepeat collections and can be DOM buffered (good for performance)
+            <br><br>
+            Swipe these demos with your mouse or finger
+        </div>
+
+        <div>
             <div>
-                <input type=number ng-model="carouselIndex">
-                <ul rn-carousel rn-carousel-controls rn-carousel-index="carouselIndex" rn-carousel-transition="none" rn-carousel-buffered class="carousel1">
-                    <li ng-repeat="slide in slides track by slide.id" ng-class="'id-' + slide.id">
-                        <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
-                          id: {{ slide.id }}<br>
-                          {{ slide.img }}
-                        </div>
-                    </li>
-                </ul>
-                <div rn-carousel-indicators ng-if="slides.length > 1" slides="slides" rn-carousel-index="carouselIndex"></div>
-                <div>
-                    <button ng-click="carouselIndex=carouselIndex-1">prev</button>
-                    {{ (carouselIndex + 1) }} / {{ slides.length }}
-                    <button ng-click="carouselIndex=carouselIndex+1">next</button>
+                <h3>Buffered ngRepeat demo</h3>
+                <div class="details">A simple buffered ng-repeat with a custom template.
+                    <br>
+                    Swipe 50 slides with only 5 slides in the DOM. use builtin controls
+                </div>
+                <div class="carousel-demo">
+                    index : <input type="number" class="tiny" ng-model="carouselIndex">
+                    <ul rn-carousel rn-carousel-controls rn-carousel-index="carouselIndex" rn-carousel-buffered class="carousel1">
+                        <li ng-repeat="slide in slides track by slide.id" ng-class="'id-' + slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                                #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            
             <div>
-                <input type=number ng-model="carouselIndex2">
-                <ul rn-carousel rn-carousel-index="carouselIndex2" rn-carousel-auto-slide="3" rn-carousel-buffered class="carousel2">
-                    <li ng-repeat="slide in slides2 track by slide.id" ng-class="'id-' + slide.id">
-                        <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
-                          id: {{ slide.id }}<br>
-                          {{ slide.img }}
-                        </div>
-                    </li>
-                </ul>
-                <div>
-                    <span class="carousel-indicator" ng-repeat="slide in slides2" ng-click="$parent.carouselIndex2=$index" ng-style="{color: $index==carouselIndex2?'white':'#666'}">●</span>
+                <h3>ngRepeat with auto-slide, controls and indicators </h3>
+                <div class="details">
                 </div>
-                <div>
-                    <button ng-click="carouselIndex2=carouselIndex2-1">prev</button>
-                    {{ (carouselIndex2 + 1) }} / {{ slides2.length }}
-                    <button ng-click="carouselIndex2=carouselIndex2+1">next</button>
+                <div class="carousel-demo">
+                    index: <input type="number" class="tiny" ng-model="carouselIndex2">
+                    <ul rn-carousel rn-carousel-index="carouselIndex2" rn-carousel-auto-slide="3" rn-carousel-buffered class="carousel2">
+                        <li ng-repeat="slide in slides2 track by slide.id" ng-class="'id-' + slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                              #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
+                    <div rn-carousel-indicators ng-if="slides2.length > 1" slides="slides2" rn-carousel-index="carouselIndex2"></div>
                 </div>
             </div>
             <br>
             <div >
-                <ul rn-carousel rn-carousel-index="carouselIndex3" rn-carousel-transition="hexagon" rn-carousel-buffered class="carousel3">
-                    <li ng-repeat="slide in slides3 track by slide.id">
-                        <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
-                          id: {{ slide.id }}<br>
-                          {{ slide.img }}
-                        </div>
-                    </li>
-                </ul>
+                <h3>ngRepeat with custom transition</h3>
+                <div class="details">Use the 'hexagon' transition. index is shared with the carousel below.
+                </div>
+                <div class="carousel-demo">
+                    <ul rn-carousel rn-carousel-index="carouselIndex3" rn-carousel-transition="hexagon" rn-carousel-buffered class="carousel3">
+                        <li ng-repeat="slide in slides3 track by slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                              #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <br>
-            <div >
-                <ul rn-carousel rn-carousel-index="carouselIndex3" rn-carousel-transition="zoom" rn-carousel-buffered class="carousel3">
-                    <li ng-repeat="slide in slides3 track by slide.id">
-                        <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
-                          id: {{ slide.id }}<br>
-                          {{ slide.img }}
-                        </div>
-                    </li>
-                </ul>
+            <div>
+                <h3>ngRepeat with custom transition</h3>
+                <div class="details">Use the 'zoom' transition. index is shared with the carousel above.
+                </div>
+                <div class="carousel-demo">
+                    <ul rn-carousel rn-carousel-index="carouselIndex3" rn-carousel-transition="zoom" rn-carousel-buffered class="carousel3">
+                        <li ng-repeat="slide in slides3 track by slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                              #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <br>
-            <div >
-                <ul rn-carousel rn-carousel-index="carouselIndex4" rn-carousel-transition="fadeAndSlide" rn-carousel-buffered class="carousel4">
-                    <li ng-repeat="slide in slides4 track by slide.id">
-                        <div ng-style="{'background-image': 'url(' + slide.img + ')'}" class="bgimage">
-                          id: {{ slide.id }} / {{ slides2.length }}<br>
-                          {{ slide.img }}
-                        </div>
-                    </li>
-                </ul>
+            <div>
+                <h3>Custom templates without ng-repeat and auto-slide</h3>
+                <div class="details">
+                </div>
+                <div class="carousel-demo">
+                    <ul rn-carousel rn-carousel-index="3" rn-carousel-auto-slide="3" class="carousel5">
+                        <li>Slide 1</li>
+                        <li>Slide 2</li>
+                        <li>Slide 3</li>
+                        <li>Slide 4</li>
+                        <li>Slide 5</li>
+                        <li>Slide 6</li>
+                        <li>Slide 7</li>
+                        <li>Slide 8</li>
+                        <li>Slide 9</li>
+                    </ul>
+                </div>
             </div>
-            <br>
-            <div >
-                <ul rn-carousel rn-carousel-index="3" rn-carousel-auto-slide="3" class="carousel5">
-                    <li>Slide 1</li>
-                    <li>Slide 2</li>
-                    <li>Slide 3</li>
-                    <li>Slide 4</li>
-                    <li>Slide 5</li>
-                    <li>Slide 6</li>
-                    <li>Slide 7</li>
-                    <li>Slide 8</li>
-                    <li>Slide 9</li>
-                </ul>
-            </div>
+
         </div>
 
     </body>
@@ -128,7 +135,7 @@
                 });
             };
 
-            $scope.carouselIndex = 0;
+            $scope.carouselIndex = 3;
             $scope.carouselIndex2 = 0;
             $scope.carouselIndex3 = 5;
             $scope.carouselIndex4 = 5;
@@ -141,7 +148,7 @@
 
             // 1st ngRepeat demo
             $scope.slides = [];
-            addSlides($scope.slides, 'sports', 10);
+            addSlides($scope.slides, 'sports', 50);
 
             // 2nd ngRepeat demo
             $scope.slides2 = [];
