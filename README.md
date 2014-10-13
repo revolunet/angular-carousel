@@ -8,7 +8,6 @@ Comments and contributions welcome :)
 
 Proudly brought to you by the [@revolunet](http://twitter.com/revolunet) team.
 
-**NOTE :** if you use IE<=9, iOS<7 or Android<4 please include the [requestAnimationFrame polyfill](https://github.com/darius/requestAnimationFrame/blob/master/requestAnimationFrame.js) in your application.
 
 ## Usage :
 
@@ -28,7 +27,7 @@ angular.module('MyApp', ['angular-carousel']);
  - Add a `rn-carousel` attribute to your `<ul>` block and your `<li>`'s become magically swipable ;)
 ```html
 <ul rn-carousel class="image">
-  <li ng-repeat="image in sportImages" ng-style="{ backgroundImage: 'url(' + image + ')' }">
+  <li ng-repeat="image in sportImages">
     <div class="layer">{{ image }}</div>
   </li>
 </ul>
@@ -43,27 +42,31 @@ angular.module('MyApp', ['angular-carousel']);
 </ul>
 ```
 
+## Directive options :
+ - `rn-carousel-index` two way binding to control the carousel position (0-indexed)
+ - `rn-carousel-buffered` add this attribute to enable the carousel buffering, good to minimize the DOM (5 slides)
+ - `rn-carousel-controls` add this attribute to enable builtin prev/next buttons (you can override by CSS)
+ - `rn-carousel-auto-slide` add this attribute to make the carousel slide automatically after given seconds (default=3)
+ - `rn-carousel-transition` : transition type, can be one of `slide,zoom,hexagon,none,slideAndFade`. (default=slide)
 
+## Indicators
 
-## Features :
- - Mobile friendly, tested on webkit+firefox
- - Use CSS 3D transformations and `requestAnimationFrame`. (fallback to CSS 2D if 3D support not available)
- - DOM buffering
- - Index data-binding
- - Optional indicators
+You can add position indicators by adding this directive where you want :
+```html
+<div rn-carousel-indicators ng-if="slides.length > 1" slides="slides" rn-carousel-index="carouselIndex"></div>
+```
+`slides` is the same collection you use in the carousel ng-repeat
+`carouselIndex` is the same index you've defined for the carousel
 
-### Regular carousel :
- - `rn-carousel-index` two way binding to control the carousel position.
- - `rn-carousel-indicator` boolean value to enable the indicator, see demo page.
- - `rn-carousel-buffered` boolean value to enable the carousel buffering, good to minimize the DOM, defaults to 5 slides. (works only with arrays)
- - `rn-carousel-swipe` boolean value to enable/disable swiping (default true)
- - `rn-carousel-control` boolean value to enable builtin prev/next buttons (you can override by CSS)
- - `rn-carousel-auto-slide` integer value will make the slider automatically change the visible slide after given seconds
- - `rn-carousel-pause-on-hover="true"` prevent auto-slide on hover
- - `rn-carousel-prevent-animation="true"` if you dont want animations
+## Notes :
+ - if you use IE<=9, iOS<7 or Android<4 please include the [requestAnimationFrame polyfill](https://github.com/darius/requestAnimationFrame/blob/master/requestAnimationFrame.js) in your application.
+ - don't set any style attribute to your li's. they would be overwritten by the carousel (use classes instead).
+ - angular-carousel use the great [shifty.js](https://github.com/jeremyckahn/shifty) for the animations
 
 ## Todo :
- - see the [TODO file](./TODO)
+ - customisable transitions
+ - more transition types
+ - infinite loop support
 
 ## Contributing 
  - Please follow [AngularJS GIT conventions](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#)

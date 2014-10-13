@@ -14,7 +14,7 @@
         <div class="center">
             <div>
                 <input type=number ng-model="carouselIndex">
-                <ul rn-carousel rn-carousel-controls rn-carousel-index="carouselIndex" rn-carousel-buffered class="carousel1">
+                <ul rn-carousel rn-carousel-controls rn-carousel-index="carouselIndex" rn-carousel-transition="none" rn-carousel-buffered class="carousel1">
                     <li ng-repeat="slide in slides track by slide.id" ng-class="'id-' + slide.id">
                         <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
                           id: {{ slide.id }}<br>
@@ -22,12 +22,7 @@
                         </div>
                     </li>
                 </ul>
-                <div rn-carousel-indicators slides="slides" rn-carousel-index="carouselIndex"></div>
-               <!--
-                <div>
-                    <span class="carousel-indicator" ng-class="{active: $index==carouselIndex}" ng-repeat="slide in slides" ng-click="$parent.carouselIndex=$index">●</span>
-                </div>
-            -->
+                <div rn-carousel-indicators ng-if="slides.length > 1" slides="slides" rn-carousel-index="carouselIndex"></div>
                 <div>
                     <button ng-click="carouselIndex=carouselIndex-1">prev</button>
                     {{ (carouselIndex + 1) }} / {{ slides.length }}
@@ -101,241 +96,22 @@
                     <li>Slide 9</li>
                 </ul>
             </div>
-       
         </div>
-    <!--
-
-        <h1>AngularJS Touch Carousel</h1>
-        <div class='intro'>
-            Transform your ng-repeat or DOM nodes in a mobile-friendly carousel just by adding a 'rn-carousel' attribute to your HTML; AngularJS directives FTW :)<br><br>
-            Carousels are data-bound to your ngRepeat collections and can be DOM buffered (good for performance)
-            <br><br>
-            Swipe these demos with your mouse or finger
-        </div>
-
-        <h3>ngRepeat demo (buffered carousel)</h3>
-        <div class="details">A simple buffered ng-repeat with a custom template.
-            <br>
-            Swipe 50 slides with only 5 slides in the DOM
-        </div>
-        <ul rn-carousel rn-carousel-buffered class="my-slider ng-cloak">
-            <li ng-repeat="slide in slides|filter:{odd:true}:true track by slide.label" ng-style="{'background-image': 'url(' + slide.img + ')'}">
-                <div class="debug">
-                    {{ slide.label }} / {{ slides.length }}
-                    <br>
-                    carouselIndex: {{ carouselIndex }}<br>
-                    carouselBufferIndex: {{ carouselBufferIndex }}<br>
-                </div>
-            </li>
-        </ul>
-
-        
-        <h3>template-based demo</h3>
-        <div class="details">Various blocks automagically converted to a carousel.
-            <br>
-            Just add rn-carousel-indicator to display clickable indicators
-        </div>
-        <ul rn-carousel rn-carousel-indicator class="my-slider standard ng-cloak">
-            <li ng-style="{'background-color': colors[0]}">
-                This is a standard template
-                <div class="big">slide #1</div>
-            </li>
-            <li ng-style="{'background-color': colors[10]}">
-                Here's sophie : <br>
-                <img src="./demo/img/sophie.jpeg">
-            </li>
-            <li ng-style="{'background-color': colors[30]}">
-                A friend of mine : <br>
-                <img src="./demo/img/grumpy.jpg" height="120">
-            </li>
-            <li ng-style="{'background-color': colors[40]}">
-                And to finish :
-                <iframe width="100%" height="80%" src="//www.youtube.com/embed/OQSNhk5ICTI" frameborder="0" allowfullscreen></iframe>
-            </li>
-        </ul>
-
-        <h3>Standard carousel with thumbs navigation </h3>
-        <div class="details">This one has an initial index and the thumbs controls the rn-carousel-index binding</div>
-        <ul rn-carousel rn-carousel-index="slideIndex2" class="my-slider ng-cloak">
-            <li ng-repeat="slide in slides2" ng-style="{'background-image': 'url(' + slide.img + ')'}"></li>
-        </ul>
-        <div class="ng-cloak thumbs">
-            <div class="thumb" ng-repeat="slide in slides2" ng-click="$parent.slideIndex2=$index" ng-style="{'background-image': 'url(' + slide.img + ')'}" ng-class="{'is-active': ($parent.slideIndex2==$index)}"></div>
-        </div>
-
-        <h3>carousel with builtin prev/next controls</h3>
-        <div class="details">just add rn-carousel-control attribute to enable builtin controls</div>
-        <ul rn-carousel rn-carousel-buffered rn-carousel-indicator rn-carousel-control class="my-slider ng-cloak">
-            <li ng-repeat="slide in slides|limitTo:5" ng-style="{'background-image': 'url(' + slide.img + ')'}">
-                <div class="debug">
-                    {{ slide.label }} / {{ slides.length }}
-                </div>
-            </li>
-        </ul>
-
-        <h3>buffered ngRepeat carousel with custom controls</h3>
-        <div class="details">Custom controls demo, just update the rn-carousel-index index binding</div>
-        <ul rn-carousel rn-carousel-buffered rn-carousel-indicator rn-carousel-index="slideIndex" rn-carousel-swipe="{{swipe}}" class="my-slider ng-cloak">
-            <li ng-repeat="slide in slides4" ng-style="{'background-image': 'url(' + slide.img + ')'}">
-                <div class="debug">
-                    {{ slide.label }} / {{ slides4.length }}
-                    <br>
-                    carouselIndex: {{ carouselIndex }}<br>
-                    carouselBufferIndex: {{ carouselBufferIndex }}<br>
-                </div>
-            </li>
-        </ul>
-        <div class="controls ng-cloak">
-            <button class="button grey" ng-disabled="slideIndex==0" ng-click="prev()">prev</button>
-            <span>{{ slideIndex + 1 }} / {{ slides4.length }}</span>
-            <button class="button grey" ng-click="next()" ng-disabled="slideIndex==slides4.length-1" >next</button>
-            <button class="button grey" ng-click="pushSlide()">add 3 slides</button>
-            <button class="button grey" ng-click="toggleSwipe()">toggle swipe ({{ swipe?'on':'off' }})</button>
-        </div>
-
-        <h3>object-based ngRepeat carousel with indicators</h3>
-        <div class="details">Use the object-based ngRepeat syntax. (not compatible with buffering)</div>
-        <ul rn-carousel rn-carousel-indicator rn-carousel-index="slideIndex3" class="my-slider slider3 ng-cloak">
-            <li ng-repeat="(label, color) in slides3"  ng-style="{'background-color': color}" class="center">
-                <div class="big">{{ label }}</div>
-            </li>
-        </ul>
-
-        <h3>togglable carousel via ng-if</h3>
-        <div class="details">If you use ng-if, be sure to use the <a target="_blank" href="http://stackoverflow.com/questions/17606936/angularjs-dot-in-ng-model">dot-notation syntax</a> for the index binding as it creates a child scope.</div>
-        <button class="ng-cloak button grey" ng-click="showCarousel=!showCarousel">toggle carousel - {{ demo.ifIndex }} / {{ slides5.length }}</button>
-        <br><br>
-
-        <ul ng-if="showCarousel" rn-carousel rn-carousel-indicator rn-carousel-index="demo.ifIndex" class="my-slider slider3 ng-cloak ifCarousel">
-            <li ng-repeat="color in slides5"  ng-style="{'background-color': color}" class="center">
-                <div class="big">#{{ $index + 1 }}</div>
-            </li>
-        </ul>
-
-        <h3>Autoplay slider</h3>
-        <div class="details">
-            By adding <strong>rn-carousel-auto-slide</strong> with an integer value will make the slider automatically change the visible slide after <strong>n</strong> seconds
-            <br/>
-            By adding <strong>rn-carousel-pause-on-hover="true"</strong>  the slide will pause on mouse hover and start on mouse leave
-        </div>
-        <ul rn-carousel rn-carousel-indicator rn-carousel-auto-slide="3" rn-carousel-control="true" rn-carousel-pause-on-hover="true" class="my-slider standard ng-cloak">
-            <li ng-style="{'background-color': colors[0]}">
-                This is a standard template
-                <div class="big">slide #1</div>
-            </li>
-            <li ng-style="{'background-color': colors[10]}">
-                Here's sophie : <br>
-                <img src="./demo/img/sophie.jpeg">
-            </li>
-            <li ng-style="{'background-color': colors[30]}">
-                A friend of mine : <br>
-                <img src="./demo/img/grumpy.jpg" height="120">
-            </li>
-            <li ng-style="{'background-color': colors[40]}">
-                And to finish :
-                <iframe width="100%" height="80%" src="//www.youtube.com/embed/OQSNhk5ICTI" frameborder="0" allowfullscreen></iframe>
-            </li>
-        </ul>
-        <br/><br/>
-        <h3>Other demos</h3>
-        <ul>
-          <li><a href="demo/flickr-full" target="_blank">Flickr browser</a></li>
-        </ul>
-        <br><br>
-    -->
 
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-touch.min.js"></script>
-    <script>
-    /*! shifty - v1.2.1 - 2014-06-29 - http://jeremyckahn.github.io/shifty */
-(function(t){var n=function(){"use strict";function n(){}function e(t,n){var e;for(e in t)Object.hasOwnProperty.call(t,e)&&n(e)}function r(t,n){return e(n,function(e){t[e]=n[e]}),t}function i(t,n){e(n,function(e){t[e]===void 0&&(t[e]=n[e])})}function o(t,n,e,r,i,o,a){var s,c=(t-o)/i;for(s in n)n.hasOwnProperty(s)&&(n[s]=u(e[s],r[s],h[a[s]],c));return n}function u(t,n,e,r){return t+(n-t)*e(r)}function a(t,n){var r=f.prototype.filter,i=t._filterArgs;e(r,function(e){r[e][n]!==void 0&&r[e][n].apply(t,i)})}function s(t,n,e,r,i,u,s,c,f){d=n+e,v=Math.min(m(),d),y=v>=d,t.isPlaying()&&!y?(f(t._timeoutHandler,_),a(t,"beforeTween"),o(v,r,i,u,e,n,s),a(t,"afterTween"),c(r)):y&&(c(u),t.stop(!0))}function c(t,n){var r={};return"string"==typeof n?e(t,function(t){r[t]=n}):e(t,function(t){r[t]||(r[t]=n[t]||l)}),r}function f(t,n){this._currentState=t||{},this._configured=!1,this._scheduleFunction=p,n!==void 0&&this.setConfig(n)}var h,p,l="linear",w=500,_=1e3/60,g=Date.now?Date.now:function(){return+new Date},m=g;p="undefined"!=typeof window?window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||window.mozCancelRequestAnimationFrame&&window.mozRequestAnimationFrame||setTimeout:setTimeout;var d,v,y;return f.prototype.tween=function(t){return this._isTweening?this:(void 0===t&&this._configured||this.setConfig(t),this._start(this.get()),this.resume())},f.prototype.setConfig=function(t){t=t||{},this._configured=!0,this._pausedAtTime=null,this._start=t.start||n,this._step=t.step||n,this._finish=t.finish||n,this._duration=t.duration||w,this._currentState=t.from||this.get(),this._originalState=this.get(),this._targetState=t.to||this.get(),this._timestamp=m();var e=this._currentState,r=this._targetState;return i(r,e),this._easing=c(e,t.easing||l),this._filterArgs=[e,this._originalState,r,this._easing],a(this,"tweenCreated"),this},f.prototype.get=function(){return r({},this._currentState)},f.prototype.set=function(t){this._currentState=t},f.prototype.pause=function(){return this._pausedAtTime=m(),this._isPaused=!0,this},f.prototype.resume=function(){this._isPaused&&(this._timestamp+=m()-this._pausedAtTime),this._isPaused=!1,this._isTweening=!0;var t=this;return this._timeoutHandler=function(){s(t,t._timestamp,t._duration,t._currentState,t._originalState,t._targetState,t._easing,t._step,t._scheduleFunction)},this._timeoutHandler(),this},f.prototype.stop=function(t){return this._isTweening=!1,this._isPaused=!1,this._timeoutHandler=n,t&&(r(this._currentState,this._targetState),a(this,"afterTweenEnd"),this._finish.call(this,this._currentState)),this},f.prototype.isPlaying=function(){return this._isTweening&&!this._isPaused},f.prototype.setScheduleFunction=function(t){this._scheduleFunction=t},f.prototype.dispose=function(){var t;for(t in this)this.hasOwnProperty(t)&&delete this[t]},f.prototype.filter={},f.prototype.formula={linear:function(t){return t}},h=f.prototype.formula,r(f,{now:m,each:e,tweenProps:o,tweenProp:u,applyFilter:a,shallowCopy:r,defaults:i,composeEasingObject:c}),"object"==typeof exports?module.exports=f:"function"==typeof define&&define.amd?define(function(){return f}):t.Tweenable===void 0&&(t.Tweenable=f),f}();(function(){n.shallowCopy(n.prototype.formula,{easeInQuad:function(t){return Math.pow(t,2)},easeOutQuad:function(t){return-(Math.pow(t-1,2)-1)},easeInOutQuad:function(t){return 1>(t/=.5)?.5*Math.pow(t,2):-.5*((t-=2)*t-2)},easeInCubic:function(t){return Math.pow(t,3)},easeOutCubic:function(t){return Math.pow(t-1,3)+1},easeInOutCubic:function(t){return 1>(t/=.5)?.5*Math.pow(t,3):.5*(Math.pow(t-2,3)+2)},easeInQuart:function(t){return Math.pow(t,4)},easeOutQuart:function(t){return-(Math.pow(t-1,4)-1)},easeInOutQuart:function(t){return 1>(t/=.5)?.5*Math.pow(t,4):-.5*((t-=2)*Math.pow(t,3)-2)},easeInQuint:function(t){return Math.pow(t,5)},easeOutQuint:function(t){return Math.pow(t-1,5)+1},easeInOutQuint:function(t){return 1>(t/=.5)?.5*Math.pow(t,5):.5*(Math.pow(t-2,5)+2)},easeInSine:function(t){return-Math.cos(t*(Math.PI/2))+1},easeOutSine:function(t){return Math.sin(t*(Math.PI/2))},easeInOutSine:function(t){return-.5*(Math.cos(Math.PI*t)-1)},easeInExpo:function(t){return 0===t?0:Math.pow(2,10*(t-1))},easeOutExpo:function(t){return 1===t?1:-Math.pow(2,-10*t)+1},easeInOutExpo:function(t){return 0===t?0:1===t?1:1>(t/=.5)?.5*Math.pow(2,10*(t-1)):.5*(-Math.pow(2,-10*--t)+2)},easeInCirc:function(t){return-(Math.sqrt(1-t*t)-1)},easeOutCirc:function(t){return Math.sqrt(1-Math.pow(t-1,2))},easeInOutCirc:function(t){return 1>(t/=.5)?-.5*(Math.sqrt(1-t*t)-1):.5*(Math.sqrt(1-(t-=2)*t)+1)},easeOutBounce:function(t){return 1/2.75>t?7.5625*t*t:2/2.75>t?7.5625*(t-=1.5/2.75)*t+.75:2.5/2.75>t?7.5625*(t-=2.25/2.75)*t+.9375:7.5625*(t-=2.625/2.75)*t+.984375},easeInBack:function(t){var n=1.70158;return t*t*((n+1)*t-n)},easeOutBack:function(t){var n=1.70158;return(t-=1)*t*((n+1)*t+n)+1},easeInOutBack:function(t){var n=1.70158;return 1>(t/=.5)?.5*t*t*(((n*=1.525)+1)*t-n):.5*((t-=2)*t*(((n*=1.525)+1)*t+n)+2)},elastic:function(t){return-1*Math.pow(4,-8*t)*Math.sin((6*t-1)*2*Math.PI/2)+1},swingFromTo:function(t){var n=1.70158;return 1>(t/=.5)?.5*t*t*(((n*=1.525)+1)*t-n):.5*((t-=2)*t*(((n*=1.525)+1)*t+n)+2)},swingFrom:function(t){var n=1.70158;return t*t*((n+1)*t-n)},swingTo:function(t){var n=1.70158;return(t-=1)*t*((n+1)*t+n)+1},bounce:function(t){return 1/2.75>t?7.5625*t*t:2/2.75>t?7.5625*(t-=1.5/2.75)*t+.75:2.5/2.75>t?7.5625*(t-=2.25/2.75)*t+.9375:7.5625*(t-=2.625/2.75)*t+.984375},bouncePast:function(t){return 1/2.75>t?7.5625*t*t:2/2.75>t?2-(7.5625*(t-=1.5/2.75)*t+.75):2.5/2.75>t?2-(7.5625*(t-=2.25/2.75)*t+.9375):2-(7.5625*(t-=2.625/2.75)*t+.984375)},easeFromTo:function(t){return 1>(t/=.5)?.5*Math.pow(t,4):-.5*((t-=2)*Math.pow(t,3)-2)},easeFrom:function(t){return Math.pow(t,4)},easeTo:function(t){return Math.pow(t,.25)}})})(),function(){function t(t,n,e,r,i,o){function u(t){return((l*t+w)*t+_)*t}function a(t){return((g*t+m)*t+d)*t}function s(t){return(3*l*t+2*w)*t+_}function c(t){return 1/(200*t)}function f(t,n){return a(p(t,n))}function h(t){return t>=0?t:0-t}function p(t,n){var e,r,i,o,a,c;for(i=t,c=0;8>c;c++){if(o=u(i)-t,n>h(o))return i;if(a=s(i),1e-6>h(a))break;i-=o/a}if(e=0,r=1,i=t,e>i)return e;if(i>r)return r;for(;r>e;){if(o=u(i),n>h(o-t))return i;t>o?e=i:r=i,i=.5*(r-e)+e}return i}var l=0,w=0,_=0,g=0,m=0,d=0;return _=3*n,w=3*(r-n)-_,l=1-_-w,d=3*e,m=3*(i-e)-d,g=1-d-m,f(t,c(o))}function e(n,e,r,i){return function(o){return t(o,n,e,r,i,1)}}n.setBezierFunction=function(t,r,i,o,u){var a=e(r,i,o,u);return a.x1=r,a.y1=i,a.x2=o,a.y2=u,n.prototype.formula[t]=a},n.unsetBezierFunction=function(t){delete n.prototype.formula[t]}}(),function(){function t(t,e,r,i,o){return n.tweenProps(i,e,t,r,1,0,o)}var e=new n;e._filterArgs=[],n.interpolate=function(r,i,o,u){var a=n.shallowCopy({},r),s=n.composeEasingObject(r,u||"linear");e.set({});var c=e._filterArgs;c.length=0,c[0]=a,c[1]=r,c[2]=i,c[3]=s,n.applyFilter(e,"tweenCreated"),n.applyFilter(e,"beforeTween");var f=t(r,a,i,o,s);return n.applyFilter(e,"afterTween"),f}}(),function(t){function n(t,n){k.length=0;var e,r=t.length;for(e=0;r>e;e++)k.push("_"+n+"_"+e);return k}function e(t){var n=t.match(y);return n?1===n.length&&n.unshift(""):n=["",""],n.join(T)}function r(n){t.each(n,function(t){var e=n[t];"string"==typeof e&&e.match(I)&&(n[t]=i(e))})}function i(t){return s(I,t,o)}function o(t){var n=u(t);return"rgb("+n[0]+","+n[1]+","+n[2]+")"}function u(t){return t=t.replace(/#/,""),3===t.length&&(t=t.split(""),t=t[0]+t[0]+t[1]+t[1]+t[2]+t[2]),F[0]=a(t.substr(0,2)),F[1]=a(t.substr(2,2)),F[2]=a(t.substr(4,2)),F}function a(t){return parseInt(t,16)}function s(t,n,e){var r=n.match(t),i=n.replace(t,T);if(r)for(var o,u=r.length,a=0;u>a;a++)o=r.shift(),i=i.replace(T,e(o));return i}function c(t){return s(O,t,f)}function f(t){for(var n=t.match(M),e=n.length,r=t.match(b)[0],i=0;e>i;i++)r+=parseInt(n[i],10)+",";return r=r.slice(0,-1)+")"}function h(r){var i={};return t.each(r,function(t){var o=r[t];if("string"==typeof o){var u=m(o);i[t]={formatString:e(o),chunkNames:n(u,t)}}}),i}function p(n,e){t.each(e,function(t){for(var r=n[t],i=m(r),o=i.length,u=0;o>u;u++)n[e[t].chunkNames[u]]=+i[u];delete n[t]})}function l(n,e){t.each(e,function(t){var r=n[t],i=w(n,e[t].chunkNames),o=_(i,e[t].chunkNames);r=g(e[t].formatString,o),n[t]=c(r)})}function w(t,n){for(var e,r={},i=n.length,o=0;i>o;o++)e=n[o],r[e]=t[e],delete t[e];return r}function _(t,n){S.length=0;for(var e=n.length,r=0;e>r;r++)S.push(t[n[r]]);return S}function g(t,n){for(var e=t,r=n.length,i=0;r>i;i++)e=e.replace(T,+n[i].toFixed(4));return e}function m(t){return t.match(M)}function d(n,e){t.each(e,function(t){for(var r=e[t],i=r.chunkNames,o=i.length,u=n[t].split(" "),a=u[u.length-1],s=0;o>s;s++)n[i[s]]=u[s]||a;delete n[t]})}function v(n,e){t.each(e,function(t){for(var r=e[t],i=r.chunkNames,o=i.length,u="",a=0;o>a;a++)u+=" "+n[i[a]],delete n[i[a]];n[t]=u.substr(1)})}var y=/([^\-0-9\.]+)/g,M=/[0-9.\-]+/g,O=RegExp("rgb\\("+M.source+/,\s*/.source+M.source+/,\s*/.source+M.source+"\\)","g"),b=/^.*\(/,I=/#([0-9]|[a-f]){3,6}/gi,T="VAL",k=[],F=[],S=[];t.prototype.filter.token={tweenCreated:function(t,n,e){r(t),r(n),r(e),this._tokenData=h(t)},beforeTween:function(t,n,e,r){d(r,this._tokenData),p(t,this._tokenData),p(n,this._tokenData),p(e,this._tokenData)},afterTween:function(t,n,e,r){l(t,this._tokenData),l(n,this._tokenData),l(e,this._tokenData),v(r,this._tokenData)}}}(n)})(this);
-</script>
+    
     <!--<script src="./dist/angular-carousel.js"></script> -->
     <script src="./src/angular-carousel.js"></script>
     <script src="./src/directives/rn-carousel.js"></script>
     <script src="./src/directives/rn-carousel-indicators.js"></script>
-    <script src="./src/directives/sliceFilter.js"></script>-->
+    <script src="./src/directives/sliceFilter.js"></script>
+    <script src="./src/directives/shifty.js"></script>
     <script>
         angular.module('DemoApp', [
             'angular-carousel'
         ])
-
-        // .controller('DemoCtrl', function($scope, $timeout) {
-        //     $scope.colors = ["#fc0003", "#f70008", "#f2000d", "#ed0012", "#e80017", "#e3001c", "#de0021", "#d90026", "#d4002b", "#cf0030", "#c90036", "#c4003b", "#bf0040", "#ba0045", "#b5004a", "#b0004f", "#ab0054", "#a60059", "#a1005e", "#9c0063", "#960069", "#91006e", "#8c0073", "#870078", "#82007d", "#7d0082", "#780087", "#73008c", "#6e0091", "#690096", "#63009c", "#5e00a1", "#5900a6", "#5400ab", "#4f00b0", "#4a00b5", "#4500ba", "#4000bf", "#3b00c4", "#3600c9", "#3000cf", "#2b00d4", "#2600d9", "#2100de", "#1c00e3", "#1700e8", "#1200ed", "#0d00f2", "#0800f7", "#0300fc"];
-
-        //     function addSlide(target, style) {
-        //         var i = target.length;
-        //         target.push({
-        //             label: 'slide #' + (i + 1),
-        //             img: 'http://lorempixel.com/450/300/' + style + '/' + (i % 10) ,
-        //             color: $scope.colors[ (i*10) % $scope.colors.length],
-        //             odd: (i % 2 === 0)
-        //         });
-        //     };
-
-        //     function addSlides(target, style, qty) {
-        //         for (var i=0; i < qty; i++) {
-        //             addSlide(target, style);
-        //         }
-        //     }
-
-        //     // 1st ngRepeat demo
-        //     $scope.slides = [];
-        //     addSlides($scope.slides, 'sports', 50);
-
-        //     // 2nd ngRepeat demo
-        //     $scope.slides2 = [];
-        //     $scope.slideIndex = 0;
-        //     addSlides($scope.slides2, 'city', 5);
-
-
-        //     // demo with controls
-        //     $scope.slides4 = [];
-        //     addSlides($scope.slides4, 'people', 5);
-        //     $scope.pushSlide = function() {
-        //         addSlides($scope.slides4, 'people', 3);
-        //     }
-        //     $scope.prev = function() {
-        //         $scope.slideIndex--;
-        //     }
-        //     $scope.next = function() {
-        //         $scope.slideIndex++;
-        //     }
-        //     $scope.swipe = true;
-        //     $scope.toggleSwipe = function() {
-        //         $scope.swipe = !$scope.swipe;
-        //     }
-
-        //     // 4rd demo, object based iterable
-        //     $scope.slideIndex3 = 2;
-        //     $scope.slides3 = {
-        //         '#1': $scope.colors[5],
-        //         '#2': $scope.colors[15],
-        //         '#3': $scope.colors[25],
-        //         '#4': $scope.colors[35],
-        //         '#5': $scope.colors[45]
-        //     }
-
-        //     // thumbs demo
-        //     $scope.slideIndex2 = 2;
-
-        //     // ngIf demo
-        //     $scope.showCarousel = false;
-        //     $scope.demo = {
-        //         ifIndex: 2
-        //     }
-        //     $scope.slides5 = [
-        //         $scope.colors[5],
-        //         $scope.colors[15],
-        //         $scope.colors[25],
-        //         $scope.colors[35],
-        //         $scope.colors[45]
-        //     ]
-
-        // })
-                
-
 
         .controller('DemoCtrl', function($scope) {
 
@@ -378,7 +154,6 @@
             // 4th ngRepeat demo
             $scope.slides4 = [];
             addSlides($scope.slides4, 'city', 50);
-
 
         });
 

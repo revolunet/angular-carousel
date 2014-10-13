@@ -1,13 +1,3 @@
-/*
-
-TODO :
-
- - non repeat-based
- - autoslide
-
-
-*/
-
 (function() {
     "use strict";
 
@@ -68,9 +58,7 @@ TODO :
                 slideTransformValue = DeviceCapabilities.has3d ? 'translate3d(' + absoluteLeft + '%, 0, 0)' : 'translate3d(' + absoluteLeft + '%, 0)',
                 distance = ((100 - Math.abs(absoluteLeft)) / 100);
 
-            if (transitionType == 'slide') {
-                style[DeviceCapabilities.transformProperty] = slideTransformValue;
-            } else if (transitionType == 'fadeAndSlide') {
+            if (transitionType == 'fadeAndSlide') {
                 style[DeviceCapabilities.transformProperty] = slideTransformValue;
                 opacity = 0;
                 if (Math.abs(absoluteLeft) < 100) {
@@ -99,6 +87,8 @@ TODO :
                     opacity = 0.3 + distance * 0.7;
                 }
                 style.opacity = opacity;
+            } else {
+                style[DeviceCapabilities.transformProperty] = slideTransformValue;
             }
             return style;
         };
@@ -114,8 +104,8 @@ TODO :
         };
     })
 
-    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$timeout', '$interval', 'computeCarouselSlideStyle', 'createStyleString',
-        function($swipe, $window, $document, $parse, $compile, $timeout, $interval, computeCarouselSlideStyle, createStyleString) {
+    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$timeout', '$interval', 'computeCarouselSlideStyle', 'createStyleString', 'Tweenable',
+        function($swipe, $window, $document, $parse, $compile, $timeout, $interval, computeCarouselSlideStyle, createStyleString, Tweenable) {
             // internal ids to allow multiple instances
             var carouselId = 0,
                 // in container % how much we need to drag to trigger the slide change
@@ -263,12 +253,10 @@ TODO :
                                 index = scope.carouselIndex;
                             }
                             slideOptions = slideOptions || {};
-                            if (slideOptions.animate === false) {
+                            if (slideOptions.animate === false || options.transitionType === 'none') {
                                 animating = false;
                                 offset = index * -100;
-                                //updateSlidesPosition(offset);
                                 scope.carouselIndex = index;
-                                //updateSlidesPosition(offset);
                                 updateBufferIndex();
                                 return;
                             }
