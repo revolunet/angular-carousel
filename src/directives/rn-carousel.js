@@ -179,6 +179,7 @@ TODO :
                             transitionType: iAttributes.rnCarouselTransition || 'slide',
                             transitionEasing: 'easeTo',
                             transitionDuration: 300,
+                            /* do touchend trigger next slide automatically */
                             isSequential: true,
                             bufferSize: 5
                         };
@@ -199,10 +200,6 @@ TODO :
                             animateTransitions = true,
                             intialState = true,
                             animating;
-                        /* do touchend trigger next slide automatically */
-                        //sequential = false;
-
-                        iElement.addClass('rn-carousel');
 
                         $swipe.bind(iElement, {
                             start: swipeStart,
@@ -212,6 +209,10 @@ TODO :
                                 swipeEnd({}, event);
                             }
                         });
+
+                        function getSlidesDOM() {
+                            return iElement[0].querySelectorAll('li');
+                        }
 
                         function documentMouseUpEvent(event) {
                             // in case we click outside the carousel, trigger a fake swipeEnd
@@ -227,7 +228,7 @@ TODO :
                             // todo : optim : apply only to visible items
                             var style, x;
                             x = scope.carouselBufferIndex * 100 + offset;
-                            angular.forEach(iElement[0].querySelectorAll('li'), function(child, index) {
+                            angular.forEach(getSlidesDOM(), function(child, index) {
                                 style = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType));
                                 if (child.getAttribute('style') !== style) {
                                     child.setAttribute('style', style);
@@ -314,6 +315,14 @@ TODO :
                         var init = true;
                         scope.carouselIndex = 0;
 
+                        if (!isRepeatBased) {
+                            // fake array when no ng-repeat
+                            currentSlides = [];
+                            angular.forEach(getSlidesDOM(), function(node, index) {
+                                currentSlides.push({id: index});
+                            });
+                        }
+
                         if (iAttributes.rnCarouselIndex) {
                             var updateParentIndex = function(value) {
                                 indexModel.assign(scope.$parent, value);
@@ -352,13 +361,22 @@ TODO :
                                     animate: false
                                 });
                             }
+                        } else {
+                            goToSlide(0, {
+                                animate: !init
+                            });
+                            init = false;
                         }
 
-                        scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
-                            //console.log('repeatCollection', arguments);
-                            currentSlides = newValue;
-                            goToSlide(scope.carouselIndex);
-                        });
+                        if (isRepeatBased) {
+                            scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
+                                //console.log('repeatCollection', arguments);
+                                currentSlides = newValue;
+                                goToSlide(scope.carouselIndex);
+                            });
+                        } else {
+                            
+                        }
 
                         function swipeEnd(coords, event, forceAnimation) {
                             //  console.log('swipeEnd', 'scope.carouselIndex', scope.carouselIndex);
@@ -429,6 +447,10 @@ TODO :
                                 }
 
                                 scope.carouselBufferIndex = bufferIndex;
+                                $timeout(function() {
+                                    updateSlidesPosition(offset);
+                                }, 0, false);
+                            } else {
                                 $timeout(function() {
                                     updateSlidesPosition(offset);
                                 }, 0, false);
