@@ -74,7 +74,13 @@ module.exports = function(grunt) {
         }
       }
     },
-
+    ngAnnotate: {
+      dist: {
+        files: {
+          '<%= concat.dist.dest %>': ['<%= concat.dist.dest %>']
+        }
+      }
+    },
     uglify: {
       options: {
         banner: '<%= meta.banner %>'
@@ -139,7 +145,7 @@ module.exports = function(grunt) {
   });
 
   // Build task.
-  grunt.registerTask('build', ['jshint', 'concat', 'uglify', 'sass', 'autoprefixer', 'cssmin']);
+  grunt.registerTask('build', ['jshint', 'concat', 'ngAnnotate', 'uglify', 'sass', 'autoprefixer', 'cssmin']);
 
   // Default task.
   grunt.registerTask('default', ['build', 'connect', 'karma:unit', 'watch']);

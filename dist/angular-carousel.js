@@ -147,7 +147,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
     })
 
-    .service('computeCarouselSlideStyle', function(DeviceCapabilities) {
+    .service('computeCarouselSlideStyle', ["DeviceCapabilities", function(DeviceCapabilities) {
         // compute transition transform properties for a given slide and global offset
         return function(slideIndex, offset, transitionType) {
             var style = {
@@ -192,7 +192,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
             }
             return style;
         };
-    })
+    }])
 
     .service('createStyleString', function() {
         return function(object) {

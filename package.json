@@ -31,6 +31,7 @@
     "grunt-contrib-watch": "^0.5.3",
     "grunt-conventional-changelog": "~1.1.0",
     "grunt-karma": "~0.6.2",
+    "grunt-ng-annotate": "^0.4.0",
     "karma": "~0.10.9",
     "karma-chrome-launcher": "~0.1.2",
     "karma-firefox-launcher": "~0.1.3",
