@@ -35,7 +35,7 @@
             
             <div>
                 <input type=number ng-model="carouselIndex2">
-                <ul rn-carousel rn-carousel-index="carouselIndex2" rn-carousel-buffered class="carousel2">
+                <ul rn-carousel rn-carousel-index="carouselIndex2" rn-carousel-auto-slide="3" rn-carousel-buffered class="carousel2">
                     <li ng-repeat="slide in slides2 track by slide.id" ng-class="'id-' + slide.id">
                         <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
                           id: {{ slide.id }}<br>
@@ -65,7 +65,7 @@
             </div>
             <br>
             <div >
-                <ul rn-carousel rn-carousel-index="carouselIndex3" rn-carousel-transition="parallax" rn-carousel-buffered class="carousel3">
+                <ul rn-carousel rn-carousel-index="carouselIndex3" rn-carousel-transition="zoom" rn-carousel-buffered class="carousel3">
                     <li ng-repeat="slide in slides3 track by slide.id">
                         <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
                           id: {{ slide.id }}<br>
@@ -87,7 +87,7 @@
             </div>
             <br>
             <div >
-                <ul rn-carousel rn-carousel-index="3" class="carousel5">
+                <ul rn-carousel rn-carousel-index="3" rn-carousel-auto-slide="3" class="carousel5">
                     <li>Slide 1</li>
                     <li>Slide 2</li>
                     <li>Slide 3</li>
@@ -350,8 +350,8 @@
                 });
             };
 
-            $scope.carouselIndex = 5;
-            $scope.carouselIndex2 = 5;
+            $scope.carouselIndex = 0;
+            $scope.carouselIndex2 = 0;
             $scope.carouselIndex3 = 5;
             $scope.carouselIndex4 = 5;
 

@@ -130,7 +130,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 TODO :
 
  - non repeat-based
- - loop
  - autoslide
 
 
@@ -214,7 +213,7 @@ TODO :
                 degrees = offset < (slideIndex * -100) ? maxDegrees : -maxDegrees;
                 style[DeviceCapabilities.transformProperty] = slideTransformValue + ' ' + 'rotateY(' + degrees + 'deg)';
                 style['transform-origin'] = transformFrom + '% 50%';
-            } else if (transitionType == 'parallax') {
+            } else if (transitionType == 'zoom') {
                 style[DeviceCapabilities.transformProperty] = slideTransformValue;
                 var scale = 1;
                 if (Math.abs(absoluteLeft) < 100) {
@@ -242,14 +241,8 @@ TODO :
         };
     })
 
-    .service('transformRepeatExpression', function() {
-
-    })
-
-
-
-    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$timeout', 'computeCarouselSlideStyle', 'createStyleString',
-        function($swipe, $window, $document, $parse, $compile, $timeout, computeCarouselSlideStyle, createStyleString) {
+    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$timeout', '$interval', 'computeCarouselSlideStyle', 'createStyleString',
+        function($swipe, $window, $document, $parse, $compile, $timeout, $interval, computeCarouselSlideStyle, createStyleString) {
             // internal ids to allow multiple instances
             var carouselId = 0,
                 // in container % how much we need to drag to trigger the slide change
@@ -364,6 +357,22 @@ TODO :
                             });
                         }
 
+                        function goToNextSlide(slideOptions) {
+                            var index = scope.carouselIndex + 1;
+                            if (index > currentSlides.length - 1) {
+                                index = 0;
+                            }
+                            goToSlide(index, slideOptions);
+                        }
+
+                        function goToPrevSlide(slideOptions) {
+                            var index = scope.carouselIndex - 1;
+                            if (index < 0) {
+                                index = currentSlides.length - 1;
+                            }
+                            goToSlide(index, slideOptions);
+                        }
+
                         function goToSlide(index, slideOptions) {
                             //console.log('goToSlide', arguments);
                             // move a to the given slide index
@@ -448,6 +457,14 @@ TODO :
                             angular.forEach(getSlidesDOM(), function(node, index) {
                                 currentSlides.push({id: index});
                             });
+                        }
+
+                        var autoSlider;
+                        if (iAttributes.rnCarouselAutoSlide) {
+                            var duration = parseInt(iAttributes.rnCarouselAutoSlide, 10) || 3;
+                            autoSlider = $interval(function() {
+                                goToNextSlide();
+                            }, duration * 1000);
                         }
 
                         if (iAttributes.rnCarouselIndex) {
