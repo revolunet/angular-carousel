@@ -342,7 +342,7 @@
                         if (iAttributes.rnCarouselAutoSlide!==undefined) {
                             var duration = parseInt(iAttributes.rnCarouselAutoSlide, 10) || options.autoSlideDuration;
                             autoSlider = $interval(function() {
-                                if (!animating) {
+                                if (!animating && !pressed) {
                                     scope.nextSlide();
                                 }
                             }, duration * 1000);
@@ -416,6 +416,9 @@
                             swipeMoved = false;
                             destination = startX - coords.x;
                             if (destination===0) {
+                                return;
+                            }
+                            if (animating) {
                                 return;
                             }
                             offset += (-destination * 100 / elWidth);
