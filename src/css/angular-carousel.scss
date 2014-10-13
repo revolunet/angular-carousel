@@ -13,6 +13,8 @@ ul[rn-carousel] {
   white-space: nowrap;
   position: relative;
   perspective:1000px;
+  -ms-touch-action: none;
+  touch-action: none;
   li {
     color:black;
     backface-visibility: hidden;
@@ -31,7 +33,19 @@ ul[rn-carousel] {
   }
 }
 
+/* prevent flickering when moving buffer */
+ul[rn-carousel-buffered] li {
+  display:none;
+}
 
 ul[rn-carousel-transition="hexagon"] {
   overflow:visible;
+}
+
+*[rn-carousel-indicator] span {
+  cursor:pointer;
+  color: #666;
+  &.active {
+    color: white
+  }
 }

@@ -11,7 +11,9 @@ ul[rn-carousel] {
   position: relative;
   -webkit-perspective: 1000px;
   -ms-perspective: 1000px;
-  perspective: 1000px; }
+  perspective: 1000px;
+  -ms-touch-action: none;
+  touch-action: none; }
   ul[rn-carousel] li {
     color: black;
     -webkit-backface-visibility: hidden;
@@ -30,5 +32,15 @@ ul[rn-carousel] {
     height: 100%;
     display: inline-block; }
 
+/* prevent flickering when moving buffer */
+ul[rn-carousel-buffered] li {
+  display: none; }
+
 ul[rn-carousel-transition="hexagon"] {
   overflow: visible; }
+
+*[rn-carousel-indicator] span {
+  cursor: pointer;
+  color: #666; }
+  *[rn-carousel-indicator] span.active {
+    color: white; }

@@ -5,17 +5,20 @@ angular.module('angular-carousel')
     restrict: 'A',
     replace: true,
     scope: {
-      items: '=',
-      index: '='
+      slides: '=',
+      index: '=rnCarouselIndex'
     },
-    templateUrl: 'carousel-indicators.html'
+    templateUrl: 'carousel-indicators.html',
+    link: function(scope, iElement, iAttributes, carouselCtrl) {
+      console.log('carouselCtrl', carouselCtrl);
+    }
   };
 }]);
 
 angular.module('angular-carousel').run(['$templateCache', function($templateCache) {
   $templateCache.put('carousel-indicators.html',
-      '<div class="rn-carousel-indicator">\n' +
-      ' <span ng-repeat="item in items" ng-click="$parent.index=$index" ng-class="{active: $index==$parent.index}"></span>\n' +
+      '<div>\n' +
+      ' <span ng-repeat="slide in currentSlides" ng-click="$parent.carouselIndex=$index" ng-class="{active: $index==$parent.carouselIndex}"></span>\n' +
       '</div>'
   );
 }]);
