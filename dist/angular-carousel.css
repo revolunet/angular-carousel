@@ -39,8 +39,29 @@ ul[rn-carousel-buffered] li {
 ul[rn-carousel-transition="hexagon"] {
   overflow: visible; }
 
-*[rn-carousel-indicator] span {
+/* indicators */
+div[rn-carousel-indicators] span {
   cursor: pointer;
   color: #666; }
-  *[rn-carousel-indicator] span.active {
+  div[rn-carousel-indicators] span.active {
     color: white; }
+
+/* prev/next controls */
+.rn-carousel-control {
+  -webkit-transition: opacity 0.2s ease-out;
+  transition: opacity 0.2s ease-out;
+  font-size: 2rem;
+  position: absolute;
+  top: 40%;
+  opacity: 0.75;
+  cursor: pointer; }
+  .rn-carousel-control:hover {
+    opacity: 1; }
+  .rn-carousel-control.rn-carousel-control-prev {
+    left: 0.5em; }
+    .rn-carousel-control.rn-carousel-control-prev:before {
+      content: "<"; }
+  .rn-carousel-control.rn-carousel-control-next {
+    right: 0.5em; }
+    .rn-carousel-control.rn-carousel-control-next:before {
+      content: ">"; }

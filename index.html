@@ -14,7 +14,7 @@
         <div class="center">
             <div>
                 <input type=number ng-model="carouselIndex">
-                <ul rn-carousel rn-carousel-index="carouselIndex" rn-carousel-buffered class="carousel1">
+                <ul rn-carousel rn-carousel-controls rn-carousel-index="carouselIndex" rn-carousel-buffered class="carousel1">
                     <li ng-repeat="slide in slides track by slide.id" ng-class="'id-' + slide.id">
                         <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
                           id: {{ slide.id }}<br>
@@ -23,9 +23,11 @@
                     </li>
                 </ul>
                 <div rn-carousel-indicators slides="slides" rn-carousel-index="carouselIndex"></div>
+               <!--
                 <div>
                     <span class="carousel-indicator" ng-class="{active: $index==carouselIndex}" ng-repeat="slide in slides" ng-click="$parent.carouselIndex=$index">●</span>
                 </div>
+            -->
                 <div>
                     <button ng-click="carouselIndex=carouselIndex-1">prev</button>
                     {{ (carouselIndex + 1) }} / {{ slides.length }}

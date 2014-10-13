@@ -174,6 +174,7 @@ TODO :
                             transitionDuration: 300,
                             /* do touchend trigger next slide automatically */
                             isSequential: true,
+                            autoSlideDuration: 3,
                             bufferSize: 5
                         };
 
@@ -193,6 +194,15 @@ TODO :
                             animateTransitions = true,
                             intialState = true,
                             animating;
+
+                        if(iAttributes.rnCarouselControls!==undefined) {
+                            // dont use a directive for this
+                            var tpl = '<div class="rn-carousel-controls">\n' +
+                                '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
+                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + repeatCollection + '.length - 1"></span>\n' +
+                                '</div>';
+                            iElement.append($compile(angular.element(tpl))(scope));
+                        }
 
                         $swipe.bind(iElement, {
                             start: swipeStart,
@@ -230,21 +240,21 @@ TODO :
                             });
                         }
 
-                        function goToNextSlide(slideOptions) {
+                        scope.nextSlide = function(slideOptions) {
                             var index = scope.carouselIndex + 1;
                             if (index > currentSlides.length - 1) {
                                 index = 0;
                             }
                             goToSlide(index, slideOptions);
-                        }
+                        };
 
-                        function goToPrevSlide(slideOptions) {
+                        scope.prevSlide = function(slideOptions) {
                             var index = scope.carouselIndex - 1;
                             if (index < 0) {
                                 index = currentSlides.length - 1;
                             }
                             goToSlide(index, slideOptions);
-                        }
+                        };
 
                         function goToSlide(index, slideOptions) {
                             //console.log('goToSlide', arguments);
@@ -333,10 +343,12 @@ TODO :
                         }
 
                         var autoSlider;
-                        if (iAttributes.rnCarouselAutoSlide) {
-                            var duration = parseInt(iAttributes.rnCarouselAutoSlide, 10) || 3;
+                        if (iAttributes.rnCarouselAutoSlide!==undefined) {
+                            var duration = parseInt(iAttributes.rnCarouselAutoSlide, 10) || options.autoSlideDuration;
                             autoSlider = $interval(function() {
-                                goToNextSlide();
+                                if (!animating) {
+                                    scope.nextSlide();
+                                }
                             }, duration * 1000);
                         }
 
@@ -458,7 +470,6 @@ TODO :
                                     // last buffer part
                                     bufferIndex = currentSlides.length - scope.carouselBufferSize;
                                 } else {
-                                    console.log('compute buffer');
                                     // compute buffer start
                                     bufferIndex = scope.carouselIndex - bufferEdgeSize;
                                 }

@@ -8,17 +8,14 @@ angular.module('angular-carousel')
       slides: '=',
       index: '=rnCarouselIndex'
     },
-    templateUrl: 'carousel-indicators.html',
-    link: function(scope, iElement, iAttributes, carouselCtrl) {
-      console.log('carouselCtrl', carouselCtrl);
-    }
+    templateUrl: 'carousel-indicators.html'
   };
 }]);
 
 angular.module('angular-carousel').run(['$templateCache', function($templateCache) {
   $templateCache.put('carousel-indicators.html',
-      '<div>\n' +
-      ' <span ng-repeat="slide in currentSlides" ng-click="$parent.carouselIndex=$index" ng-class="{active: $index==$parent.carouselIndex}"></span>\n' +
+      '<div class="carousel-indicator">\n' +
+        '<span ng-class="{active: $index==index}" ng-repeat="slide in slides" ng-click="$parent.index=$index">●</span>' +
       '</div>'
   );
 }]);

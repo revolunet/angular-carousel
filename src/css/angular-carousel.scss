@@ -42,10 +42,38 @@ ul[rn-carousel-transition="hexagon"] {
   overflow:visible;
 }
 
-*[rn-carousel-indicator] span {
+/* indicators */
+div[rn-carousel-indicators] span {
   cursor:pointer;
   color: #666;
   &.active {
     color: white
+  }
+}
+
+/* prev/next controls */
+.rn-carousel-control {
+  transition: opacity 0.2s ease-out;
+  font-size: 2rem;
+  position: absolute;
+  top: 40%;
+  opacity: 0.75;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+
+  &.rn-carousel-control-prev {
+    left: 0.5em;
+    &:before {
+      content: "<";
+    }
+  }
+
+  &.rn-carousel-control-next {
+    right: 0.5em;
+    &:before {
+      content: ">";
+    }
   }
 }
