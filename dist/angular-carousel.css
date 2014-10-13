@@ -40,10 +40,10 @@ ul[rn-carousel-transition="hexagon"] {
   overflow: visible; }
 
 /* indicators */
-div[rn-carousel-indicators] span {
+div.rn-carousel-indicator span {
   cursor: pointer;
   color: #666; }
-  div[rn-carousel-indicators] span.active {
+  div.rn-carousel-indicator span.active {
     color: white; }
 
 /* prev/next controls */

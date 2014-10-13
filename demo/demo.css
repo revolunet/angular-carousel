@@ -61,3 +61,10 @@ input.tiny {
 ul[rn-carousel-transition="hexagon"] {
   margin-left:100px;
 }
+
+.custom-indicator span {
+  transition: all 0.3s ease-in;
+}
+.custom-indicator span.active {
+  color:yellow !important;
+}

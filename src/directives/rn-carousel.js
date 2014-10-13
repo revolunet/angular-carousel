@@ -356,7 +356,6 @@
                             if (angular.isFunction(indexModel.assign)) {
                                 /* check if this property is assignable then watch it */
                                 scope.$watch('carouselIndex', function(newValue) {
-                                    console.log('watch carouselIndex', newValue);
                                     if (!animating) {
                                         updateParentIndex(newValue);
                                     }

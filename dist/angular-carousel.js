@@ -92,7 +92,7 @@ angular.module('angular-carousel')
 
 angular.module('angular-carousel').run(['$templateCache', function($templateCache) {
   $templateCache.put('carousel-indicators.html',
-      '<div class="carousel-indicator">\n' +
+      '<div class="rn-carousel-indicator">\n' +
         '<span ng-repeat="slide in slides" ng-class="{active: $index==index}" ng-click="goToSlide($index)">●</span>' +
       '</div>'
   );
@@ -456,7 +456,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             if (angular.isFunction(indexModel.assign)) {
                                 /* check if this property is assignable then watch it */
                                 scope.$watch('carouselIndex', function(newValue) {
-                                    console.log('watch carouselIndex', newValue);
                                     if (!animating) {
                                         updateParentIndex(newValue);
                                     }

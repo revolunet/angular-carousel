@@ -64,6 +64,8 @@ You can add position indicators by adding this directive where you want :
  - angular-carousel use the great [shifty.js](https://github.com/jeremyckahn/shifty) for the animations
 
 ## Todo :
+ - disable autoslide on hover
+ - delay autoslide on indicators click/move
  - customisable transitions
  - more transition types
  - infinite loop support

@@ -43,7 +43,7 @@ ul[rn-carousel-transition="hexagon"] {
 }
 
 /* indicators */
-div[rn-carousel-indicators] span {
+div.rn-carousel-indicator span {
   cursor:pointer;
   color: #666;
   &.active {
