@@ -31,6 +31,7 @@ h3 {
     color:white;
     background-size:cover;
     height: 100%;
+    background-position: center center;
 }
 
 ul[rn-carousel] {
@@ -46,10 +47,18 @@ ul[rn-carousel] {
     background-color: #ccc;
 }
 
-div.carousel-demo {
+.carousel-demo {
     margin-top:20px;
     display:inline-block;
     text-align: center;
+}
+.carousel-demo-fullscreen {
+  width:100%;
+  height:100%;
+}
+.carousel-demo-fullscreen ul[rn-carousel] {
+  width:100%;
+  height:100%;
 }
 
 input.tiny {
@@ -58,7 +67,7 @@ input.tiny {
 }
 
 
-ul[rn-carousel-transition="hexagon"] {
+.carousel-demo ul[rn-carousel-transition="hexagon"] {
   margin-left:100px;
 }
 
