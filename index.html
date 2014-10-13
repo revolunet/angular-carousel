@@ -19,160 +19,126 @@
             Swipe these demos with your mouse or finger
         </div>
 
-        <h3>ngRepeat demo (buffered carousel)</h3>
-        <div class="details">A simple buffered ng-repeat with a custom template.
-            <br>
-            Swipe 50 slides with only 5 slides in the DOM
-        </div>
-        <ul rn-carousel rn-carousel-buffered class="my-slider ng-cloak">
-            <li ng-repeat="slide in slides|filter:{odd:true}:true track by slide.label" ng-style="{'background-image': 'url(' + slide.img + ')'}">
-                <div class="debug">
-                    {{ slide.label }} / {{ slides.length }}
+        <div>
+            <div>
+                <h3>Buffered ngRepeat demo</h3>
+                <div class="details">A simple buffered ng-repeat with a custom template.
                     <br>
-                    carouselIndex: {{ carouselIndex }}<br>
-                    carouselBufferIndex: {{ carouselBufferIndex }}<br>
+                    Swipe 50 slides with only 5 slides in the DOM. use builtin controls
                 </div>
-            </li>
-        </ul>
-
-        <h3>template-based demo</h3>
-        <div class="details">Various blocks automagically converted to a carousel.
+                <div class="carousel-demo">
+                    index : <input type="number" class="tiny" ng-model="carouselIndex">
+                    <ul rn-carousel rn-carousel-controls rn-carousel-index="carouselIndex" rn-carousel-buffered class="carousel1">
+                        <li ng-repeat="slide in slides track by slide.id" ng-class="'id-' + slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                                #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <h3>ngRepeat with auto-slide, controls and indicators </h3>
+                <div class="details">
+                </div>
+                <div class="carousel-demo">
+                    index: <input type="number" class="tiny" ng-model="carouselIndex2">
+                    <ul rn-carousel rn-carousel-index="carouselIndex2" rn-carousel-auto-slide="3" rn-carousel-buffered class="carousel2">
+                        <li ng-repeat="slide in slides2 track by slide.id" ng-class="'id-' + slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                              #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
+                    <div rn-carousel-indicators ng-if="slides2.length > 1" slides="slides2" rn-carousel-index="carouselIndex2"></div>
+                </div>
+            </div>
             <br>
-            Just add rn-carousel-indicator to display clickable indicators
-        </div>
-        <ul rn-carousel rn-carousel-indicator class="my-slider standard ng-cloak">
-            <li ng-style="{'background-color': colors[0]}">
-                This is a standard template
-                <div class="big">slide #1</div>
-            </li>
-            <li ng-style="{'background-color': colors[10]}">
-                Here's sophie : <br>
-                <img src="./demo/img/sophie.jpeg">
-            </li>
-            <li ng-style="{'background-color': colors[30]}">
-                A friend of mine : <br>
-                <img src="./demo/img/grumpy.jpg" height="120">
-            </li>
-            <li ng-style="{'background-color': colors[40]}">
-                And to finish :
-                <iframe width="100%" height="80%" src="//www.youtube.com/embed/OQSNhk5ICTI" frameborder="0" allowfullscreen></iframe>
-            </li>
-        </ul>
-
-        <h3>Standard carousel with thumbs navigation </h3>
-        <div class="details">This one has an initial index and the thumbs controls the rn-carousel-index binding</div>
-        <ul rn-carousel rn-carousel-index="slideIndex2" class="my-slider ng-cloak">
-            <li ng-repeat="slide in slides2" ng-style="{'background-image': 'url(' + slide.img + ')'}"></li>
-        </ul>
-        <div class="ng-cloak thumbs">
-            <div class="thumb" ng-repeat="slide in slides2" ng-click="$parent.slideIndex2=$index" ng-style="{'background-image': 'url(' + slide.img + ')'}" ng-class="{'is-active': ($parent.slideIndex2==$index)}"></div>
-        </div>
-
-        <h3>carousel with builtin prev/next controls</h3>
-        <div class="details">just add rn-carousel-control attribute to enable builtin controls</div>
-        <ul rn-carousel rn-carousel-buffered rn-carousel-indicator rn-carousel-control class="my-slider ng-cloak">
-            <li ng-repeat="slide in slides|limitTo:5" ng-style="{'background-image': 'url(' + slide.img + ')'}">
-                <div class="debug">
-                    {{ slide.label }} / {{ slides.length }}
+            <div >
+                <h3>ngRepeat with custom transition</h3>
+                <div class="details">Use the 'hexagon' transition. index is shared with the carousel below.
                 </div>
-            </li>
-        </ul>
-
-        <h3>buffered ngRepeat carousel with custom controls</h3>
-        <div class="details">Custom controls demo, just update the rn-carousel-index index binding</div>
-        <ul rn-carousel rn-carousel-buffered rn-carousel-indicator rn-carousel-index="slideIndex" rn-carousel-swipe="{{swipe}}" class="my-slider ng-cloak">
-            <li ng-repeat="slide in slides4" ng-style="{'background-image': 'url(' + slide.img + ')'}">
-                <div class="debug">
-                    {{ slide.label }} / {{ slides4.length }}
-                    <br>
-                    carouselIndex: {{ carouselIndex }}<br>
-                    carouselBufferIndex: {{ carouselBufferIndex }}<br>
+                <div class="carousel-demo">
+                    <ul rn-carousel rn-carousel-index="carouselIndex3" rn-carousel-transition="hexagon" rn-carousel-buffered class="carousel3">
+                        <li ng-repeat="slide in slides3 track by slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                              #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </li>
-        </ul>
-        <div class="controls ng-cloak">
-            <button class="button grey" ng-disabled="slideIndex==0" ng-click="prev()">prev</button>
-            <span>{{ slideIndex + 1 }} / {{ slides4.length }}</span>
-            <button class="button grey" ng-click="next()" ng-disabled="slideIndex==slides4.length-1" >next</button>
-            <button class="button grey" ng-click="pushSlide()">add 3 slides</button>
-            <button class="button grey" ng-click="toggleSwipe()">toggle swipe ({{ swipe?'on':'off' }})</button>
+            </div>
+            <br>
+            <div>
+                <h3>ngRepeat with custom transition</h3>
+                <div class="details">Use the 'zoom' transition. index is shared with the carousel above.
+                </div>
+                <div class="carousel-demo">
+                    <ul rn-carousel rn-carousel-index="carouselIndex3" rn-carousel-transition="zoom" rn-carousel-buffered class="carousel3">
+                        <li ng-repeat="slide in slides3 track by slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                              #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <br>
+            <div>
+                <h3>Custom templates without ng-repeat and auto-slide</h3>
+                <div class="details">
+                </div>
+                <div class="carousel-demo">
+                    <ul rn-carousel rn-carousel-index="3" rn-carousel-auto-slide="3" class="carousel5">
+                        <li>Slide 1</li>
+                        <li>Slide 2</li>
+                        <li>Slide 3</li>
+                        <li>Slide 4</li>
+                        <li>Slide 5</li>
+                        <li>Slide 6</li>
+                        <li>Slide 7</li>
+                        <li>Slide 8</li>
+                        <li>Slide 9</li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
-
-        <h3>object-based ngRepeat carousel with indicators</h3>
-        <div class="details">Use the object-based ngRepeat syntax. (not compatible with buffering)</div>
-        <ul rn-carousel rn-carousel-indicator rn-carousel-index="slideIndex3" class="my-slider slider3 ng-cloak">
-            <li ng-repeat="(label, color) in slides3"  ng-style="{'background-color': color}" class="center">
-                <div class="big">{{ label }}</div>
-            </li>
-        </ul>
-
-        <h3>togglable carousel via ng-if</h3>
-        <div class="details">If you use ng-if, be sure to use the <a target="_blank" href="http://stackoverflow.com/questions/17606936/angularjs-dot-in-ng-model">dot-notation syntax</a> for the index binding as it creates a child scope.</div>
-        <button class="ng-cloak button grey" ng-click="showCarousel=!showCarousel">toggle carousel - {{ demo.ifIndex }} / {{ slides5.length }}</button>
-        <br><br>
-
-        <ul ng-if="showCarousel" rn-carousel rn-carousel-indicator rn-carousel-index="demo.ifIndex" class="my-slider slider3 ng-cloak ifCarousel">
-            <li ng-repeat="color in slides5"  ng-style="{'background-color': color}" class="center">
-                <div class="big">#{{ $index + 1 }}</div>
-            </li>
-        </ul>
-
-        <h3>Autoplay slider</h3>
-        <div class="details">
-            By adding <strong>rn-carousel-auto-slide</strong> with an integer value will make the slider automatically change the visible slide after <strong>n</strong> seconds
-            <br/>
-            By adding <strong>rn-carousel-pause-on-hover="true"</strong>  the slide will pause on mouse hover and start on mouse leave
-        </div>
-        <ul rn-carousel rn-carousel-indicator rn-carousel-auto-slide="3" rn-carousel-control="true" rn-carousel-pause-on-hover="true" class="my-slider standard ng-cloak">
-            <li ng-style="{'background-color': colors[0]}">
-                This is a standard template
-                <div class="big">slide #1</div>
-            </li>
-            <li ng-style="{'background-color': colors[10]}">
-                Here's sophie : <br>
-                <img src="./demo/img/sophie.jpeg">
-            </li>
-            <li ng-style="{'background-color': colors[30]}">
-                A friend of mine : <br>
-                <img src="./demo/img/grumpy.jpg" height="120">
-            </li>
-            <li ng-style="{'background-color': colors[40]}">
-                And to finish :
-                <iframe width="100%" height="80%" src="//www.youtube.com/embed/OQSNhk5ICTI" frameborder="0" allowfullscreen></iframe>
-            </li>
-        </ul>
-        <br/><br/>
-        <h3>Other demos</h3>
-        <ul>
-          <li><a href="demo/flickr-full" target="_blank">Flickr browser</a></li>
-        </ul>
-        <br><br>
 
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-touch.min.js"></script>
-    <script src="./dist/angular-carousel.js"></script>
-    <!--<script src="./src/angular-carousel.js"></script>
+    
+    <!--<script src="./dist/angular-carousel.js"></script> -->
+    <script src="./src/angular-carousel.js"></script>
     <script src="./src/directives/rn-carousel.js"></script>
     <script src="./src/directives/rn-carousel-indicators.js"></script>
-    <script src="./src/directives/sliceFilter.js"></script>-->
+    <script src="./src/directives/sliceFilter.js"></script>
+    <script src="./src/directives/shifty.js"></script>
     <script>
         angular.module('DemoApp', [
             'angular-carousel'
         ])
 
-        .controller('DemoCtrl', function($scope, $timeout) {
+        .controller('DemoCtrl', function($scope) {
+
             $scope.colors = ["#fc0003", "#f70008", "#f2000d", "#ed0012", "#e80017", "#e3001c", "#de0021", "#d90026", "#d4002b", "#cf0030", "#c90036", "#c4003b", "#bf0040", "#ba0045", "#b5004a", "#b0004f", "#ab0054", "#a60059", "#a1005e", "#9c0063", "#960069", "#91006e", "#8c0073", "#870078", "#82007d", "#7d0082", "#780087", "#73008c", "#6e0091", "#690096", "#63009c", "#5e00a1", "#5900a6", "#5400ab", "#4f00b0", "#4a00b5", "#4500ba", "#4000bf", "#3b00c4", "#3600c9", "#3000cf", "#2b00d4", "#2600d9", "#2100de", "#1c00e3", "#1700e8", "#1200ed", "#0d00f2", "#0800f7", "#0300fc"];
 
             function addSlide(target, style) {
                 var i = target.length;
                 target.push({
+                    id: (i + 1),
                     label: 'slide #' + (i + 1),
-                    img: 'http://lorempixel.com/450/300/' + style + '/' + (i % 10) ,
+                    img: 'http://lorempixel.com/450/300/' + style + '/' + ((i + 1) % 10) ,
                     color: $scope.colors[ (i*10) % $scope.colors.length],
                     odd: (i % 2 === 0)
                 });
             };
+
+            $scope.carouselIndex = 3;
+            $scope.carouselIndex2 = 0;
+            $scope.carouselIndex3 = 5;
+            $scope.carouselIndex4 = 5;
 
             function addSlides(target, style, qty) {
                 for (var i=0; i < qty; i++) {
@@ -186,52 +152,15 @@
 
             // 2nd ngRepeat demo
             $scope.slides2 = [];
-            $scope.slideIndex = 0;
-            addSlides($scope.slides2, 'city', 5);
+            addSlides($scope.slides2, 'sports', 10);
 
+            // 3rd ngRepeat demo
+            $scope.slides3 = [];
+            addSlides($scope.slides3, 'people', 50);
 
-            // demo with controls
+            // 4th ngRepeat demo
             $scope.slides4 = [];
-            addSlides($scope.slides4, 'people', 5);
-            $scope.pushSlide = function() {
-                addSlides($scope.slides4, 'people', 3);
-            }
-            $scope.prev = function() {
-                $scope.slideIndex--;
-            }
-            $scope.next = function() {
-                $scope.slideIndex++;
-            }
-            $scope.swipe = true;
-            $scope.toggleSwipe = function() {
-                $scope.swipe = !$scope.swipe;
-            }
-
-            // 4rd demo, object based iterable
-            $scope.slideIndex3 = 2;
-            $scope.slides3 = {
-                '#1': $scope.colors[5],
-                '#2': $scope.colors[15],
-                '#3': $scope.colors[25],
-                '#4': $scope.colors[35],
-                '#5': $scope.colors[45]
-            }
-
-            // thumbs demo
-            $scope.slideIndex2 = 2;
-
-            // ngIf demo
-            $scope.showCarousel = false;
-            $scope.demo = {
-                ifIndex: 2
-            }
-            $scope.slides5 = [
-                $scope.colors[5],
-                $scope.colors[15],
-                $scope.colors[25],
-                $scope.colors[35],
-                $scope.colors[45]
-            ]
+            addSlides($scope.slides4, 'city', 50);
 
         });
 

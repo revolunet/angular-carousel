@@ -1,21 +1,26 @@
 angular.module('angular-carousel')
 
-.directive('rnCarouselIndicators', [function() {
+.directive('rnCarouselIndicators', ['$parse', function($parse) {
   return {
     restrict: 'A',
-    replace: true,
     scope: {
-      items: '=',
-      index: '='
+      slides: '=',
+      index: '=rnCarouselIndex'
     },
-    templateUrl: 'carousel-indicators.html'
+    templateUrl: 'carousel-indicators.html',
+    link: function(scope, iElement, iAttributes) {
+      var indexModel = $parse(iAttributes.rnCarouselIndex);
+      scope.goToSlide = function(index) {
+        indexModel.assign(scope.$parent.$parent, index);
+      };
+    }
   };
 }]);
 
 angular.module('angular-carousel').run(['$templateCache', function($templateCache) {
   $templateCache.put('carousel-indicators.html',
-      '<div class="rn-carousel-indicator">\n' +
-      ' <span ng-repeat="item in items" ng-click="$parent.index=$index" ng-class="{active: $index==$parent.index}"></span>\n' +
+      '<div class="carousel-indicator">\n' +
+        '<span ng-repeat="slide in slides" ng-class="{active: $index==index}" ng-click="goToSlide($index)">●</span>' +
       '</div>'
   );
 }]);
