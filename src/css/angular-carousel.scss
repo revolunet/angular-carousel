@@ -13,8 +13,8 @@ ul[rn-carousel] {
   white-space: nowrap;
   position: relative;
   perspective:1000px;
-  -ms-touch-action: none;
-  touch-action: none;
+  -ms-touch-action: pan-y;
+  touch-action: pan-y;
   li {
     color:black;
     backface-visibility: hidden;
