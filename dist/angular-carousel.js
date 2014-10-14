@@ -320,14 +320,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         function updateSlidesPosition(offset) {
                             // manually apply transformation to carousel childrens
                             // todo : optim : apply only to visible items
-                            var style, x;
-                            x = scope.carouselBufferIndex * 100 + offset;
+                            var x = scope.carouselBufferIndex * 100 + offset;
                             angular.forEach(getSlidesDOM(), function(child, index) {
-                                style = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType));
-                                if (child.getAttribute('style') !== style) {
-                                    child.setAttribute('style', style);
-                                }
-
+                                child.style.cssText = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType));
                             });
                         }
 
