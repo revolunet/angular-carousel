@@ -12,8 +12,8 @@ ul[rn-carousel] {
   -webkit-perspective: 1000px;
   -ms-perspective: 1000px;
   perspective: 1000px;
-  -ms-touch-action: none;
-  touch-action: none; }
+  -ms-touch-action: pan-y;
+  touch-action: pan-y; }
   ul[rn-carousel] li {
     color: black;
     -webkit-backface-visibility: hidden;
