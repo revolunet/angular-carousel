@@ -108,8 +108,6 @@
         function($swipe, $window, $document, $parse, $compile, $timeout, $interval, computeCarouselSlideStyle, createStyleString, Tweenable) {
             // internal ids to allow multiple instances
             var carouselId = 0,
-                // in container % how much we need to drag to trigger the slide change
-                moveTreshold = 0.05,
                 // in absolute pixels, at which distance the slide stick to the edge on release
                 rubberTreshold = 3;
 
@@ -165,7 +163,9 @@
                             /* do touchend trigger next slide automatically */
                             isSequential: true,
                             autoSlideDuration: 3,
-                            bufferSize: 5
+                            bufferSize: 5,
+                            /* in container % how much we need to drag to trigger the slide change */
+                            moveTreshold: 0.1
                         };
 
                         // TODO
@@ -183,7 +183,8 @@
                             elX = null,
                             animateTransitions = true,
                             intialState = true,
-                            animating = false;
+                            animating = false,
+                            locked = false;
 
                         if(iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
@@ -231,14 +232,11 @@
                         }
 
                         scope.nextSlide = function(slideOptions) {
-                            if (carouselId===1) {
-                                console.log('nextSlide, scope.carouselIndex', scope.carouselIndex);
-                            }
                             var index = scope.carouselIndex + 1;
                             if (index > currentSlides.length - 1) {
                                 index = 0;
                             }
-                            if (!animating) {
+                            if (!locked) {
                                 goToSlide(index, slideOptions);
                             }
                         };
@@ -252,9 +250,6 @@
                         };
 
                         function goToSlide(index, slideOptions) {
-                            if (carouselId===1) {
-                                console.log('goToSlide', arguments, animating);
-                            }
                             // move a to the given slide index
                             if (index === undefined) {
                                 index = scope.carouselIndex;
@@ -262,14 +257,14 @@
 
                             slideOptions = slideOptions || {};
                             if (slideOptions.animate === false || options.transitionType === 'none') {
-                                animating = false;
+                                locked = false;
                                 offset = index * -100;
                                 scope.carouselIndex = index;
                                 updateBufferIndex();
                                 return;
                             }
 
-                            animating = true;
+                            locked = true;
                             var tweenable = new Tweenable();
                             tweenable.tween({
                                 from: {
@@ -284,7 +279,7 @@
                                     updateSlidesPosition(state.x);
                                 },
                                 finish: function() {
-                                    animating = false;
+                                    locked = false;
                                     scope.$apply(function() {
                                         scope.carouselIndex = index;
                                         offset = index * -100;
@@ -314,6 +309,9 @@
 
                         function swipeMove(coords, event) {
                             //console.log('swipeMove', coords, event);
+                            if (locked) {
+                                return;
+                            }
                             var x, delta;
                             if (pressed) {
                                 x = coords.x;
@@ -342,7 +340,7 @@
                         if (iAttributes.rnCarouselAutoSlide!==undefined) {
                             var duration = parseInt(iAttributes.rnCarouselAutoSlide, 10) || options.autoSlideDuration;
                             autoSlider = $interval(function() {
-                                if (!animating && !pressed) {
+                                if (!locked && !pressed) {
                                     scope.nextSlide();
                                 }
                             }, duration * 1000);
@@ -356,7 +354,7 @@
                             if (angular.isFunction(indexModel.assign)) {
                                 /* check if this property is assignable then watch it */
                                 scope.$watch('carouselIndex', function(newValue) {
-                                    if (!animating) {
+                                    if (!locked) {
                                         updateParentIndex(newValue);
                                     }
 
@@ -371,7 +369,7 @@
                                             newValue = 0;
                                             updateParentIndex(newValue);
                                         }
-                                        if (!animating) {
+                                        if (!locked) {
                                             goToSlide(newValue, {
                                                 animate: !init
                                             });
@@ -393,14 +391,23 @@
                             init = false;
                         }
 
+                        if (iAttributes.rnCarouselLocked) {
+                            scope.$watch(iAttributes.rnCarouselLocked, function(newValue, oldValue) {
+                                // only bind swipe when it's not switched off
+                                if(newValue === true) {
+                                    locked = true;
+                                } else {
+                                    locked = false;
+                                }
+                            });
+                        }
+
                         if (isRepeatBased) {
                             scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
                                 //console.log('repeatCollection', arguments);
                                 currentSlides = newValue;
                                 goToSlide(scope.carouselIndex);
                             });
-                        } else {
-                            
                         }
 
                         function swipeEnd(coords, event, forceAnimation) {
@@ -417,12 +424,12 @@
                             if (destination===0) {
                                 return;
                             }
-                            if (animating) {
+                            if (locked) {
                                 return;
                             }
                             offset += (-destination * 100 / elWidth);
                             if (options.isSequential) {
-                                var minMove = moveTreshold * elWidth,
+                                var minMove = options.moveTreshold * elWidth,
                                     absMove = -destination,
                                     slidesMove = -Math[absMove >= 0 ? 'ceil' : 'floor'](absMove / elWidth),
                                     shouldMove = Math.abs(absMove) > minMove;

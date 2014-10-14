@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.1 - 2014-10-13
+ * @version v0.3.2 - 2014-10-14
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -208,8 +208,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
         function($swipe, $window, $document, $parse, $compile, $timeout, $interval, computeCarouselSlideStyle, createStyleString, Tweenable) {
             // internal ids to allow multiple instances
             var carouselId = 0,
-                // in container % how much we need to drag to trigger the slide change
-                moveTreshold = 0.05,
                 // in absolute pixels, at which distance the slide stick to the edge on release
                 rubberTreshold = 3;
 
@@ -265,7 +263,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             /* do touchend trigger next slide automatically */
                             isSequential: true,
                             autoSlideDuration: 3,
-                            bufferSize: 5
+                            bufferSize: 5,
+                            /* in container % how much we need to drag to trigger the slide change */
+                            moveTreshold: 0.1
                         };
 
                         // TODO
@@ -283,7 +283,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             elX = null,
                             animateTransitions = true,
                             intialState = true,
-                            animating = false;
+                            animating = false,
+                            locked = false;
 
                         if(iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
@@ -331,14 +332,11 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         }
 
                         scope.nextSlide = function(slideOptions) {
-                            if (carouselId===1) {
-                                console.log('nextSlide, scope.carouselIndex', scope.carouselIndex);
-                            }
                             var index = scope.carouselIndex + 1;
                             if (index > currentSlides.length - 1) {
                                 index = 0;
                             }
-                            if (!animating) {
+                            if (!locked) {
                                 goToSlide(index, slideOptions);
                             }
                         };
@@ -352,9 +350,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         };
 
                         function goToSlide(index, slideOptions) {
-                            if (carouselId===1) {
-                                console.log('goToSlide', arguments, animating);
-                            }
                             // move a to the given slide index
                             if (index === undefined) {
                                 index = scope.carouselIndex;
@@ -362,14 +357,14 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                             slideOptions = slideOptions || {};
                             if (slideOptions.animate === false || options.transitionType === 'none') {
-                                animating = false;
+                                locked = false;
                                 offset = index * -100;
                                 scope.carouselIndex = index;
                                 updateBufferIndex();
                                 return;
                             }
 
-                            animating = true;
+                            locked = true;
                             var tweenable = new Tweenable();
                             tweenable.tween({
                                 from: {
@@ -384,7 +379,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     updateSlidesPosition(state.x);
                                 },
                                 finish: function() {
-                                    animating = false;
+                                    locked = false;
                                     scope.$apply(function() {
                                         scope.carouselIndex = index;
                                         offset = index * -100;
@@ -414,6 +409,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                         function swipeMove(coords, event) {
                             //console.log('swipeMove', coords, event);
+                            if (locked) {
+                                return;
+                            }
                             var x, delta;
                             if (pressed) {
                                 x = coords.x;
@@ -442,7 +440,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         if (iAttributes.rnCarouselAutoSlide!==undefined) {
                             var duration = parseInt(iAttributes.rnCarouselAutoSlide, 10) || options.autoSlideDuration;
                             autoSlider = $interval(function() {
-                                if (!animating && !pressed) {
+                                if (!locked && !pressed) {
                                     scope.nextSlide();
                                 }
                             }, duration * 1000);
@@ -456,7 +454,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             if (angular.isFunction(indexModel.assign)) {
                                 /* check if this property is assignable then watch it */
                                 scope.$watch('carouselIndex', function(newValue) {
-                                    if (!animating) {
+                                    if (!locked) {
                                         updateParentIndex(newValue);
                                     }
 
@@ -471,7 +469,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                             newValue = 0;
                                             updateParentIndex(newValue);
                                         }
-                                        if (!animating) {
+                                        if (!locked) {
                                             goToSlide(newValue, {
                                                 animate: !init
                                             });
@@ -493,14 +491,23 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             init = false;
                         }
 
+                        if (iAttributes.rnCarouselLocked) {
+                            scope.$watch(iAttributes.rnCarouselLocked, function(newValue, oldValue) {
+                                // only bind swipe when it's not switched off
+                                if(newValue === true) {
+                                    locked = true;
+                                } else {
+                                    locked = false;
+                                }
+                            });
+                        }
+
                         if (isRepeatBased) {
                             scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
                                 //console.log('repeatCollection', arguments);
                                 currentSlides = newValue;
                                 goToSlide(scope.carouselIndex);
                             });
-                        } else {
-                            
                         }
 
                         function swipeEnd(coords, event, forceAnimation) {
@@ -517,12 +524,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             if (destination===0) {
                                 return;
                             }
-                            if (animating) {
+                            if (locked) {
                                 return;
                             }
                             offset += (-destination * 100 / elWidth);
                             if (options.isSequential) {
-                                var minMove = moveTreshold * elWidth,
+                                var minMove = options.moveTreshold * elWidth,
                                     absMove = -destination,
                                     slidesMove = -Math[absMove >= 0 ? 'ceil' : 'floor'](absMove / elWidth),
                                     shouldMove = Math.abs(absMove) > minMove;

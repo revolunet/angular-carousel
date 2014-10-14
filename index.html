@@ -105,6 +105,22 @@
                     </ul>
                 </div>
             </div>
+            <br>
+            <div>
+                <h3>Lockable carousel</h3>
+                <div class="details">
+                </div>
+                <div class="carousel-demo">
+                    <label><input type="checkbox" ng-model="isLocked"/>Lock the carousel</label>
+                    <ul rn-carousel class="carousel5" rn-carousel-locked="isLocked">
+                        <li ng-repeat="slide in slides3 track by slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                              #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
         </div>
 
