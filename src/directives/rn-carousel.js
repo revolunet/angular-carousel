@@ -118,7 +118,8 @@
                 scope: true,
                 compile: function(tElement, tAttributes) {
                     // use the compile phase to customize the DOM
-                    var firstChildAttributes = tElement[0].querySelector('li').attributes,
+                    var firstChild = tElement[0].querySelector('li'),
+                        firstChildAttributes = (firstChild) ? firstChild.attributes : [],
                         isRepeatBased = false,
                         isBuffered = false,
                         repeatItem,
