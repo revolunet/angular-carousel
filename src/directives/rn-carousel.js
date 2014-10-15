@@ -205,7 +205,7 @@
                         });
 
                         function getSlidesDOM() {
-                            return iElement[0].querySelectorAll('li');
+                            return iElement[0].querySelectorAll(':scope > li');
                         }
 
                         function documentMouseUpEvent(event) {
