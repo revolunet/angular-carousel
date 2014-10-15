@@ -15,7 +15,7 @@ ul[rn-carousel] {
   perspective:1000px;
   -ms-touch-action: pan-y;
   touch-action: pan-y;
-  li {
+  > li {
     color:black;
     backface-visibility: hidden;
     overflow: visible;
@@ -34,7 +34,7 @@ ul[rn-carousel] {
 }
 
 /* prevent flickering when moving buffer */
-ul[rn-carousel-buffered] li {
+ul[rn-carousel-buffered] > li {
   display:none;
 }
 
