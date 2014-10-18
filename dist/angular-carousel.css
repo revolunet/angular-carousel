@@ -11,7 +11,7 @@ ul[rn-carousel] {
   perspective: 1000px;
   -ms-touch-action: pan-y;
   touch-action: pan-y; }
-  ul[rn-carousel] li {
+  ul[rn-carousel] > li {
     color: black;
     -webkit-backface-visibility: hidden;
     -ms-backface-visibility: hidden;
@@ -30,7 +30,7 @@ ul[rn-carousel] {
     display: inline-block; }
 
 /* prevent flickering when moving buffer */
-ul[rn-carousel-buffered] li {
+ul[rn-carousel-buffered] > li {
   display: none; }
 
 ul[rn-carousel-transition="hexagon"] {

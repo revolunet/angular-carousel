@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.2 - 2014-10-15
+ * @version v0.3.3 - 2014-10-19
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -218,7 +218,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                 scope: true,
                 compile: function(tElement, tAttributes) {
                     // use the compile phase to customize the DOM
-                    var firstChildAttributes = tElement[0].querySelector('li').attributes,
+                    var firstChild = tElement[0].querySelector('li'),
+                        firstChildAttributes = (firstChild) ? firstChild.attributes : [],
                         isRepeatBased = false,
                         isBuffered = false,
                         repeatItem,
@@ -305,7 +306,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         });
 
                         function getSlidesDOM() {
-                            return iElement[0].querySelectorAll('li');
+                            return iElement[0].querySelectorAll(':scope > li');
                         }
 
                         function documentMouseUpEvent(event) {
