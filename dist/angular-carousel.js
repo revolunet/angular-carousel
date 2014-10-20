@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.3 - 2014-10-19
+ * @version v0.3.4 - 2014-10-20
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -616,7 +616,7 @@ angular.module('angular-carousel.shifty', [])
 
 .factory('Tweenable', function() {
 
-  (function (root) {
+  (function (root, window) {
     /*!
      * Shifty Core
      * By Jeremy Kahn - jeremyckahn@gmail.com
@@ -1068,7 +1068,8 @@ angular.module('angular-carousel.shifty', [])
       return Tweenable;
 
     } ());
-
+    
+    window.Tweenable = Tweenable;
     /*!
      * All equations are adapted from Thomas Fuchs' [Scripty2](https://github.com/madrobby/scripty2/blob/master/src/effects/transitions/penner.js).
      *
@@ -1989,9 +1990,9 @@ angular.module('angular-carousel.shifty', [])
 
     } (Tweenable));
 
-  }(this));
+  }(this, window));
 
-  return this.Tweenable;
+  return window.Tweenable;
 });
 
 (function() {
