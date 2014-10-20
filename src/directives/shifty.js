@@ -4,7 +4,7 @@ angular.module('angular-carousel.shifty', [])
 
 .factory('Tweenable', function() {
 
-  (function (root) {
+  (function (root, window) {
     /*!
      * Shifty Core
      * By Jeremy Kahn - jeremyckahn@gmail.com
@@ -456,7 +456,8 @@ angular.module('angular-carousel.shifty', [])
       return Tweenable;
 
     } ());
-
+    
+    window.Tweenable = Tweenable;
     /*!
      * All equations are adapted from Thomas Fuchs' [Scripty2](https://github.com/madrobby/scripty2/blob/master/src/effects/transitions/penner.js).
      *
@@ -1377,7 +1378,7 @@ angular.module('angular-carousel.shifty', [])
 
     } (Tweenable));
 
-  }(this));
+  }(this, window));
 
-  return this.Tweenable;
+  return window.Tweenable;
 });
