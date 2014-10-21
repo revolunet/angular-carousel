@@ -61,6 +61,7 @@ You can add position indicators by adding this directive where you want :
 
 ## Notes :
  - if you use IE<=9, iOS<7 or Android<4 please include the [requestAnimationFrame polyfill](https://github.com/darius/requestAnimationFrame/blob/master/requestAnimationFrame.js) in your application.
+ - if you use IE<=8 include the [es5-shim polyfill](https://github.com/es-shims/es5-shim/blob/master/es5-shim.min.js) in your application.
  - don't set any style attribute to your li's. they would be overwritten by the carousel (use classes instead).
  - angular-carousel use the great [shifty.js](https://github.com/jeremyckahn/shifty) for the animations
 
