@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.4 - 2014-10-20
+ * @version v0.3.5 - 2014-10-21
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -108,14 +108,18 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
         // detect supported CSS property
         function detectTransformProperty() {
             var transformProperty = 'transform';
-            ['webkit', 'moz', 'o', 'ms'].every(function(prefix) {
-                var e = '-' + prefix + '-transform';
-                if (typeof document.body.style[e] !== 'undefined') {
-                    transformProperty = e;
-                    return false;
-                }
-                return true;
-            });
+            if (typeof document.body.style[transformProperty] !== 'undefined') {
+                ['webkit', 'moz', 'o', 'ms'].every(function (prefix) {
+                    var e = '-' + prefix + '-transform';
+                    if (typeof document.body.style[e] !== 'undefined') {
+                        transformProperty = e;
+                        return false;
+                    }
+                    return true;
+                });
+            } else {
+                transformProperty = undefined;
+            }
             return transformProperty;
         }
 
@@ -158,37 +162,42 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                 slideTransformValue = DeviceCapabilities.has3d ? 'translate3d(' + absoluteLeft + '%, 0, 0)' : 'translate3d(' + absoluteLeft + '%, 0)',
                 distance = ((100 - Math.abs(absoluteLeft)) / 100);
 
-            if (transitionType == 'fadeAndSlide') {
-                style[DeviceCapabilities.transformProperty] = slideTransformValue;
-                opacity = 0;
-                if (Math.abs(absoluteLeft) < 100) {
-                    opacity = 0.3 + distance * 0.7;
-                }
-                style.opacity = opacity;
-            } else if (transitionType == 'hexagon') {
-                var transformFrom = 100,
-                    degrees = 0,
-                    maxDegrees = 60 * (distance - 1);
-
-                transformFrom = offset < (slideIndex * -100) ? 100 : 0;
-                degrees = offset < (slideIndex * -100) ? maxDegrees : -maxDegrees;
-                style[DeviceCapabilities.transformProperty] = slideTransformValue + ' ' + 'rotateY(' + degrees + 'deg)';
-                style['transform-origin'] = transformFrom + '% 50%';
-            } else if (transitionType == 'zoom') {
-                style[DeviceCapabilities.transformProperty] = slideTransformValue;
-                var scale = 1;
-                if (Math.abs(absoluteLeft) < 100) {
-                    scale = 1 + ((1 - distance) * 2);
-                }
-                style[DeviceCapabilities.transformProperty] += ' scale(' + scale + ')';
-                style['transform-origin'] = '50% 50%';
-                opacity = 0;
-                if (Math.abs(absoluteLeft) < 100) {
-                    opacity = 0.3 + distance * 0.7;
-                }
-                style.opacity = opacity;
+            if (!DeviceCapabilities.transformProperty) {
+                // fallback to default slide if transformProperty is not available
+                style['margin-left'] = absoluteLeft + '%';
             } else {
-                style[DeviceCapabilities.transformProperty] = slideTransformValue;
+                if (transitionType == 'fadeAndSlide') {
+                    style[DeviceCapabilities.transformProperty] = slideTransformValue;
+                    opacity = 0;
+                    if (Math.abs(absoluteLeft) < 100) {
+                        opacity = 0.3 + distance * 0.7;
+                    }
+                    style.opacity = opacity;
+                } else if (transitionType == 'hexagon') {
+                    var transformFrom = 100,
+                        degrees = 0,
+                        maxDegrees = 60 * (distance - 1);
+
+                    transformFrom = offset < (slideIndex * -100) ? 100 : 0;
+                    degrees = offset < (slideIndex * -100) ? maxDegrees : -maxDegrees;
+                    style[DeviceCapabilities.transformProperty] = slideTransformValue + ' ' + 'rotateY(' + degrees + 'deg)';
+                    style['transform-origin'] = transformFrom + '% 50%';
+                } else if (transitionType == 'zoom') {
+                    style[DeviceCapabilities.transformProperty] = slideTransformValue;
+                    var scale = 1;
+                    if (Math.abs(absoluteLeft) < 100) {
+                        scale = 1 + ((1 - distance) * 2);
+                    }
+                    style[DeviceCapabilities.transformProperty] += ' scale(' + scale + ')';
+                    style['transform-origin'] = '50% 50%';
+                    opacity = 0;
+                    if (Math.abs(absoluteLeft) < 100) {
+                        opacity = 0.3 + distance * 0.7;
+                    }
+                    style.opacity = opacity;
+                } else {
+                    style[DeviceCapabilities.transformProperty] = slideTransformValue;
+                }
             }
             return style;
         };
@@ -306,7 +315,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         });
 
                         function getSlidesDOM() {
-                            return iElement[0].querySelectorAll(':scope > li');
+                            return iElement[0].querySelectorAll('ul[rn-carousel] > li');
                         }
 
                         function documentMouseUpEvent(event) {
@@ -386,7 +395,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         }
 
                         function getContainerWidth() {
-                            return iElement[0].getBoundingClientRect().width;
+                            var rect = iElement[0].getBoundingClientRect();
+                            return rect.width ? rect.width : rect.right - rect.left;
                         }
 
                         function updateContainerWidth() {
