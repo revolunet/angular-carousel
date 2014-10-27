@@ -133,6 +133,9 @@
                         isBuffered = false,
                         repeatItem,
                         repeatCollection;
+		    
+		    // check if looping is specified
+		    var loop = angular.isDefined(tAttributes['rnCarouselLoop']);
 
                     // try to find an ngRepeat expression
                     // at this point, the attributes are not yet normalized so we need to try various syntax
@@ -150,6 +153,7 @@
                                 if (angular.isDefined(tAttributes['rnCarouselBuffered'])) {
                                     // update the current ngRepeat expression and add a slice operator if buffered
                                     isBuffered = true;
+				    loop = false; //disable looping if buffering
                                     repeatAttribute.value = repeatItem + ' in ' + repeatCollection + '|carouselSlice:carouselBufferIndex:carouselBufferSize';
                                     if (trackProperty) {
                                         repeatAttribute.value += ' track by ' + trackProperty;
@@ -163,6 +167,21 @@
                     });
 
                     return function(scope, iElement, iAttributes, containerCtrl) {
+
+			// add virtual slides for looping
+			if (loop){
+			    var children = iElement.children();
+			    var firstCopy = angular.element(children[0]).clone();
+			    var lastCopy = angular.element(children[children.length-1]).clone();
+			    iElement.prepend(lastCopy);
+			    iElement.append(firstCopy);
+			    if (!isRepeatBased){
+				// might have to add something
+			    }
+			}
+
+			//for displaying carousel controls
+			scope.loop = loop;
 
                         carouselId++;
 
@@ -199,8 +218,8 @@
                         if(iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
                             var tpl = '<div class="rn-carousel-controls">\n' +
-                                '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
-                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + repeatCollection + '.length - 1"></span>\n' +
+                                '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0 || loop"></span>\n' +
+                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + repeatCollection + '.length - 1 || loop"></span>\n' +
                                 '</div>';
                             iElement.append($compile(angular.element(tpl))(scope));
                         }
@@ -228,9 +247,13 @@
                         }
 
                         function updateSlidesPosition(offset) {
+			    console.log('updateSlidesPosition');
                             // manually apply transformation to carousel childrens
                             // todo : optim : apply only to visible items
                             var x = scope.carouselBufferIndex * 100 + offset;
+			    if (loop) {
+				x -= 100;
+			    }
                             angular.forEach(getSlidesDOM(), function(child, index) {
                                 child.style.cssText = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType));
                             });
@@ -238,7 +261,7 @@
 
                         scope.nextSlide = function(slideOptions) {
                             var index = scope.carouselIndex + 1;
-                            if (index > currentSlides.length - 1) {
+                            if (index > currentSlides.length - 1 && !loop) {
                                 index = 0;
                             }
                             if (!locked) {
@@ -248,7 +271,7 @@
 
                         scope.prevSlide = function(slideOptions) {
                             var index = scope.carouselIndex - 1;
-                            if (index < 0) {
+                            if (index < 0 && !loop) {
                                 index = currentSlides.length - 1;
                             }
                             goToSlide(index, slideOptions);
@@ -284,11 +307,24 @@
                                     updateSlidesPosition(state.x);
                                 },
                                 finish: function() {
+				    
                                     locked = false;
                                     scope.$apply(function() {
                                         scope.carouselIndex = index;
                                         offset = index * -100;
                                         updateBufferIndex();
+					console.log(currentSlides);
+					if (loop && index === -1){
+					    console.log(currentSlides.length);
+					    index = currentSlides.length -1;
+					    goToSlide(index,
+						     {animate: false});
+					}
+					if (loop && index === currentSlides.length){
+					    index = 0;
+					    goToSlide(index,
+						      {animate: false});
+					}
                                     });
                                 }
                             });
@@ -340,6 +376,9 @@
                             angular.forEach(getSlidesDOM(), function(node, index) {
                                 currentSlides.push({id: index});
                             });
+			    if (loop) {
+				currentSlides.length -= 2;
+			    }
                         }
 
                         var autoSlider;
@@ -412,6 +451,9 @@
                             scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
                                 //console.log('repeatCollection', arguments);
                                 currentSlides = newValue;
+				if (loop) {
+				    currentSlides.length -= 2;
+				}
                                 goToSlide(scope.carouselIndex);
                             });
                         }
