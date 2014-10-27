@@ -582,10 +582,10 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     slidesMove = -Math[absMove >= 0 ? 'ceil' : 'floor'](absMove / elWidth),
                                     shouldMove = Math.abs(absMove) > minMove;
 
-                                if (currentSlides && (slidesMove + scope.carouselIndex) >= currentSlides.length) {
+                                if (currentSlides && (slidesMove + scope.carouselIndex) >= currentSlides.length && !loop) {
                                     slidesMove = currentSlides.length - 1 - scope.carouselIndex;
                                 }
-                                if ((slidesMove + scope.carouselIndex) < 0) {
+                                if ((slidesMove + scope.carouselIndex) < 0 && !loop) {
                                     slidesMove = -scope.carouselIndex;
                                 }
                                 var moveOffset = shouldMove ? slidesMove : 0;
