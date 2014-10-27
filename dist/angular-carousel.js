@@ -347,7 +347,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         }
 
                         function updateSlidesPosition(offset) {
-			    console.log('updateSlidesPosition');
                             // manually apply transformation to carousel childrens
                             // todo : optim : apply only to visible items
                             var x = scope.carouselBufferIndex * 100 + offset;
@@ -413,9 +412,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                         scope.carouselIndex = index;
                                         offset = index * -100;
                                         updateBufferIndex();
-					console.log(currentSlides);
 					if (loop && index === -1){
-					    console.log(currentSlides.length);
 					    index = currentSlides.length -1;
 					    goToSlide(index,
 						     {animate: false});
