@@ -269,15 +269,15 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                     return function(scope, iElement, iAttributes, containerCtrl) {
 
 			// add virtual slides for looping
+			// need to fix this
 			if (loop){
-			    var children = iElement.children();
-			    var firstCopy = angular.element(children[0]).clone();
-			    var lastCopy = angular.element(children[children.length-1]).clone();
-			    iElement.prepend(lastCopy);
-			    iElement.append(firstCopy);
-			    if (!isRepeatBased){
-				// might have to add something
-			    }
+			    $timeout(function(){
+				var children = iElement[0].querySelectorAll('li');
+				var firstCopy = angular.element(children[0]).clone();
+				var lastCopy = angular.element(children[children.length-1]).clone();
+				iElement.prepend(lastCopy);
+				iElement.append(firstCopy);
+			    });
 			}
 
 			//for displaying carousel controls
@@ -351,7 +351,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             // todo : optim : apply only to visible items
                             var x = scope.carouselBufferIndex * 100 + offset;
 			    if (loop) {
-				x -= 100;
+			    	x -= 100;
 			    }
                             angular.forEach(getSlidesDOM(), function(child, index) {
                                 child.style.cssText = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType));
@@ -473,9 +473,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             angular.forEach(getSlidesDOM(), function(node, index) {
                                 currentSlides.push({id: index});
                             });
-			    if (loop) {
-				currentSlides.length -= 2;
-			    }
                         }
 
                         var autoSlider;
@@ -548,9 +545,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
                                 //console.log('repeatCollection', arguments);
                                 currentSlides = newValue;
-				if (loop) {
-				    currentSlides.length -= 2;
-				}
                                 goToSlide(scope.carouselIndex);
                             });
                         }
