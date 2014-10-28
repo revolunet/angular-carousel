@@ -448,9 +448,6 @@
                             scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
                                 //console.log('repeatCollection', arguments);
                                 currentSlides = newValue;
-				if (loop) {
-				    currentSlides.length -= 2;
-				}
                                 goToSlide(scope.carouselIndex);
                             });
                         }
