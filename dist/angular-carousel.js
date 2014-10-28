@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.5 - 2014-10-27
+ * @version v0.3.5 - 2014-10-28
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -268,11 +268,14 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                     return function(scope, iElement, iAttributes, containerCtrl) {
 
+			carouselId++;
+			
+			iElement[0].id = 'carousel' + carouselId;
+
 			// add virtual slides for looping
-			// need to fix this
 			if (loop){
 			    $timeout(function(){
-				var children = iElement[0].querySelectorAll('li');
+				var children = document.querySelectorAll('#' + iElement[0].id + '> li');
 				var firstCopy = angular.element(children[0]).clone();
 				var lastCopy = angular.element(children[children.length-1]).clone();
 				iElement.prepend(lastCopy);
@@ -282,8 +285,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
 			//for displaying carousel controls
 			scope.loop = loop;
-
-                        carouselId++;
 
                         var defaultOptions = {
                             transitionType: iAttributes.rnCarouselTransition || 'slide',

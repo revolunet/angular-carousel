@@ -168,11 +168,14 @@
 
                     return function(scope, iElement, iAttributes, containerCtrl) {
 
+			carouselId++;
+			
+			iElement[0].id = 'carousel' + carouselId;
+
 			// add virtual slides for looping
-			// need to fix this
 			if (loop){
 			    $timeout(function(){
-				var children = iElement[0].querySelectorAll('li');
+				var children = document.querySelectorAll('#' + iElement[0].id + '> li');
 				var firstCopy = angular.element(children[0]).clone();
 				var lastCopy = angular.element(children[children.length-1]).clone();
 				iElement.prepend(lastCopy);
@@ -182,8 +185,6 @@
 
 			//for displaying carousel controls
 			scope.loop = loop;
-
-                        carouselId++;
 
                         var defaultOptions = {
                             transitionType: iAttributes.rnCarouselTransition || 'slide',
