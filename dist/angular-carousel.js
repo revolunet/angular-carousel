@@ -213,6 +213,19 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
         };
     })
 
+    .directive('signalRepeatDone', function(){
+	return {
+	    restrict: 'A',
+	    link: function(scope, element, attrs){
+		if (scope.$first || scope.$last){
+		    scope.$emit('repeatReady', element);
+		}
+
+	    }
+	};
+
+    })
+
     .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$timeout', '$interval', 'computeCarouselSlideStyle', 'createStyleString', 'Tweenable',
         function($swipe, $window, $document, $parse, $compile, $timeout, $interval, computeCarouselSlideStyle, createStyleString, Tweenable) {
             // internal ids to allow multiple instances
@@ -260,6 +273,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     }
                                 }
                                 isRepeatBased = true;
+				angular.element(firstChild).attr('signal-repeat-done', ''); 
                                 return false;
                             }
                         }
@@ -274,13 +288,32 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
 			// add virtual slides for looping
 			if (loop){
-			    $timeout(function(){
+			    if (!isRepeatBased){
 				var children = document.querySelectorAll('#' + iElement[0].id + '> li');
 				var firstCopy = angular.element(children[0]).clone();
 				var lastCopy = angular.element(children[children.length-1]).clone();
 				iElement.prepend(lastCopy);
 				iElement.append(firstCopy);
-			    });
+
+			    } else {
+				// this eliminates flicker caused by using $timeout
+				var deregister = scope.$on('repeatReady', function(event, element){
+				    console.log(element, 'before');
+				    scope.$evalAsync(function(){
+					console.log(element, 'after');
+					var copy = element.clone();
+					if (event.targetScope.$index){
+				    	    iElement.prepend(copy);
+					} else if (!event.targetScope.$index){
+				    	    iElement.append(copy);
+					}
+					event.stopPropagation();
+					if (event.targetScope.$last){
+					    deregister();
+					}
+				    });
+				});
+			    }
 			}
 
 			//for displaying carousel controls
@@ -474,6 +507,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             angular.forEach(getSlidesDOM(), function(node, index) {
                                 currentSlides.push({id: index});
                             });
+			    if (loop) {
+				currentSlides.length -= 2;
+			    }
                         }
 
                         var autoSlider;
