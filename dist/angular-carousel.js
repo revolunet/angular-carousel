@@ -218,7 +218,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 	    restrict: 'A',
 	    link: function(scope, element, attrs){
 		if (scope.$first || scope.$last){
-		    scope.$emit('rn-repeatReady', element);
+		    scope.$emit('rnRepeatReady', element);
 		}
 
 	    }
@@ -285,7 +285,15 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 			carouselId++;
 			
 			iElement[0].id = 'carousel' + carouselId;
-
+			function addVirtualClone (event, element){
+			    var copy = element.clone();
+			    if (event.targetScope.$last){
+				iElement.prepend(copy);
+			    } else if (event.targetScope.$first){
+				iElement.append(copy);
+			    }
+			    event.stopPropagation();
+			}
 			// add virtual slides for looping
 			if (loop){
 			    if (!isRepeatBased){
@@ -297,18 +305,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
 			    } else {
 				// this eliminates flicker caused by using $timeout
-				var deregister = scope.$on('rn-repeatReady', function(event, element){
+				var deregister = scope.$on('rnRepeatReady', function(event, element){
 				    scope.$evalAsync(function(){
-					var copy = element.clone();
-					if (event.targetScope.$index){
-				    	    iElement.prepend(copy);
-					} else if (!event.targetScope.$index){
-				    	    iElement.append(copy);
-					}
-					event.stopPropagation();
-					if (event.targetScope.$last){
-					    deregister();
-					}
+					addVirtualClone(event, element);
 				    });
 				});
 			    }
@@ -380,7 +379,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                         function updateSlidesPosition(offset) {
                             // manually apply transformation to carousel childrens
-                            // todo : optim : apply only to visible items
+			    // todo : optim : apply only to visible items
                             var x = scope.carouselBufferIndex * 100 + offset;
 			    if (loop) {
 			    	x -= 100;
@@ -413,7 +412,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             if (index === undefined) {
                                 index = scope.carouselIndex;
                             }
-
+			    
                             slideOptions = slideOptions || {};
                             if (slideOptions.animate === false || options.transitionType === 'none') {
                                 locked = false;
