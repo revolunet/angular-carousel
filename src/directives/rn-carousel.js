@@ -200,10 +200,11 @@
                         function removeVirtualClone (event){
                             //head true if we are removing front-most clone
                             var head = event.targetScope.$last ? true : false;
+                            var eleToRemove;
                             if (head){
-                                var eleToRemove = document.querySelectorAll('#' + iElement[0].id + ' li.rn-carousel-virtual-slide-head');                                
+                                eleToRemove = document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-virtual-slide-head');                                
                             } else {
-                                var eleToRemove = document.querySelectorAll('#'+ iElement[0].id + ' li.rn-carousel-virtual-slide-tail');
+                                eleToRemove = document.querySelectorAll('#'+ iElement[0].id + ' .rn-carousel-virtual-slide-tail');
                             }
                             angular.element(eleToRemove).remove();
                         }

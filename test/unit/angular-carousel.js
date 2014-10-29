@@ -136,9 +136,14 @@ describe('carousel', function () {
 
         it('should properly replicate new slides if the repeat group changes', function(){
             var tpl = compileTpl({useLoop:true, nbItems: 5});
+            scope.$digest();
             expect(tpl.find('li').length).toBe(7);
-            console.log(tpl.scope().items);
-            tpl.scope().items.push();
+            expect((tpl.find('li')[0]).id).toBe(tpl.find('li')[5].id);
+            tpl.scope().items.push({text: 'new tail element!', id: 6});
+            scope.$digest();
+            console.log(document.querySelectorAll('#carousel1 .'));
+            console.log(tpl.find('li'));
+            expect(tpl.find('li').length).toBe(8);
         });
 
         it('should cancel itself if buffering is used', function(){
