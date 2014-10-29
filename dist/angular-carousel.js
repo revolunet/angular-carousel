@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.5 - 2014-10-28
+ * @version v0.3.5 - 2014-10-29
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -579,6 +579,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         if (isRepeatBased) {
                             scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
 				// TODO: add looping support to update virtual slides
+
                                 //console.log('repeatCollection', arguments);
                                 currentSlides = newValue;
                                 goToSlide(scope.carouselIndex);

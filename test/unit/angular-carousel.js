@@ -61,6 +61,7 @@ describe('carousel', function () {
     if (options.useBuffer) tpl += ' rn-carousel-buffered ';
     if (options.useWatch) tpl += ' rn-carousel-watch ';
     if (options.useIndex) tpl += ' rn-carousel-index="' + options.useIndex + '" ';
+    if (options.useLoop) tpl += ' rn-carousel-loop';
     tpl += '><li class="test" style="width:200px" ng-repeat="item in items" id="slide-{{ item.id }}">{{ item.text }}</li></ul>';
     angular.extend(scope, sampleData.scope);
  //   var $element = $(tpl).appendTo($sandbox);
@@ -80,10 +81,69 @@ describe('carousel', function () {
         curMatrix = getElmTransform(elm);
     expect(curMatrix).toBe(expectedMatrix);
   }
+    it('should load test', function() {
+	expect(1).toBe(1);
+    });
+
+
+    describe('looping', function () {
+	it('should have attribute rn-carousel-looping', function(){
+	    var tpl = compileTpl({useLoop: true});
+	    expect(tpl.attr('rn-carousel-loop')).toBeDefined();
+	});
+	
+	it('should have appended two virtual slides to the dom', function(){
+	    var nbItems = 25;
+	    var tpl = compileTpl({useLoop: true, nbItems: nbItems});
+	    var children = tpl.find('li');
+	    expect(children.length).toBe(nbItems + 2);
+	});
+
+	it('should place virtual slides at proper indices, -1 and items.length', function(){
+	    var nbItems = 25;
+	    var tpl = compileTpl({useLoop: true, nbItems: nbItems});
+	    var virtualCopy1 = tpl.find('li')[0]; // this is scope indice -1, the virtual slide
+	    var actualSlide1 = tpl.find('li')[nbItems]; //offset because of virtual slides
+	    var actualSlide2 = tpl.find('li')[1]; // this is real first slide
+	    var virtualCopy2 = tpl.find('li')[nbItems + 1];
+	    expect(virtualCopy1.id)
+		.toEqual(actualSlide1.id);
+	    expect(virtualCopy2.id)
+		.toEqual(actualSlide2.id);
+	});
+
+	it('should instantaneously scroll to real slide when at virtual slide', function(){
+	    var tpl = compileTpl({useLoop: true});
+	    runs(function () {
+		tpl.scope().prevSlide();
+		scope.$digest();
+	    });
+	    waits(500); //this is time for initial animation to virtual slide
+	    runs(function(){
+		expect(tpl.scope().carouselIndex).toEqual(scope.items.length - 1);
+	    });
+	    runs(function(){
+		expect(tpl.scope().carouselIndex).toEqual(scope.items.length - 1);
+		tpl.scope().nextSlide();
+		scope.$digest();
+	    });
+	    waits(500);
+	    runs(function(){
+		expect(tpl.scope().carouselIndex).toBe(0);
+	    });
+	});
+
+	it('should cancel itself if buffering is used', function(){
+	    var tpl = compileTpl({useLoop: true, useBuffer: true});
+	    var children = tpl.find('li');
+	    expect(tpl.scope().loop).toBe(false);
+	});
+
+
+
+    });
 /*
-  it('should load test', function() {
-    expect(1).toBe(1);
-  });
+
 
   describe('directive', function () {
     it('should add a wrapper div around the ul/li', function () {
