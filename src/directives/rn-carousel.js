@@ -173,7 +173,7 @@
                                     }
                                 }
                                 isRepeatBased = true;
-				angular.element(firstChild).attr('signal-repeat-done', ''); 
+				if (loop) angular.element(firstChild).attr('signal-repeat-done', ''); 
                                 return false;
                             }
                         }
