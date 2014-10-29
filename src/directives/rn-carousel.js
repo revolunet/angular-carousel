@@ -478,6 +478,8 @@
 
                         if (isRepeatBased) {
                             scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
+				// TODO: add looping support to update virtual slides
+
                                 //console.log('repeatCollection', arguments);
                                 currentSlides = newValue;
                                 goToSlide(scope.carouselIndex);
