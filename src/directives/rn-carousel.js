@@ -120,7 +120,6 @@
 		if (scope.$first || scope.$last){
 		    scope.$emit('rnRepeatReady', element);
 		}
-
 	    }
 	};
 
@@ -188,12 +187,27 @@
 			function addVirtualClone (event, element){
 			    var copy = element.clone();
 			    if (event.targetScope.$last){
+                                // for identification during removal
+                                // it's the virtual slide at front of list
+                                copy.addClass('rn-carousel-virtual-slide-head');
 				iElement.prepend(copy);
 			    } else if (event.targetScope.$first){
+                                copy.addClass('rn-carousel-virtual-slide-tail');
 				iElement.append(copy);
 			    }
 			    event.stopPropagation();
 			}
+                        function removeVirtualClone (event){
+                            //head true if we are removing front-most clone
+                            var head = event.targetScope.$last ? true : false;
+                            if (head){
+                                var eleToRemove = document.querySelectorAll('#' + iElement[0].id + ' li.rn-carousel-virtual-slide-head');                                
+                            } else {
+                                var eleToRemove = document.querySelectorAll('#'+ iElement[0].id + ' li.rn-carousel-virtual-slide-tail');
+                            }
+                            angular.element(eleToRemove).remove();
+                        }
+
 			// add virtual slides for looping
 			if (loop){
 			    if (!isRepeatBased){
@@ -205,8 +219,9 @@
 
 			    } else {
 				// this eliminates flicker caused by using $timeout
-				var deregister = scope.$on('rnRepeatReady', function(event, element){
+				scope.$on('rnRepeatReady', function(event, element){
 				    scope.$evalAsync(function(){
+                                        removeVirtualClone(event);
 					addVirtualClone(event, element);
 				    });
 				});
@@ -478,7 +493,7 @@
                         if (isRepeatBased) {
                             scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
 				// TODO: add looping support to update virtual slides
-
+                                
                                 //console.log('repeatCollection', arguments);
                                 currentSlides = newValue;
                                 goToSlide(scope.carouselIndex);
