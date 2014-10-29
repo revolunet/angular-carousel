@@ -118,7 +118,7 @@
 	    restrict: 'A',
 	    link: function(scope, element, attrs){
 		if (scope.$first || scope.$last){
-		    scope.$emit('repeatReady', element);
+		    scope.$emit('rn-repeatReady', element);
 		}
 
 	    }
@@ -197,10 +197,8 @@
 
 			    } else {
 				// this eliminates flicker caused by using $timeout
-				var deregister = scope.$on('repeatReady', function(event, element){
-				    console.log(element, 'before');
+				var deregister = scope.$on('rn-repeatReady', function(event, element){
 				    scope.$evalAsync(function(){
-					console.log(element, 'after');
 					var copy = element.clone();
 					if (event.targetScope.$index){
 				    	    iElement.prepend(copy);
