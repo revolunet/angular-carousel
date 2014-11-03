@@ -285,15 +285,16 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 			
 			iElement[0].id = 'carousel' + carouselId;
 			function addVirtualClone (event, element){
+                          var copy;
 			  if (event.targetScope.$last){
-                            var copy = element.clone();
+                            copy = element.clone();
                             // for identification during removal
                             // it's the virtual slide at front of list
                             copy.addClass('rn-carousel-virtual-slide-head');
 			    iElement.prepend(copy);
 			  }
                           if (event.targetScope.$first){
-                            var copy = element.clone();
+                            copy = element.clone();
                             copy.addClass('rn-carousel-virtual-slide-tail');
 			    iElement.append(copy);
 			  }
@@ -302,13 +303,17 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         function removeVirtualClone (event){
                             //head true if we are removing front-most clone
                             var head = event.targetScope.$last ? true : false;
+                            var tail = event.targetScope.$first ? true : false;
                             var eleToRemove;
                             if (head){
-                                eleToRemove = document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-virtual-slide-head');                                
-                            } else {
-                                eleToRemove = document.querySelectorAll('#'+ iElement[0].id + ' .rn-carousel-virtual-slide-tail');
+                                eleToRemove = document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-virtual-slide-head');
+                                angular.element(eleToRemove).remove();
                             }
-                            angular.element(eleToRemove).remove();
+                            if (tail){
+                                eleToRemove = document.querySelectorAll('#'+ iElement[0].id + ' .rn-carousel-virtual-slide-tail');
+                                angular.element(eleToRemove).remove();
+                            }
+                           
                         }
 
 			// add virtual slides for looping
