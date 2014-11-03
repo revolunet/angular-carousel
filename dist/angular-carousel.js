@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.5 - 2014-10-29
+ * @version v0.3.5 - 2014-11-03
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -285,17 +285,19 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 			
 			iElement[0].id = 'carousel' + carouselId;
 			function addVirtualClone (event, element){
-			    var copy = element.clone();
-			    if (event.targetScope.$last){
-                                // for identification during removal
-                                // it's the virtual slide at front of list
-                                copy.addClass('rn-carousel-virtual-slide-head');
-				iElement.prepend(copy);
-			    } else if (event.targetScope.$first){
-                                copy.addClass('rn-carousel-virtual-slide-tail');
-				iElement.append(copy);
-			    }
-			    event.stopPropagation();
+			  if (event.targetScope.$last){
+                            var copy = element.clone();
+                            // for identification during removal
+                            // it's the virtual slide at front of list
+                            copy.addClass('rn-carousel-virtual-slide-head');
+			    iElement.prepend(copy);
+			  }
+                          if (event.targetScope.$first){
+                            var copy = element.clone();
+                            copy.addClass('rn-carousel-virtual-slide-tail');
+			    iElement.append(copy);
+			  }
+			  event.stopPropagation();
 			}
                         function removeVirtualClone (event){
                             //head true if we are removing front-most clone
