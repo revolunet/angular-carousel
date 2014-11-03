@@ -185,17 +185,19 @@
 			
 			iElement[0].id = 'carousel' + carouselId;
 			function addVirtualClone (event, element){
-			    var copy = element.clone();
-			    if (event.targetScope.$last){
-                                // for identification during removal
-                                // it's the virtual slide at front of list
-                                copy.addClass('rn-carousel-virtual-slide-head');
-				iElement.prepend(copy);
-			    } else if (event.targetScope.$first){
-                                copy.addClass('rn-carousel-virtual-slide-tail');
-				iElement.append(copy);
-			    }
-			    event.stopPropagation();
+			  if (event.targetScope.$last){
+                            var copy = element.clone();
+                            // for identification during removal
+                            // it's the virtual slide at front of list
+                            copy.addClass('rn-carousel-virtual-slide-head');
+			    iElement.prepend(copy);
+			  }
+                          if (event.targetScope.$first){
+                            var copy = element.clone();
+                            copy.addClass('rn-carousel-virtual-slide-tail');
+			    iElement.append(copy);
+			  }
+			  event.stopPropagation();
 			}
                         function removeVirtualClone (event){
                             //head true if we are removing front-most clone
