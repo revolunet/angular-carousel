@@ -284,36 +284,34 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 			carouselId++;
 			
 			iElement[0].id = 'carousel' + carouselId;
-			function addVirtualClone (event, element){
-                          var copy;
-			  if (event.targetScope.$last){
-                            copy = element.clone();
-                            // for identification during removal
-                            // it's the virtual slide at front of list
-                            copy.addClass('rn-carousel-virtual-slide-head');
-			    iElement.prepend(copy);
-			  }
-                          if (event.targetScope.$first){
-                            copy = element.clone();
-                            copy.addClass('rn-carousel-virtual-slide-tail');
-			    iElement.append(copy);
-			  }
-			  event.stopPropagation();
-			}
-                        function removeVirtualClone (event){
+                        function produceVirtualSlides(event, element){
                             //head true if we are removing front-most clone
                             var head = event.targetScope.$last ? true : false;
                             var tail = event.targetScope.$first ? true : false;
-                            var eleToRemove;
+                            var eleToRemove, copy;
                             if (head){
-                                eleToRemove = document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-virtual-slide-head');
-                                angular.element(eleToRemove).remove();
+                                eleToRemove = document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-virtual-slide-head')[0];
+                                copy = element.clone();
+                                copy.addClass('rn-carousel-virtual-slide-head');
+                                if (eleToRemove ) {
+                                    iElement[0].replaceChild(copy[0], eleToRemove);
+                                } else {
+                                    iElement.prepend(copy);
+                                }
                             }
                             if (tail){
-                                eleToRemove = document.querySelectorAll('#'+ iElement[0].id + ' .rn-carousel-virtual-slide-tail');
-                                angular.element(eleToRemove).remove();
+                                eleToRemove = document.querySelectorAll('#'+ iElement[0].id + ' .rn-carousel-virtual-slide-tail')[0];
+                                copy = element.clone();
+                                copy.addClass('rn-carousel-virtual-slide-tail');
+                                if (eleToRemove) {
+                                    iElement[0].replaceChild(copy[0], eleToRemove);
+                                } else {
+                                    var controlsNode = 
+                                        document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-controls');
+                                    iElement[0].insertBefore(copy[0], controlsNode[0]);
+                                }
                             }
-                           
+                            event.stopPropagation();
                         }
 
 			// add virtual slides for looping
@@ -329,8 +327,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 				// this eliminates flicker caused by using $timeout
 				scope.$on('rnRepeatReady', function(event, element){
 				    scope.$evalAsync(function(){
-                                        removeVirtualClone(event);
-					addVirtualClone(event, element);
+                                        produceVirtualSlides(event, element);
 				    });
 				});
 			    }
