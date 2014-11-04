@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.5 - 2014-10-21
+ * @version v0.3.5 - 2014-11-03
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -213,6 +213,18 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
         };
     })
 
+    .directive('signalRepeatDone', function(){
+	return {
+	    restrict: 'A',
+	    link: function(scope, element, attrs){
+		if (scope.$first || scope.$last){
+		    scope.$emit('rnRepeatReady', element);
+		}
+	    }
+	};
+
+    })
+
     .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$timeout', '$interval', 'computeCarouselSlideStyle', 'createStyleString', 'Tweenable',
         function($swipe, $window, $document, $parse, $compile, $timeout, $interval, computeCarouselSlideStyle, createStyleString, Tweenable) {
             // internal ids to allow multiple instances
@@ -233,6 +245,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         isBuffered = false,
                         repeatItem,
                         repeatCollection;
+		    
+		    // check if looping is specified
+		    var loop = angular.isDefined(tAttributes['rnCarouselLoop']);
 
                     // try to find an ngRepeat expression
                     // at this point, the attributes are not yet normalized so we need to try various syntax
@@ -250,12 +265,14 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                 if (angular.isDefined(tAttributes['rnCarouselBuffered'])) {
                                     // update the current ngRepeat expression and add a slice operator if buffered
                                     isBuffered = true;
+				    loop = false; //disable looping if buffering
                                     repeatAttribute.value = repeatItem + ' in ' + repeatCollection + '|carouselSlice:carouselBufferIndex:carouselBufferSize';
                                     if (trackProperty) {
                                         repeatAttribute.value += ' track by ' + trackProperty;
                                     }
                                 }
                                 isRepeatBased = true;
+				if (loop) angular.element(firstChild).attr('signal-repeat-done', ''); 
                                 return false;
                             }
                         }
@@ -264,7 +281,62 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                     return function(scope, iElement, iAttributes, containerCtrl) {
 
-                        carouselId++;
+			carouselId++;
+			
+			iElement[0].id = 'carousel' + carouselId;
+                        function produceVirtualSlides(event, element){
+                            //head true if we are removing front-most clone
+                            var head = event.targetScope.$last ? true : false;
+                            var tail = event.targetScope.$first ? true : false;
+                            var eleToRemove, copy;
+                            if (head){
+                                eleToRemove = document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-virtual-slide-head')[0];
+                                copy = element.clone();
+                                copy.addClass('rn-carousel-virtual-slide-head');
+                                if (eleToRemove ) {
+                                    iElement[0].replaceChild(copy[0], eleToRemove);
+                                } else {
+                                    iElement.prepend(copy);
+                                }
+                            }
+                            if (tail){
+                                eleToRemove = document.querySelectorAll('#'+ iElement[0].id + ' .rn-carousel-virtual-slide-tail')[0];
+                                copy = element.clone();
+                                copy.addClass('rn-carousel-virtual-slide-tail');
+                                if (eleToRemove) {
+                                    iElement[0].replaceChild(copy[0], eleToRemove);
+                                } else {
+                                    var controlsNode = 
+                                        document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-controls');
+                                    iElement[0].insertBefore(copy[0], controlsNode[0]);
+                                }
+                            }
+                            event.stopPropagation();
+                        }
+
+			// add virtual slides for looping
+			if (loop){
+			    if (!isRepeatBased){
+				var children = document.querySelectorAll('#' + iElement[0].id + '> li');
+				var firstCopy = angular.element(children[0]).clone();
+				var lastCopy = angular.element(children[children.length-1]).clone();
+				iElement.prepend(lastCopy);
+                                var controlsNode = 
+                                    document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-controls');
+                                iElement[0].insertBefore(copy[0], controlsNode[0]);
+
+			    } else {
+				// this eliminates flicker caused by using $timeout
+				scope.$on('rnRepeatReady', function(event, element){
+				    scope.$evalAsync(function(){
+                                        produceVirtualSlides(event, element);
+				    });
+				});
+			    }
+			}
+
+			//for displaying carousel controls
+			scope.loop = loop;
 
                         var defaultOptions = {
                             transitionType: iAttributes.rnCarouselTransition || 'slide',
@@ -299,8 +371,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         if(iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
                             var tpl = '<div class="rn-carousel-controls">\n' +
-                                '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
-                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + repeatCollection + '.length - 1"></span>\n' +
+                                '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0 || loop"></span>\n' +
+                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + repeatCollection + '.length - 1 || loop"></span>\n' +
                                 '</div>';
                             iElement.append($compile(angular.element(tpl))(scope));
                         }
@@ -329,8 +401,11 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                         function updateSlidesPosition(offset) {
                             // manually apply transformation to carousel childrens
-                            // todo : optim : apply only to visible items
+			    // todo : optim : apply only to visible items
                             var x = scope.carouselBufferIndex * 100 + offset;
+			    if (loop) {
+			    	x -= 100;
+			    }
                             angular.forEach(getSlidesDOM(), function(child, index) {
                                 child.style.cssText = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType));
                             });
@@ -338,7 +413,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                         scope.nextSlide = function(slideOptions) {
                             var index = scope.carouselIndex + 1;
-                            if (index > currentSlides.length - 1) {
+                            if (index > currentSlides.length - 1 && !loop) {
                                 index = 0;
                             }
                             if (!locked) {
@@ -348,7 +423,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                         scope.prevSlide = function(slideOptions) {
                             var index = scope.carouselIndex - 1;
-                            if (index < 0) {
+                            if (index < 0 && !loop) {
                                 index = currentSlides.length - 1;
                             }
                             goToSlide(index, slideOptions);
@@ -359,7 +434,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             if (index === undefined) {
                                 index = scope.carouselIndex;
                             }
-
+			    
                             slideOptions = slideOptions || {};
                             if (slideOptions.animate === false || options.transitionType === 'none') {
                                 locked = false;
@@ -384,11 +459,22 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     updateSlidesPosition(state.x);
                                 },
                                 finish: function() {
+				    
                                     locked = false;
                                     scope.$apply(function() {
                                         scope.carouselIndex = index;
                                         offset = index * -100;
                                         updateBufferIndex();
+					if (loop && index === -1){
+					    index = currentSlides.length -1;
+					    goToSlide(index,
+						     {animate: false});
+					}
+					if (loop && index === currentSlides.length){
+					    index = 0;
+					    goToSlide(index,
+						      {animate: false});
+					}
                                     });
                                 }
                             });
@@ -440,6 +526,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             angular.forEach(getSlidesDOM(), function(node, index) {
                                 currentSlides.push({id: index});
                             });
+			    if (loop) {
+				currentSlides.length -= 2;
+			    }
                         }
 
                         var autoSlider;
@@ -510,6 +599,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                         if (isRepeatBased) {
                             scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
+				// TODO: add looping support to update virtual slides
+                                
                                 //console.log('repeatCollection', arguments);
                                 currentSlides = newValue;
                                 goToSlide(scope.carouselIndex);
@@ -540,10 +631,10 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     slidesMove = -Math[absMove >= 0 ? 'ceil' : 'floor'](absMove / elWidth),
                                     shouldMove = Math.abs(absMove) > minMove;
 
-                                if (currentSlides && (slidesMove + scope.carouselIndex) >= currentSlides.length) {
+                                if (currentSlides && (slidesMove + scope.carouselIndex) >= currentSlides.length && !loop) {
                                     slidesMove = currentSlides.length - 1 - scope.carouselIndex;
                                 }
-                                if ((slidesMove + scope.carouselIndex) < 0) {
+                                if ((slidesMove + scope.carouselIndex) < 0 && !loop) {
                                     slidesMove = -scope.carouselIndex;
                                 }
                                 var moveOffset = shouldMove ? slidesMove : 0;

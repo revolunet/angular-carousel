@@ -49,6 +49,7 @@ angular.module('MyApp', ['angular-carousel']);
  - `rn-carousel-auto-slide` add this attribute to make the carousel slide automatically after given seconds (default=3)
  - `rn-carousel-transition` : transition type, can be one of `slide, zoom, hexagon, fadeAndSlide, none`. (default=slide)
  - `rn-carousel-locked`: two way binding boolean that lock/unlock the carousel
+ - `rn-carousel-loop` : make the carousel loop around from the first element to the last and vice versa. Note that this feature will be disabled if `rn-carousel-buffered` is also declared.
 
 ## Indicators
 
