@@ -321,7 +321,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 				var firstCopy = angular.element(children[0]).clone();
 				var lastCopy = angular.element(children[children.length-1]).clone();
 				iElement.prepend(lastCopy);
-				iElement.append(firstCopy);
+                                var controlsNode = 
+                                    document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-controls');
+                                iElement[0].insertBefore(copy[0], controlsNode[0]);
 
 			    } else {
 				// this eliminates flicker caused by using $timeout
