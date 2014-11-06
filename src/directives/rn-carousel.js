@@ -5,6 +5,8 @@
 
     .service('DeviceCapabilities', function() {
 
+        // TODO: merge in a single function
+
         // detect supported CSS property
         function detectTransformProperty() {
             var transformProperty = 'transform',
@@ -85,7 +87,7 @@
                     transformFrom = offset < (slideIndex * -100) ? 100 : 0;
                     degrees = offset < (slideIndex * -100) ? maxDegrees : -maxDegrees;
                     style[DeviceCapabilities.transformProperty] = slideTransformValue + ' ' + 'rotateY(' + degrees + 'deg)';
-                    style['transform-origin'] = transformFrom + '% 50%';
+                    style[DeviceCapabilities.transformProperty + '-origin'] = transformFrom + '% 50%';
                 } else if (transitionType == 'zoom') {
                     style[DeviceCapabilities.transformProperty] = slideTransformValue;
                     var scale = 1;
@@ -93,7 +95,7 @@
                         scale = 1 + ((1 - distance) * 2);
                     }
                     style[DeviceCapabilities.transformProperty] += ' scale(' + scale + ')';
-                    style['transform-origin'] = '50% 50%';
+                    style[DeviceCapabilities.transformProperty + '-origin'] = '50% 50%';
                     opacity = 0;
                     if (Math.abs(absoluteLeft) < 100) {
                         opacity = 0.3 + distance * 0.7;
