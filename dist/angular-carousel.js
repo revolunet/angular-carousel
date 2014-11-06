@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.5 - 2014-10-21
+ * @version v0.3.5 - 2014-11-06
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -107,8 +107,11 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
         // detect supported CSS property
         function detectTransformProperty() {
-            var transformProperty = 'transform';
-            if (typeof document.body.style[transformProperty] !== 'undefined') {
+            var transformProperty = 'transform',
+                safariPropertyHack = 'webkitTransform';
+            if (typeof document.body.style[transformProperty] !== 'undefined' && 
+                typeof document.body.style[safariPropertyHack] !== 'undefined') {
+
                 ['webkit', 'moz', 'o', 'ms'].every(function (prefix) {
                     var e = '-' + prefix + '-transform';
                     if (typeof document.body.style[e] !== 'undefined') {
@@ -117,6 +120,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                     }
                     return true;
                 });
+            } else if (typeof document.body.style[safariPropertyHack] !== 'undefined') {
+                transformProperty = '-webkit-transform';
             } else {
                 transformProperty = undefined;
             }
