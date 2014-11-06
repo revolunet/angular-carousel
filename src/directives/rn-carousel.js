@@ -7,8 +7,11 @@
 
         // detect supported CSS property
         function detectTransformProperty() {
-            var transformProperty = 'transform';
-            if (typeof document.body.style[transformProperty] !== 'undefined') {
+            var transformProperty = 'transform',
+                safariPropertyHack = 'webkitTransform';
+            if (typeof document.body.style[transformProperty] !== 'undefined' && 
+                typeof document.body.style[safariPropertyHack] !== 'undefined') {
+
                 ['webkit', 'moz', 'o', 'ms'].every(function (prefix) {
                     var e = '-' + prefix + '-transform';
                     if (typeof document.body.style[e] !== 'undefined') {
@@ -17,6 +20,8 @@
                     }
                     return true;
                 });
+            } else if (typeof document.body.style[safariPropertyHack] !== 'undefined') {
+                transformProperty = '-webkit-transform';
             } else {
                 transformProperty = undefined;
             }
