@@ -109,8 +109,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
         function detectTransformProperty() {
             var transformProperty = 'transform',
                 safariPropertyHack = 'webkitTransform';
-            if (typeof document.body.style[transformProperty] !== 'undefined' && 
-                typeof document.body.style[safariPropertyHack] !== 'undefined') {
+            if (typeof document.body.style[transformProperty] !== 'undefined') {
 
                 ['webkit', 'moz', 'o', 'ms'].every(function (prefix) {
                     var e = '-' + prefix + '-transform';
