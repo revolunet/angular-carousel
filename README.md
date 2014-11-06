@@ -49,6 +49,7 @@ angular.module('MyApp', ['angular-carousel']);
  - `rn-carousel-auto-slide` add this attribute to make the carousel slide automatically after given seconds (default=3)
  - `rn-carousel-transition` : transition type, can be one of `slide, zoom, hexagon, fadeAndSlide, none`. (default=slide)
  - `rn-carousel-locked`: two way binding boolean that lock/unlock the carousel
+ - `rn-carousel-deep-watch`: Deep watch the collection which enable to dynamically add slides at beginning without corrupting position
 
 ## Indicators
 

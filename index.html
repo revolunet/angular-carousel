@@ -109,6 +109,7 @@
             <div>
                 <h3>Lockable carousel</h3>
                 <div class="details">
+                    use rn-carousel-locked binding to dynamically lock/unlock the carousel
                 </div>
                 <div class="carousel-demo">
                     <label><input type="checkbox" ng-model="isLocked"/>Lock the carousel</label>
@@ -121,9 +122,32 @@
                     </ul>
                 </div>
             </div>
+            <br>
+            <div>
+                <h3>Add/Remove items in the collection</h3>
+                <div class="details">
+                    The carousel is bound to your ngRepeat collection.<br>
+                    If you add items at the start of the collection, then by default, the slide position will change.<br>
+                    If you want to preserve position even when adding items at the head of the collection, you need to add the `rn-carousel-deep-watch` attribute. This has a performance impact so use carefully.<br>
+                    Works great with buffering too so you can have almost infinite slides while keeping only 5 items in the DOM<br>
+                </div>
+                <div class="carousel-demo" >
+                    <button ng-click="addSlide('head')">Add at beginning</button>
+                    <button ng-click="addSlide('tail')">Add at end</button>
+                    <ul rn-carousel rn-carousel-index="carouselIndex6" rn-carousel-deep-watch rn-carousel-buffered class="carousel5">
+                        <li ng-repeat="slide in slides6 track by slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                              #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
+                    <div rn-carousel-indicators ng-if="slides6.length > 1" slides="slides6" rn-carousel-index="carouselIndex6"></div>
+                </div>
+            </div>
 
         </div>
-
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-touch.min.js"></script>
@@ -144,15 +168,19 @@
 
             $scope.colors = ["#fc0003", "#f70008", "#f2000d", "#ed0012", "#e80017", "#e3001c", "#de0021", "#d90026", "#d4002b", "#cf0030", "#c90036", "#c4003b", "#bf0040", "#ba0045", "#b5004a", "#b0004f", "#ab0054", "#a60059", "#a1005e", "#9c0063", "#960069", "#91006e", "#8c0073", "#870078", "#82007d", "#7d0082", "#780087", "#73008c", "#6e0091", "#690096", "#63009c", "#5e00a1", "#5900a6", "#5400ab", "#4f00b0", "#4a00b5", "#4500ba", "#4000bf", "#3b00c4", "#3600c9", "#3000cf", "#2b00d4", "#2600d9", "#2100de", "#1c00e3", "#1700e8", "#1200ed", "#0d00f2", "#0800f7", "#0300fc"];
 
-            function addSlide(target, style) {
+            function getSlide(target, style) {
                 var i = target.length;
-                target.push({
+                return {
                     id: (i + 1),
                     label: 'slide #' + (i + 1),
                     img: 'http://lorempixel.com/450/300/' + style + '/' + ((i + 1) % 10) ,
                     color: $scope.colors[ (i*10) % $scope.colors.length],
                     odd: (i % 2 === 0)
-                });
+                };
+            }
+
+            function addSlide(target, style) {
+                target.push(getSlide(target, style));
             };
 
             $scope.carouselIndex = 3;
@@ -183,7 +211,21 @@
             $scope.slides4 = [];
             addSlides($scope.slides4, 'city', 50);
 
-        });
+
+            // 5th ngRepeat demo
+            $scope.slides6 = [];
+            $scope.carouselIndex6 = 0;
+            addSlides($scope.slides6, 'sports', 10);
+            $scope.addSlide = function(at) {
+                if(at==='head') {
+                    $scope.slides6.unshift(getSlide($scope.slides6, 'people'));
+                } else {
+                    $scope.slides6.push(getSlide($scope.slides6, 'people'));
+                }
+            }
+
+        })
+
 
     </script>
 </html>

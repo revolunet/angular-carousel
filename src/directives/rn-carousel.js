@@ -128,6 +128,18 @@
 
             var requestAnimationFrame = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame || $window.mozRequestAnimationFrame;
 
+            function getItemIndex(collection, target, defaultIndex) {
+                var result = defaultIndex;
+                collection.every(function(item, index) {
+                    if (angular.equals(item, target)) {
+                        result = index;
+                        return false;
+                    }
+                    return true;
+                });
+                return result;
+            };
+
             return {
                 restrict: 'A',
                 scope: true,
@@ -261,6 +273,7 @@
                         };
 
                         function goToSlide(index, slideOptions) {
+                            //console.log('goToSlide', arguments);
                             // move a to the given slide index
                             if (index === undefined) {
                                 index = scope.carouselIndex;
@@ -415,11 +428,23 @@
                         }
 
                         if (isRepeatBased) {
-                            scope.$watchCollection(repeatCollection, function(newValue, oldValue) {
-                                //console.log('repeatCollection', arguments);
+                            // use rn-carousel-deep-watch to fight the Angular $watchCollection weakness : https://github.com/angular/angular.js/issues/2621
+                            // optional because it have some performance impacts (deep watch)
+                            var deepWatch = (iAttributes.rnCarouselDeepWatch!==undefined);
+
+                            scope[deepWatch?'$watch':'$watchCollection'](repeatCollection, function(newValue, oldValue) {
+                                //console.log('repeatCollection', currentSlides);
+                                var oldSlides = (currentSlides || newValue).slice();
                                 currentSlides = newValue;
-                                goToSlide(scope.carouselIndex);
-                            });
+                                // if deepWatch ON ,manually compare objects to guess the new position
+                                if (deepWatch && angular.isArray(newValue)) {
+                                    var activeElement = oldValue[scope.carouselIndex];
+                                    var newIndex = getItemIndex(newValue, activeElement, scope.carouselIndex);
+                                    goToSlide(newIndex, {animate: false});
+                                } else {
+                                    goToSlide(scope.carouselIndex, {animate: false});
+                                }
+                            }, true);
                         }
 
                         function swipeEnd(coords, event, forceAnimation) {
