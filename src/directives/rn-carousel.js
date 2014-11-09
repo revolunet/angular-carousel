@@ -223,7 +223,7 @@
 				iElement.prepend(lastCopy);
                                 var controlsNode = 
                                     document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-controls');
-                                iElement[0].insertBefore(copy[0], controlsNode[0]);
+                                iElement[0].insertBefore(firstCopy[0], controlsNode[0]);
 
 			    } else {
 				// this eliminates flicker caused by using $timeout

@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.5 - 2014-11-03
+ * @version v0.3.5 - 2014-11-09
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -323,7 +323,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 				iElement.prepend(lastCopy);
                                 var controlsNode = 
                                     document.querySelectorAll('#' + iElement[0].id + ' .rn-carousel-controls');
-                                iElement[0].insertBefore(copy[0], controlsNode[0]);
+                                iElement[0].insertBefore(firstCopy[0], controlsNode[0]);
 
 			    } else {
 				// this eliminates flicker caused by using $timeout
