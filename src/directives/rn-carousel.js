@@ -326,7 +326,9 @@
                             if (index < 0 && !loop) {
                                 index = currentSlides.length - 1;
                             }
-                            goToSlide(index, slideOptions);
+                            if (!locked) {
+                              goToSlide(index, slideOptions);
+                            }
                         };
 
                         function goToSlide(index, slideOptions) {
