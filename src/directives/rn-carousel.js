@@ -138,7 +138,7 @@
                     return true;
                 });
                 return result;
-            };
+            }
 
             return {
                 restrict: 'A',
