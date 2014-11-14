@@ -434,7 +434,6 @@
 
                             scope[deepWatch?'$watch':'$watchCollection'](repeatCollection, function(newValue, oldValue) {
                                 //console.log('repeatCollection', currentSlides);
-                                var oldSlides = (currentSlides || newValue).slice();
                                 currentSlides = newValue;
                                 // if deepWatch ON ,manually compare objects to guess the new position
                                 if (deepWatch && angular.isArray(newValue)) {
