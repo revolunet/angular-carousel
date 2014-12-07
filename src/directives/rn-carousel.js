@@ -361,14 +361,19 @@
                             });
                         }
 
-                        var autoSlider;
                         if (iAttributes.rnCarouselAutoSlide!==undefined) {
                             var duration = parseInt(iAttributes.rnCarouselAutoSlide, 10) || options.autoSlideDuration;
-                            autoSlider = $interval(function() {
-                                if (!locked && !pressed) {
-                                    scope.nextSlide();
+                            scope.autoSlide = function() {
+                                if (scope.autoSlider) {
+                                    $interval.cancel(scope.autoSlider);
+                                    scope.autoSlider = null;
                                 }
-                            }, duration * 1000);
+                                scope.autoSlider = $interval(function() {
+                                    if (!locked && !pressed) {
+                                        scope.nextSlide();
+                                    }
+                                }, duration * 1000);
+                            };
                         }
 
                         if (iAttributes.rnCarouselIndex) {

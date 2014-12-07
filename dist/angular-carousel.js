@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.7 - 2014-11-11
+ * @version v0.3.7 - 2014-12-06
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -20,57 +20,36 @@ angular.module('angular-carousel', [
 
 angular.module('angular-carousel')
 
-.directive('rnCarouselAutoSlide', ['$timeout', function($timeout) {
+.directive('rnCarouselAutoSlide', ['$interval', function($interval) {
   return {
     restrict: 'A',
     link: function (scope, element, attrs) {
-        var delay = Math.round(parseFloat(attrs.rnCarouselAutoSlide) * 1000),
-            timer = increment = false, slidesCount = element.children().length;
-
-        if(!scope.carouselExposedIndex){
-            scope.carouselExposedIndex = 0;
-        }
-        stopAutoplay = function () {
-            if (angular.isDefined(timer)) {
-                $timeout.cancel(timer);
-            }
-            timer = undefined;
-        };
-
-        increment = function () {
-            if (scope.carouselExposedIndex < slidesCount - 1) {
-                scope.carouselExposedIndex =  scope.carouselExposedIndex + 1;
-            } else {
-                scope.carouselExposedIndex = 0;
+        var stopAutoPlay = function() {
+            if (scope.autoSlider) {
+                $interval.cancel(scope.autoSlider);
+                scope.autoSlider = null;
             }
         };
-
-        restartTimer = function (){
-            stopAutoplay();
-            timer = $timeout(increment, delay);
+        var restartTimer = function() {
+            scope.autoSlide();
         };
 
-        scope.$watch('carouselIndex', function(){
-           restartTimer();
-        });
+        scope.$watch('carouselIndex', restartTimer);
 
-        restartTimer();
-        if (attrs.rnCarouselPauseOnHover && attrs.rnCarouselPauseOnHover != 'false'){
-            element.on('mouseenter', stopAutoplay);
-
+        if (attrs.hasOwnProperty('rnCarouselPauseOnHover') && attrs.rnCarouselPauseOnHover !== 'false'){
+            element.on('mouseenter', stopAutoPlay);
             element.on('mouseleave', restartTimer);
         }
 
         scope.$on('$destroy', function(){
-            stopAutoplay();
-            element.off('mouseenter', stopAutoplay);
+            stopAutoPlay();
+            element.off('mouseenter', stopAutoPlay);
             element.off('mouseleave', restartTimer);
         });
-
-
     }
   };
 }]);
+
 angular.module('angular-carousel')
 
 .directive('rnCarouselIndicators', ['$parse', function($parse) {
@@ -461,14 +440,19 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             });
                         }
 
-                        var autoSlider;
                         if (iAttributes.rnCarouselAutoSlide!==undefined) {
                             var duration = parseInt(iAttributes.rnCarouselAutoSlide, 10) || options.autoSlideDuration;
-                            autoSlider = $interval(function() {
-                                if (!locked && !pressed) {
-                                    scope.nextSlide();
+                            scope.autoSlide = function() {
+                                if (scope.autoSlider) {
+                                    $interval.cancel(scope.autoSlider);
+                                    scope.autoSlider = null;
                                 }
-                            }, duration * 1000);
+                                scope.autoSlider = $interval(function() {
+                                    if (!locked && !pressed) {
+                                        scope.nextSlide();
+                                    }
+                                }, duration * 1000);
+                            };
                         }
 
                         if (iAttributes.rnCarouselIndex) {
@@ -534,7 +518,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                             scope[deepWatch?'$watch':'$watchCollection'](repeatCollection, function(newValue, oldValue) {
                                 //console.log('repeatCollection', currentSlides);
-                                var oldSlides = (currentSlides || newValue).slice();
                                 currentSlides = newValue;
                                 // if deepWatch ON ,manually compare objects to guess the new position
                                 if (deepWatch && angular.isArray(newValue)) {
