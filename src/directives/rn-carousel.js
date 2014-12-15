@@ -206,7 +206,7 @@
                             destination,
                             swipeMoved = false,
                             //animOnIndexChange = true,
-                            currentSlides,
+                            currentSlides = [],
                             elWidth = null,
                             elX = null,
                             animateTransitions = true,
@@ -324,6 +324,9 @@
 
                         function swipeStart(coords, event) {
                             // console.log('swipeStart', coords, event);
+                            if (locked || currentSlides.length <= 1) {
+                                return;
+                            }
                             $document.bind('mouseup', documentMouseUpEvent);
                             updateContainerWidth();
                             elX = iElement[0].querySelector('li').getBoundingClientRect().left;
@@ -334,9 +337,6 @@
 
                         function swipeMove(coords, event) {
                             //console.log('swipeMove', coords, event);
-                            if (locked) {
-                                return;
-                            }
                             var x, delta;
                             if (pressed) {
                                 x = coords.x;
