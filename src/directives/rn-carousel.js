@@ -214,15 +214,6 @@
                             animating = false,
                             locked = false;
 
-                        if(iAttributes.rnCarouselControls!==undefined) {
-                            // dont use a directive for this
-                            var tpl = '<div class="rn-carousel-controls">\n' +
-                                '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
-                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + repeatCollection + '.length - 1"></span>\n' +
-                                '</div>';
-                            iElement.append($compile(angular.element(tpl))(scope));
-                        }
-
                         $swipe.bind(iElement, {
                             start: swipeStart,
                             move: swipeMove,
@@ -359,6 +350,16 @@
                             angular.forEach(getSlidesDOM(), function(node, index) {
                                 currentSlides.push({id: index});
                             });
+                        }
+                        
+                        if (iAttributes.rnCarouselControls!==undefined) {
+                            // dont use a directive for this
+                            var nextSlideIndexCompareValue = isRepeatBased ? repeatCollection + '.length - 1' : currentSlides.length - 1;
+                            var tpl = '<div class="rn-carousel-controls">\n' +
+                                '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
+                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + nextSlideIndexCompareValue + '"></span>\n' +
+                                '</div>';
+                            iElement.append($compile(angular.element(tpl))(scope));
                         }
 
                         var autoSlider;
