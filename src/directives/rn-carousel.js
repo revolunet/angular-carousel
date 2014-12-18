@@ -354,7 +354,7 @@
                         
                         if (iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
-                            var nextSlideIndexCompareValue = isRepeatBased ? repeatCollection + '.length - 1' : currentSlides.length - 1;
+                            var nextSlideIndexCompareValue = isRepeatBased ? repeatCollection.replace('::', '') + '.length - 1' : currentSlides.length - 1;
                             var tpl = '<div class="rn-carousel-controls">\n' +
                                 '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
                                 '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + nextSlideIndexCompareValue + '"></span>\n' +
