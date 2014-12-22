@@ -482,8 +482,9 @@ angular.module('angular-carousel.shifty', [])
       // CommonJS
       module.exports = Tweenable;
     } else if (typeof define === 'function' && define.amd) {
-      // AMD
-      define(function () {return Tweenable;});
+      // AMD: define it as a named module to avoid the mismatched error(http://requirejs.org/docs/errors.html#mismatch)
+      define('shifty', [], function () {return Tweenable;});
+      root.Tweenable = Tweenable;
     } else if (typeof root.Tweenable === 'undefined') {
       // Browser: Make `Tweenable` globally accessible.
       root.Tweenable = Tweenable;
