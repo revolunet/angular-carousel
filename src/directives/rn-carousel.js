@@ -294,11 +294,13 @@
                                     updateSlidesPosition(state.x);
                                 },
                                 finish: function() {
-                                    locked = false;
                                     scope.$apply(function() {
                                         scope.carouselIndex = index;
                                         offset = index * -100;
                                         updateBufferIndex();
+                                        $timeout(function () {
+                                          locked = false;
+                                        }, 0, false);
                                     });
                                 }
                             });
@@ -351,7 +353,7 @@
                                 currentSlides.push({id: index});
                             });
                         }
-                        
+
                         if (iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
                             var nextSlideIndexCompareValue = isRepeatBased ? repeatCollection.replace('::', '') + '.length - 1' : currentSlides.length - 1;
@@ -380,10 +382,7 @@
                             if (angular.isFunction(indexModel.assign)) {
                                 /* check if this property is assignable then watch it */
                                 scope.$watch('carouselIndex', function(newValue) {
-                                    if (!locked) {
-                                        updateParentIndex(newValue);
-                                    }
-
+                                    updateParentIndex(newValue);
                                 });
                                 scope.$parent.$watch(indexModel, function(newValue, oldValue) {
 
