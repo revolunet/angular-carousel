@@ -212,6 +212,7 @@
                             animateTransitions = true,
                             intialState = true,
                             animating = false,
+                            mouseUpBound = false,
                             locked = false;
 
                         $swipe.bind(iElement, {
@@ -315,12 +316,25 @@
                             elWidth = getContainerWidth();
                         }
 
+                        function bindMouseUpEvent() {
+                            if (!mouseUpBound) {
+                              mouseUpBound = true;
+                              $document.bind('mouseup', documentMouseUpEvent);
+                            }
+                        }
+
+                        function unbindMouseUpEvent() {
+                            if (mouseUpBound) {
+                              mouseUpBound = false;
+                              $document.unbind('mouseup', documentMouseUpEvent);
+                            }
+                        }
+
                         function swipeStart(coords, event) {
                             // console.log('swipeStart', coords, event);
                             if (locked || currentSlides.length <= 1) {
                                 return;
                             }
-                            $document.bind('mouseup', documentMouseUpEvent);
                             updateContainerWidth();
                             elX = iElement[0].querySelector('li').getBoundingClientRect().left;
                             pressed = true;
@@ -331,6 +345,7 @@
                         function swipeMove(coords, event) {
                             //console.log('swipeMove', coords, event);
                             var x, delta;
+                            bindMouseUpEvent();
                             if (pressed) {
                                 x = coords.x;
                                 delta = startX - x;
@@ -452,8 +467,7 @@
                             if (event && !swipeMoved) {
                                 return;
                             }
-
-                            $document.unbind('mouseup', documentMouseUpEvent);
+                            unbindMouseUpEvent();
                             pressed = false;
                             swipeMoved = false;
                             destination = startX - coords.x;
@@ -492,7 +506,7 @@
                         }
 
                         scope.$on('$destroy', function() {
-                            $document.unbind('mouseup', documentMouseUpEvent);
+                            unbindMouseUpEvent();
                         });
 
                         scope.carouselBufferIndex = 0;
@@ -539,7 +553,7 @@
                         winEl.bind('resize', onOrientationChange);
 
                         scope.$on('$destroy', function() {
-                            $document.unbind('mouseup', documentMouseUpEvent);
+                            unbindMouseUpEvent();
                             winEl.unbind('orientationchange', onOrientationChange);
                             winEl.unbind('resize', onOrientationChange);
                         });
