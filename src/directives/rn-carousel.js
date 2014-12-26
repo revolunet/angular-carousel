@@ -212,6 +212,7 @@
                             animateTransitions = true,
                             intialState = true,
                             animating = false,
+                            mouseUpBound = false,
                             locked = false;
 
                         $swipe.bind(iElement, {
@@ -294,11 +295,13 @@
                                     updateSlidesPosition(state.x);
                                 },
                                 finish: function() {
-                                    locked = false;
                                     scope.$apply(function() {
                                         scope.carouselIndex = index;
                                         offset = index * -100;
                                         updateBufferIndex();
+                                        $timeout(function () {
+                                          locked = false;
+                                        }, 0, false);
                                     });
                                 }
                             });
@@ -313,12 +316,25 @@
                             elWidth = getContainerWidth();
                         }
 
+                        function bindMouseUpEvent() {
+                            if (!mouseUpBound) {
+                              mouseUpBound = true;
+                              $document.bind('mouseup', documentMouseUpEvent);
+                            }
+                        }
+
+                        function unbindMouseUpEvent() {
+                            if (mouseUpBound) {
+                              mouseUpBound = false;
+                              $document.unbind('mouseup', documentMouseUpEvent);
+                            }
+                        }
+
                         function swipeStart(coords, event) {
                             // console.log('swipeStart', coords, event);
                             if (locked || currentSlides.length <= 1) {
                                 return;
                             }
-                            $document.bind('mouseup', documentMouseUpEvent);
                             updateContainerWidth();
                             elX = iElement[0].querySelector('li').getBoundingClientRect().left;
                             pressed = true;
@@ -329,6 +345,7 @@
                         function swipeMove(coords, event) {
                             //console.log('swipeMove', coords, event);
                             var x, delta;
+                            bindMouseUpEvent();
                             if (pressed) {
                                 x = coords.x;
                                 delta = startX - x;
@@ -351,7 +368,7 @@
                                 currentSlides.push({id: index});
                             });
                         }
-                        
+
                         if (iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
                             var nextSlideIndexCompareValue = isRepeatBased ? repeatCollection.replace('::', '') + '.length - 1' : currentSlides.length - 1;
@@ -380,10 +397,7 @@
                             if (angular.isFunction(indexModel.assign)) {
                                 /* check if this property is assignable then watch it */
                                 scope.$watch('carouselIndex', function(newValue) {
-                                    if (!locked) {
-                                        updateParentIndex(newValue);
-                                    }
-
+                                    updateParentIndex(newValue);
                                 });
                                 scope.$parent.$watch(indexModel, function(newValue, oldValue) {
 
@@ -453,8 +467,7 @@
                             if (event && !swipeMoved) {
                                 return;
                             }
-
-                            $document.unbind('mouseup', documentMouseUpEvent);
+                            unbindMouseUpEvent();
                             pressed = false;
                             swipeMoved = false;
                             destination = startX - coords.x;
@@ -493,7 +506,7 @@
                         }
 
                         scope.$on('$destroy', function() {
-                            $document.unbind('mouseup', documentMouseUpEvent);
+                            unbindMouseUpEvent();
                         });
 
                         scope.carouselBufferIndex = 0;
@@ -540,7 +553,7 @@
                         winEl.bind('resize', onOrientationChange);
 
                         scope.$on('$destroy', function() {
-                            $document.unbind('mouseup', documentMouseUpEvent);
+                            unbindMouseUpEvent();
                             winEl.unbind('orientationchange', onOrientationChange);
                             winEl.unbind('resize', onOrientationChange);
                         });
