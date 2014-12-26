@@ -534,7 +534,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                             scope[deepWatch?'$watch':'$watchCollection'](repeatCollection, function(newValue, oldValue) {
                                 //console.log('repeatCollection', currentSlides);
+                                if(currentSlides) {
                                 var oldSlides = (currentSlides || newValue).slice();
+                                }
                                 currentSlides = newValue;
                                 // if deepWatch ON ,manually compare objects to guess the new position
                                 if (deepWatch && angular.isArray(newValue)) {
@@ -2069,6 +2071,8 @@ angular.module('angular-carousel.shifty', [])
     };
 
   } (Tweenable));
+
+   window.Tweenable = Tweenable;
 
   }(window));
 
