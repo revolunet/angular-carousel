@@ -38,12 +38,12 @@
                 </div>
             </div>
             <div>
-                <h3>buffered ngRepeat with auto-slide and builtin indicators </h3>
+                <h3>buffered ngRepeat with auto-slide(pause on hover) and builtin indicators </h3>
                 <div class="details">
                 </div>
                 <div class="carousel-demo">
                     index: <input type="number" class="tiny" ng-model="carouselIndex2">
-                    <ul rn-carousel rn-carousel-index="carouselIndex2" rn-carousel-auto-slide rn-carousel-buffered class="carousel2">
+                    <ul rn-carousel rn-carousel-index="carouselIndex2" rn-carousel-auto-slide rn-carousel-pause-on-hover rn-carousel-buffered class="carousel2">
                         <li ng-repeat="slide in slides2 track by slide.id" ng-class="'id-' + slide.id">
                             <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
                               #{{ slide.id }}
@@ -151,7 +151,7 @@
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-touch.min.js"></script>
-    
+
     <script src="./dist/angular-carousel.min.js"></script>
     <!--<script src="./src/angular-carousel.js"></script>
     <script src="./src/directives/rn-carousel.js"></script>
