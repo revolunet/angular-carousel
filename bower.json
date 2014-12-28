@@ -20,6 +20,7 @@
     "angular-touch": ">=1.2.10"
   },
   "devDependencies": {
-    "angular-mocks": ">=1.2.10"
+    "angular-mocks": ">=1.2.10",
+    "requirejs": ">=2.1.0"
   }
 }
