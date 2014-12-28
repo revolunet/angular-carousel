@@ -13,6 +13,7 @@ module.exports = function ( karma ) {
         'bower_components/angular/angular.js',
         'bower_components/angular-touch/angular-touch.js',
         'bower_components/angular-mocks/angular-mocks.js',
+        'bower_components/requirejs/require.js',
         'dist/angular-carousel.js',
         'test/unit/*.js'
     ],
