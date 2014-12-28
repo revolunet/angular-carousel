@@ -1,6 +1,6 @@
 angular.module('angular-carousel')
 
-.directive('rnCarouselAutoSlide', function() {
+.directive('rnCarouselAutoSlide', ['$interval', function($interval) {
   return {
     restrict: 'A',
     link: function (scope, element, attrs) {
@@ -28,4 +28,4 @@ angular.module('angular-carousel')
         });
     }
   };
-});
+}]);
