@@ -1,5 +1,5 @@
-html, body { 
-  height:100%; 
+html, body {
+  height:100%;
   padding:0;
   margin:0;
 }
@@ -36,7 +36,7 @@ h3 {
 
 ul[rn-carousel] {
     width:400px;
-    height:200px;
+    height:240px;
     margin: 0 auto;
 }
 
@@ -76,4 +76,13 @@ input.tiny {
 }
 .custom-indicator span.active {
   color:yellow !important;
+}
+
+.bootstrap-slide {
+  background: #FFFFFF;
+  height: 240px;
+  line-height: 240px;
+  font-size: 200%;
+  text-align:center;
+  border: 2px solid #000000;
 }
