@@ -25,7 +25,6 @@ ul[rn-carousel] {
     padding: 0;
     margin: 0;
     list-style-type: none;
-    width: 100%;
     height: 100%;
     display: inline-block; }
 
@@ -33,7 +32,7 @@ ul[rn-carousel] {
 ul[rn-carousel-buffered] > li {
   display: none; }
 
-ul[rn-carousel-transition="hexagon"] {
+ul[rn-carousel-transition="hexagon"], ul[rn-carousel-transition="multiple"] {
   overflow: visible; }
 
 /* indicators */

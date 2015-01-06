@@ -101,6 +101,11 @@
                         opacity = 0.3 + distance * 0.7;
                     }
                     style.opacity = opacity;
+                } else if (transitionType == 'multiple') {
+                  var transformFrom = 100,
+                  transformFrom = offset < (slideIndex * -100) ? 100 : 0;
+                  style[DeviceCapabilities.transformProperty] = slideTransformValue;
+                  style[DeviceCapabilities.transformProperty + '-origin'] = transformFrom + '% 50%';
                 } else {
                     style[DeviceCapabilities.transformProperty] = slideTransformValue;
                 }

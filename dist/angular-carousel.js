@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.7 - 2014-11-11
+ * @version v0.3.7 - 2015-01-06
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -20,57 +20,36 @@ angular.module('angular-carousel', [
 
 angular.module('angular-carousel')
 
-.directive('rnCarouselAutoSlide', ['$timeout', function($timeout) {
+.directive('rnCarouselAutoSlide', ['$interval', function($interval) {
   return {
     restrict: 'A',
     link: function (scope, element, attrs) {
-        var delay = Math.round(parseFloat(attrs.rnCarouselAutoSlide) * 1000),
-            timer = increment = false, slidesCount = element.children().length;
-
-        if(!scope.carouselExposedIndex){
-            scope.carouselExposedIndex = 0;
-        }
-        stopAutoplay = function () {
-            if (angular.isDefined(timer)) {
-                $timeout.cancel(timer);
-            }
-            timer = undefined;
-        };
-
-        increment = function () {
-            if (scope.carouselExposedIndex < slidesCount - 1) {
-                scope.carouselExposedIndex =  scope.carouselExposedIndex + 1;
-            } else {
-                scope.carouselExposedIndex = 0;
+        var stopAutoPlay = function() {
+            if (scope.autoSlider) {
+                $interval.cancel(scope.autoSlider);
+                scope.autoSlider = null;
             }
         };
-
-        restartTimer = function (){
-            stopAutoplay();
-            timer = $timeout(increment, delay);
+        var restartTimer = function() {
+            scope.autoSlide();
         };
 
-        scope.$watch('carouselIndex', function(){
-           restartTimer();
-        });
+        scope.$watch('carouselIndex', restartTimer);
 
-        restartTimer();
-        if (attrs.rnCarouselPauseOnHover && attrs.rnCarouselPauseOnHover != 'false'){
-            element.on('mouseenter', stopAutoplay);
-
+        if (attrs.hasOwnProperty('rnCarouselPauseOnHover') && attrs.rnCarouselPauseOnHover !== 'false'){
+            element.on('mouseenter', stopAutoPlay);
             element.on('mouseleave', restartTimer);
         }
 
         scope.$on('$destroy', function(){
-            stopAutoplay();
-            element.off('mouseenter', stopAutoplay);
+            stopAutoPlay();
+            element.off('mouseenter', stopAutoPlay);
             element.off('mouseleave', restartTimer);
         });
-
-
     }
   };
 }]);
+
 angular.module('angular-carousel')
 
 .directive('rnCarouselIndicators', ['$parse', function($parse) {
@@ -201,6 +180,11 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         opacity = 0.3 + distance * 0.7;
                     }
                     style.opacity = opacity;
+                } else if (transitionType == 'multiple') {
+                  var transformFrom = 100,
+                  transformFrom = offset < (slideIndex * -100) ? 100 : 0;
+                  style[DeviceCapabilities.transformProperty] = slideTransformValue;
+                  style[DeviceCapabilities.transformProperty + '-origin'] = transformFrom + '% 50%';
                 } else {
                     style[DeviceCapabilities.transformProperty] = slideTransformValue;
                 }
@@ -306,22 +290,14 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             destination,
                             swipeMoved = false,
                             //animOnIndexChange = true,
-                            currentSlides,
+                            currentSlides = [],
                             elWidth = null,
                             elX = null,
                             animateTransitions = true,
                             intialState = true,
                             animating = false,
+                            mouseUpBound = false,
                             locked = false;
-
-                        if(iAttributes.rnCarouselControls!==undefined) {
-                            // dont use a directive for this
-                            var tpl = '<div class="rn-carousel-controls">\n' +
-                                '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
-                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + repeatCollection + '.length - 1"></span>\n' +
-                                '</div>';
-                            iElement.append($compile(angular.element(tpl))(scope));
-                        }
 
                         $swipe.bind(iElement, {
                             start: swipeStart,
@@ -403,11 +379,13 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     updateSlidesPosition(state.x);
                                 },
                                 finish: function() {
-                                    locked = false;
                                     scope.$apply(function() {
                                         scope.carouselIndex = index;
                                         offset = index * -100;
                                         updateBufferIndex();
+                                        $timeout(function () {
+                                          locked = false;
+                                        }, 0, false);
                                     });
                                 }
                             });
@@ -422,9 +400,25 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             elWidth = getContainerWidth();
                         }
 
+                        function bindMouseUpEvent() {
+                            if (!mouseUpBound) {
+                              mouseUpBound = true;
+                              $document.bind('mouseup', documentMouseUpEvent);
+                            }
+                        }
+
+                        function unbindMouseUpEvent() {
+                            if (mouseUpBound) {
+                              mouseUpBound = false;
+                              $document.unbind('mouseup', documentMouseUpEvent);
+                            }
+                        }
+
                         function swipeStart(coords, event) {
                             // console.log('swipeStart', coords, event);
-                            $document.bind('mouseup', documentMouseUpEvent);
+                            if (locked || currentSlides.length <= 1) {
+                                return;
+                            }
                             updateContainerWidth();
                             elX = iElement[0].querySelector('li').getBoundingClientRect().left;
                             pressed = true;
@@ -434,10 +428,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                         function swipeMove(coords, event) {
                             //console.log('swipeMove', coords, event);
-                            if (locked) {
-                                return;
-                            }
                             var x, delta;
+                            bindMouseUpEvent();
                             if (pressed) {
                                 x = coords.x;
                                 delta = startX - x;
@@ -461,14 +453,29 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             });
                         }
 
-                        var autoSlider;
+                        if (iAttributes.rnCarouselControls!==undefined) {
+                            // dont use a directive for this
+                            var nextSlideIndexCompareValue = isRepeatBased ? repeatCollection.replace('::', '') + '.length - 1' : currentSlides.length - 1;
+                            var tpl = '<div class="rn-carousel-controls">\n' +
+                                '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
+                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + nextSlideIndexCompareValue + '"></span>\n' +
+                                '</div>';
+                            iElement.append($compile(angular.element(tpl))(scope));
+                        }
+
                         if (iAttributes.rnCarouselAutoSlide!==undefined) {
                             var duration = parseInt(iAttributes.rnCarouselAutoSlide, 10) || options.autoSlideDuration;
-                            autoSlider = $interval(function() {
-                                if (!locked && !pressed) {
-                                    scope.nextSlide();
+                            scope.autoSlide = function() {
+                                if (scope.autoSlider) {
+                                    $interval.cancel(scope.autoSlider);
+                                    scope.autoSlider = null;
                                 }
-                            }, duration * 1000);
+                                scope.autoSlider = $interval(function() {
+                                    if (!locked && !pressed) {
+                                        scope.nextSlide();
+                                    }
+                                }, duration * 1000);
+                            };
                         }
 
                         if (iAttributes.rnCarouselIndex) {
@@ -479,10 +486,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             if (angular.isFunction(indexModel.assign)) {
                                 /* check if this property is assignable then watch it */
                                 scope.$watch('carouselIndex', function(newValue) {
-                                    if (!locked) {
-                                        updateParentIndex(newValue);
-                                    }
-
+                                    updateParentIndex(newValue);
                                 });
                                 scope.$parent.$watch(indexModel, function(newValue, oldValue) {
 
@@ -534,7 +538,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                             scope[deepWatch?'$watch':'$watchCollection'](repeatCollection, function(newValue, oldValue) {
                                 //console.log('repeatCollection', currentSlides);
-                                var oldSlides = (currentSlides || newValue).slice();
                                 currentSlides = newValue;
                                 // if deepWatch ON ,manually compare objects to guess the new position
                                 if (deepWatch && angular.isArray(newValue)) {
@@ -553,8 +556,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             if (event && !swipeMoved) {
                                 return;
                             }
-
-                            $document.unbind('mouseup', documentMouseUpEvent);
+                            unbindMouseUpEvent();
                             pressed = false;
                             swipeMoved = false;
                             destination = startX - coords.x;
@@ -593,7 +595,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         }
 
                         scope.$on('$destroy', function() {
-                            $document.unbind('mouseup', documentMouseUpEvent);
+                            unbindMouseUpEvent();
                         });
 
                         scope.carouselBufferIndex = 0;
@@ -640,7 +642,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         winEl.bind('resize', onOrientationChange);
 
                         scope.$on('$destroy', function() {
-                            $document.unbind('mouseup', documentMouseUpEvent);
+                            unbindMouseUpEvent();
                             winEl.unbind('orientationchange', onOrientationChange);
                             winEl.unbind('resize', onOrientationChange);
                         });
@@ -1135,8 +1137,9 @@ angular.module('angular-carousel.shifty', [])
       // CommonJS
       module.exports = Tweenable;
     } else if (typeof define === 'function' && define.amd) {
-      // AMD
-      define(function () {return Tweenable;});
+      // AMD: define it as a named module to avoid the mismatched error(http://requirejs.org/docs/errors.html#mismatch)
+      define('shifty', [], function () {return Tweenable;});
+      root.Tweenable = Tweenable;
     } else if (typeof root.Tweenable === 'undefined') {
       // Browser: Make `Tweenable` globally accessible.
       root.Tweenable = Tweenable;
