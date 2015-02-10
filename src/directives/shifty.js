@@ -2,7 +2,7 @@
 
 angular.module('angular-carousel.shifty', [])
 
-.factory('Tweenable', function() {
+.constant('Tweenable', function() {
 
     /*! shifty - v1.3.4 - 2014-10-29 - http://jeremyckahn.github.io/shifty */
   ;(function (root) {
