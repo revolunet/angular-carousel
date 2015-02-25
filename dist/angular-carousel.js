@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.10 - 2015-02-11
+ * @version v0.3.10 - 2015-05-18
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -80,8 +80,16 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 (function() {
     "use strict";
 
-    angular.module('angular-carousel')
+    angular.module('angular-carousel');
 
+    angular.module('angular-carousel').run(['$templateCache', function($templateCache) {
+      $templateCache.put('carousel-controls.html',
+        '<div class="rn-carousel-controls">\n' +
+        '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
+        '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < currentSlides.length-1"></span>\n' +
+        '</div>'
+      );
+    }])
     .service('DeviceCapabilities', function() {
 
         // TODO: merge in a single function
@@ -198,8 +206,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
         };
     })
 
-    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$timeout', '$interval', 'computeCarouselSlideStyle', 'createStyleString', 'Tweenable',
-        function($swipe, $window, $document, $parse, $compile, $timeout, $interval, computeCarouselSlideStyle, createStyleString, Tweenable) {
+    .directive('rnCarousel', ['$swipe', '$window', '$document', '$parse', '$compile', '$timeout', '$interval', '$templateCache', 'computeCarouselSlideStyle', 'createStyleString', 'Tweenable',
+        function($swipe, $window, $document, $parse, $compile, $timeout, $interval, $templateCache, computeCarouselSlideStyle, createStyleString, Tweenable) {
             // internal ids to allow multiple instances
             var carouselId = 0,
                 // in absolute pixels, at which distance the slide stick to the edge on release
@@ -271,7 +279,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             autoSlideDuration: 3,
                             bufferSize: 5,
                             /* in container % how much we need to drag to trigger the slide change */
-                            moveTreshold: 0.1
+                            moveTreshold: 0.1,
+                            defaultIndex: 0
                         };
 
                         // TODO
@@ -373,6 +382,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     updateSlidesPosition(state.x);
                                 },
                                 finish: function() {
+                                    scope.currentSlides = currentSlides;
                                     scope.$apply(function() {
                                         scope.carouselIndex = index;
                                         offset = index * -100;
@@ -438,6 +448,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                         var init = true;
                         scope.carouselIndex = 0;
+                        scope.currentSlides = 0;
 
                         if (!isRepeatBased) {
                             // fake array when no ng-repeat
@@ -446,15 +457,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                 currentSlides.push({id: index});
                             });
                         }
-
+                        
                         if (iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
-                            var nextSlideIndexCompareValue = isRepeatBased ? repeatCollection.replace('::', '') + '.length - 1' : currentSlides.length - 1;
-                            var tpl = '<div class="rn-carousel-controls">\n' +
-                                '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
-                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + nextSlideIndexCompareValue + '"></span>\n' +
-                                '</div>';
+                            var tpl = $templateCache.get('carousel-controls.html');
                             iElement.append($compile(angular.element(tpl))(scope));
+                            scope.showNexControll = false;
                         }
 
                         if (iAttributes.rnCarouselAutoSlide!==undefined) {
@@ -471,6 +479,11 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                 }, duration * 1000);
                             };
                         }
+                        
+                        if (iAttributes.rnCarouselDefaultIndex) {
+                            var defaultIndexModel = $parse(iAttributes.rnCarouselDefaultIndex);
+                            options.defaultIndex = defaultIndexModel(scope.$parent) || 0;
+                        }
 
                         if (iAttributes.rnCarouselIndex) {
                             var updateParentIndex = function(value) {
@@ -485,7 +498,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                 scope.$parent.$watch(indexModel, function(newValue, oldValue) {
 
                                     if (newValue !== undefined && newValue !== null) {
-                                        if (currentSlides && newValue >= currentSlides.length) {
+                                        if (currentSlides && currentSlides.length > 0 && newValue >= currentSlides.length) {
                                             newValue = currentSlides.length - 1;
                                             updateParentIndex(newValue);
                                         } else if (currentSlides && newValue < 0) {
@@ -501,6 +514,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     }
                                 });
                                 isIndexBound = true;
+                                
+                                if (options.defaultIndex) {
+                                    goToSlide(options.defaultIndex, {
+                                        animate: !init
+                                    });
+                                }
                             } else if (!isNaN(iAttributes.rnCarouselIndex)) {
                                 /* if user just set an initial number, set it */
                                 goToSlide(parseInt(iAttributes.rnCarouselIndex, 10), {
@@ -508,7 +527,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                 });
                             }
                         } else {
-                            goToSlide(0, {
+                            goToSlide(options.defaultIndex, {
                                 animate: !init
                             });
                             init = false;
@@ -531,7 +550,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             var deepWatch = (iAttributes.rnCarouselDeepWatch!==undefined);
 
                             scope[deepWatch?'$watch':'$watchCollection'](repeatCollection, function(newValue, oldValue) {
-                                //console.log('repeatCollection', currentSlides);
+                                // console.log('repeatCollection', currentSlides);
                                 currentSlides = newValue;
                                 // if deepWatch ON ,manually compare objects to guess the new position
                                 if (deepWatch && angular.isArray(newValue)) {
@@ -542,8 +561,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     goToSlide(scope.carouselIndex, {animate: false});
                                 }
                             }, true);
+                            scope.currentSlides = currentSlides;
                         }
-
                         function swipeEnd(coords, event, forceAnimation) {
                             //  console.log('swipeEnd', 'scope.carouselIndex', scope.carouselIndex);
                             // Prevent clicks on buttons inside slider to trigger "swipeEnd" event on touchend/mouseup
