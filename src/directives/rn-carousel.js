@@ -247,7 +247,7 @@
 
                         scope.nextSlide = function(slideOptions) {
                             var index = scope.carouselIndex + 1;
-                            if (index > currentSlides.length - 1) {
+                            if (index > currentSlides.length - scope.visibleCount) {
                                 index = 0;
                             }
                             if (!locked) {
@@ -258,7 +258,7 @@
                         scope.prevSlide = function(slideOptions) {
                             var index = scope.carouselIndex - 1;
                             if (index < 0) {
-                                index = currentSlides.length - 1;
+                                index = currentSlides.length - scope.visibleCount;
                             }
                             goToSlide(index, slideOptions);
                         };
@@ -307,8 +307,31 @@
                         }
 
                         function getContainerWidth() {
-                            var rect = iElement[0].getBoundingClientRect();
+                            var rect = iElement.children()[0].getBoundingClientRect();
                             return rect.width ? rect.width : rect.right - rect.left;
+                        }
+
+                        // need to make this run after window changes size too...
+                        function setVisibleCount(useTimeout) {
+                            var useTimeout = useTimeout || false;
+
+                            function getCount() {
+                                var item = iElement.children()[0].getBoundingClientRect(),
+                                    itemWidth = item.width ? item.width : item.right - item.left,
+                                    container = iElement[0].getBoundingClientRect(),
+                                    containerWidth = container.width ? container.width : container.right - container.left;
+
+                                return Math.floor(containerWidth / itemWidth);
+                            }
+
+                            // necessary as first call DOM isn't ready so can't calculate how many are visible
+                            if (useTimeout) {
+                                window.setTimeout(function () {
+                                    scope.visibleCount = getCount();
+                                }, 0);
+                            } else {
+                                scope.visibleCount = getCount();
+                            }
                         }
 
                         function updateContainerWidth() {
@@ -370,10 +393,10 @@
 
                         if (iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
-                            var nextSlideIndexCompareValue = isRepeatBased ? repeatCollection.replace('::', '') + '.length - 1' : currentSlides.length - 1;
+                            scope.visibleCount = 1;
                             var tpl = '<div class="rn-carousel-controls">\n' +
                                 '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
-                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + nextSlideIndexCompareValue + '"></span>\n' +
+                                '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < slides.length - visibleCount"></span>\n' +
                                 '</div>';
                             iElement.append($compile(angular.element(tpl))(scope));
                         }
@@ -407,7 +430,8 @@
 
                                     if (newValue !== undefined && newValue !== null) {
                                         if (currentSlides && newValue >= currentSlides.length) {
-                                            newValue = currentSlides.length - 1;
+                                            setVisibleCount(true);
+                                            newValue = currentSlides.length - scope.visibleCount;
                                             updateParentIndex(newValue);
                                         } else if (currentSlides && newValue < 0) {
                                             newValue = 0;
@@ -489,7 +513,7 @@
                                     shouldMove = Math.abs(absMove) > minMove;
 
                                 if (currentSlides && (slidesMove + scope.carouselIndex) >= currentSlides.length) {
-                                    slidesMove = currentSlides.length - 1 - scope.carouselIndex;
+                                    slidesMove = currentSlides.length - scope.visibleCount - scope.carouselIndex;
                                 }
                                 if ((slidesMove + scope.carouselIndex) < 0) {
                                     slidesMove = -scope.carouselIndex;
