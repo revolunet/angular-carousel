@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.10 - 2015-02-11
+ * @version v0.3.10 - 2015-03-11
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -472,8 +472,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             };
                         }
 
+                        var shouldInitialySlideTo = null;
                         if (iAttributes.rnCarouselIndex) {
                             var updateParentIndex = function(value) {
+                                if (value < 0) {
+                                    return;
+                                }
                                 indexModel.assign(scope.$parent, value);
                             };
                             var indexModel = $parse(iAttributes.rnCarouselIndex);
@@ -482,10 +486,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                 scope.$watch('carouselIndex', function(newValue) {
                                     updateParentIndex(newValue);
                                 });
-                                scope.$parent.$watch(indexModel, function(newValue, oldValue) {
-
+                                scope.$parent.$watch(function () {
+                                    return indexModel(scope.$parent);
+                                }, function(newValue, oldValue) {
+                                    shouldInitialySlideTo = newValue;
                                     if (newValue !== undefined && newValue !== null) {
-                                        if (currentSlides && newValue >= currentSlides.length) {
+                                        if (currentSlides && currentSlides.length > 0 && newValue >= currentSlides.length) {
                                             newValue = currentSlides.length - 1;
                                             updateParentIndex(newValue);
                                         } else if (currentSlides && newValue < 0) {
@@ -533,6 +539,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             scope[deepWatch?'$watch':'$watchCollection'](repeatCollection, function(newValue, oldValue) {
                                 //console.log('repeatCollection', currentSlides);
                                 currentSlides = newValue;
+                                // This will force the required initial carouselIndex
+                                // specified with `rn-carousel-index` on carousel initialization.
+                                if (shouldInitialySlideTo) {
+                                    scope.carouselIndex = shouldInitialySlideTo;
+                                    shouldInitialySlideTo = null;
+                                }
                                 // if deepWatch ON ,manually compare objects to guess the new position
                                 if (deepWatch && angular.isArray(newValue)) {
                                     var activeElement = oldValue[scope.carouselIndex];

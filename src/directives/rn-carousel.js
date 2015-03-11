@@ -393,8 +393,12 @@
                             };
                         }
 
+                        var shouldInitialySlideTo = null;
                         if (iAttributes.rnCarouselIndex) {
                             var updateParentIndex = function(value) {
+                                if (value < 0) {
+                                    return;
+                                }
                                 indexModel.assign(scope.$parent, value);
                             };
                             var indexModel = $parse(iAttributes.rnCarouselIndex);
@@ -403,8 +407,10 @@
                                 scope.$watch('carouselIndex', function(newValue) {
                                     updateParentIndex(newValue);
                                 });
-                                scope.$parent.$watch(indexModel, function(newValue, oldValue) {
-
+                                scope.$parent.$watch(function () {
+                                    return indexModel(scope.$parent);
+                                }, function(newValue, oldValue) {
+                                    shouldInitialySlideTo = newValue;
                                     if (newValue !== undefined && newValue !== null) {
                                         if (currentSlides && currentSlides.length > 0 && newValue >= currentSlides.length) {
                                             newValue = currentSlides.length - 1;
@@ -454,6 +460,12 @@
                             scope[deepWatch?'$watch':'$watchCollection'](repeatCollection, function(newValue, oldValue) {
                                 //console.log('repeatCollection', currentSlides);
                                 currentSlides = newValue;
+                                // This will force the required initial carouselIndex
+                                // specified with `rn-carousel-index` on carousel initialization.
+                                if (shouldInitialySlideTo) {
+                                    scope.carouselIndex = shouldInitialySlideTo;
+                                    shouldInitialySlideTo = null;
+                                }
                                 // if deepWatch ON ,manually compare objects to guess the new position
                                 if (deepWatch && angular.isArray(newValue)) {
                                     var activeElement = oldValue[scope.carouselIndex];
