@@ -576,10 +576,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                 }
                                 var moveOffset = shouldMove ? slidesMove : 0;
                                 
-                                console.log("scope.carouselIndex = " + scope.carouselIndex);
-                                console.log("moveOffset = " + moveOffset);
-                                console.log("slidesMove = " + slidesMove);
-
                                 destination = (scope.carouselIndex + moveOffset);
 
                                 goToSlide(destination);
