@@ -505,11 +505,11 @@
 
                                 goToSlide(destination);
                                 if(iAttributes.rnCarouselOnInfiniteScrollRight!==undefined && slidesMove === 0 && scope.carouselIndex !== 0) {
-                                    eval("scope." + iAttributes.rnCarouselOnInfiniteScrollRight);
+                                    $parse(iAttributes.rnCarouselOnInfiniteScrollRight)(scope)
                                     goToSlide(0);
                                 }
                                 if(iAttributes.rnCarouselOnInfiniteScrollLeft!==undefined && slidesMove === 0 && scope.carouselIndex === 0 && moveOffset === 0) {
-                                    eval("scope." + iAttributes.rnCarouselOnInfiniteScrollLeft);
+                                    $parse(iAttributes.rnCarouselOnInfiniteScrollLeft)(scope)
                                     goToSlide(currentSlides.length);
                                 }
                                 
