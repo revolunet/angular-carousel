@@ -192,7 +192,8 @@
                             autoSlideDuration: 3,
                             bufferSize: 5,
                             /* in container % how much we need to drag to trigger the slide change */
-                            moveTreshold: 0.1
+                            moveTreshold: 0.1,
+                            defaultIndex: 0
                         };
 
                         // TODO
@@ -392,6 +393,11 @@
                                 }, duration * 1000);
                             };
                         }
+                        
+                        if (iAttributes.rnCarouselDefaultIndex) {
+                            var defaultIndexModel = $parse(iAttributes.rnCarouselDefaultIndex);
+                            options.defaultIndex = defaultIndexModel(scope.$parent) || 0;
+                        }
 
                         if (iAttributes.rnCarouselIndex) {
                             var updateParentIndex = function(value) {
@@ -422,6 +428,12 @@
                                     }
                                 });
                                 isIndexBound = true;
+                                
+                                if (options.defaultIndex) {
+                                    goToSlide(options.defaultIndex, {
+                                        animate: !init
+                                    });
+                                }
                             } else if (!isNaN(iAttributes.rnCarouselIndex)) {
                                 /* if user just set an initial number, set it */
                                 goToSlide(parseInt(iAttributes.rnCarouselIndex, 10), {
@@ -429,7 +441,7 @@
                                 });
                             }
                         } else {
-                            goToSlide(0, {
+                            goToSlide(options.defaultIndex, {
                                 animate: !init
                             });
                             init = false;
