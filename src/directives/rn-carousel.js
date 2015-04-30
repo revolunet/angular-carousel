@@ -481,6 +481,7 @@
                             //  console.log('swipeEnd', 'scope.carouselIndex', scope.carouselIndex);
                             // Prevent clicks on buttons inside slider to trigger "swipeEnd" event on touchend/mouseup
                             if (event && !swipeMoved) {
+                                scope.$emit( 'carouselTap', event.target );
                                 return;
                             }
                             unbindMouseUpEvent();
