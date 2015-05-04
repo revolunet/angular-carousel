@@ -11,7 +11,7 @@ input[type=range] {
   perspective: 1000px;
   -ms-touch-action: pan-y;
   touch-action: pan-y; }
-  [rn-carousel] > * {
+  [rn-carousel] > [rn-slide] {
     color: black;
     -webkit-backface-visibility: hidden;
     -ms-backface-visibility: hidden;
@@ -30,7 +30,7 @@ input[type=range] {
     display: inline-block; }
 
 /* prevent flickering when moving buffer */
-[rn-carousel-buffered] > * {
+[rn-carousel-buffered] > [rn-slide] {
   display: none; }
 
 [rn-carousel-transition="hexagon"] {
