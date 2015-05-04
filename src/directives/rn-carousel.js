@@ -225,7 +225,7 @@
                         });
 
                         function getSlidesDOM() {
-                            return iElement[0].querySelectorAll('ul[rn-carousel] > li');
+                            return iElement[0].querySelectorAll('[rn-carousel] > *');
                         }
 
                         function documentMouseUpEvent(event) {
@@ -393,7 +393,7 @@
                                 }, duration * 1000);
                             };
                         }
-                        
+
                         if (iAttributes.rnCarouselDefaultIndex) {
                             var defaultIndexModel = $parse(iAttributes.rnCarouselDefaultIndex);
                             options.defaultIndex = defaultIndexModel(scope.$parent) || 0;
@@ -428,7 +428,7 @@
                                     }
                                 });
                                 isIndexBound = true;
-                                
+
                                 if (options.defaultIndex) {
                                     goToSlide(options.defaultIndex, {
                                         animate: !init

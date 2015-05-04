@@ -1,7 +1,7 @@
 input[type=range] {
   width: 300px; }
 
-ul[rn-carousel] {
+[rn-carousel] {
   overflow: hidden;
   padding: 0;
   white-space: nowrap;
@@ -11,7 +11,7 @@ ul[rn-carousel] {
   perspective: 1000px;
   -ms-touch-action: pan-y;
   touch-action: pan-y; }
-  ul[rn-carousel] > li {
+  [rn-carousel] > * {
     color: black;
     -webkit-backface-visibility: hidden;
     -ms-backface-visibility: hidden;
@@ -30,10 +30,10 @@ ul[rn-carousel] {
     display: inline-block; }
 
 /* prevent flickering when moving buffer */
-ul[rn-carousel-buffered] > li {
+[rn-carousel-buffered] > * {
   display: none; }
 
-ul[rn-carousel-transition="hexagon"] {
+[rn-carousel-transition="hexagon"] {
   overflow: visible; }
 
 /* indicators */
@@ -62,3 +62,5 @@ div.rn-carousel-indicator span {
     right: 0.5em; }
     .rn-carousel-control.rn-carousel-control-next:before {
       content: ">"; }
+
+/*# sourceMappingURL=angular-carousel.css.map */
