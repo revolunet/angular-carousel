@@ -382,13 +382,21 @@
                         if (iAttributes.rnCarouselAutoSlide!==undefined) {
                             var duration = parseInt(iAttributes.rnCarouselAutoSlide, 10) || options.autoSlideDuration;
                             scope.autoSlide = function() {
-                                if (scope.autoSlider) {
-                                    $interval.cancel(scope.autoSlider);
-                                    scope.autoSlider = null;
-                                }
-                                scope.autoSlider = $interval(function() {
-                                    if (!locked && !pressed) {
-                                        scope.nextSlide();
+                                var cancelAutoSlider = function() {
+                                    if (scope.autoSlider) {
+                                        $interval.cancel(scope.autoSlider);
+                                        scope.autoSlider = null;
+                                    }
+                            };
+                            cancelAutoSlider();
+                            scope.autoSlider = $interval(function() {
+                                    if (currentSlides === undefined) {
+                                        cancelAutoSlider();
+                                    }
+                                    else {
+                                        if (!locked && !pressed) {
+                                            scope.nextSlide();
+                                        }
                                     }
                                 }, duration * 1000);
                             };
