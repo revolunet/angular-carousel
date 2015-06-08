@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.10 - 2015-02-11
+ * @version v0.3.10 - 2015-04-16
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -486,7 +486,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                 scope.$parent.$watch(indexModel, function(newValue, oldValue) {
 
                                     if (newValue !== undefined && newValue !== null) {
-                                        if (currentSlides && newValue >= currentSlides.length) {
+                                        if (currentSlides && currentSlides.length > 0 && newValue >= currentSlides.length) {
                                             newValue = currentSlides.length - 1;
                                             updateParentIndex(newValue);
                                         } else if (currentSlides && newValue < 0) {
@@ -548,6 +548,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         function swipeEnd(coords, event, forceAnimation) {
                             //  console.log('swipeEnd', 'scope.carouselIndex', scope.carouselIndex);
                             // Prevent clicks on buttons inside slider to trigger "swipeEnd" event on touchend/mouseup
+                            // console.log(iAttributes.rnCarouselOnInfiniteScroll);
                             if (event && !swipeMoved) {
                                 return;
                             }
@@ -575,10 +576,19 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     slidesMove = -scope.carouselIndex;
                                 }
                                 var moveOffset = shouldMove ? slidesMove : 0;
-
+                                
                                 destination = (scope.carouselIndex + moveOffset);
 
                                 goToSlide(destination);
+                                if(iAttributes.rnCarouselOnInfiniteScrollRight!==undefined && slidesMove === 0 && scope.carouselIndex !== 0) {
+                                    $parse(iAttributes.rnCarouselOnInfiniteScrollRight)(scope)
+                                    goToSlide(0);
+                                }
+                                if(iAttributes.rnCarouselOnInfiniteScrollLeft!==undefined && slidesMove === 0 && scope.carouselIndex === 0 && moveOffset === 0) {
+                                    $parse(iAttributes.rnCarouselOnInfiniteScrollLeft)(scope)
+                                    goToSlide(currentSlides.length);
+                                }
+                                
                             } else {
                                 scope.$apply(function() {
                                     scope.carouselIndex = parseInt(-offset / 100, 10);
