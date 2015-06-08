@@ -480,7 +480,11 @@
                         function swipeEnd(coords, event, forceAnimation) {
                             //  console.log('swipeEnd', 'scope.carouselIndex', scope.carouselIndex);
                             // Prevent clicks on buttons inside slider to trigger "swipeEnd" event on touchend/mouseup
-                            if (event && !swipeMoved) {
+                           if (event && !swipeMoved ) {
+                                // Don't emit on cancel
+                                if( coords.y !== undefined ) {
+                                   scope.$emit( 'carouselTap', event.target );
+                                }
                                 return;
                             }
                             unbindMouseUpEvent();
