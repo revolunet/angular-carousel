@@ -293,14 +293,15 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             mouseUpBound = false,
                             locked = false;
 
-                        $swipe.bind(iElement, {
+                        if(iAttributes.rnSwipeDisabled !== "true") { //rn-swipe-disabled =true will only disable swipe events
+                          $swipe.bind(iElement, {
                             start: swipeStart,
                             move: swipeMove,
                             end: swipeEnd,
                             cancel: function(event) {
                                 swipeEnd({}, event);
                             }
-                        });
+                        })};
 
                         function getSlidesDOM() {
                             return iElement[0].querySelectorAll('ul[rn-carousel] > li');
