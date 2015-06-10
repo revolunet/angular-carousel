@@ -376,7 +376,7 @@
                                 '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0"></span>\n' +
                                 '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + nextSlideIndexCompareValue + '"></span>\n' +
                                 '</div>';
-                            iElement.append($compile(angular.element(tpl))(scope));
+                            iElement.parent().append($compile(angular.element(tpl))(scope));
                         }
 
                         if (iAttributes.rnCarouselAutoSlide!==undefined) {
@@ -393,7 +393,7 @@
                                 }, duration * 1000);
                             };
                         }
-                        
+
                         if (iAttributes.rnCarouselDefaultIndex) {
                             var defaultIndexModel = $parse(iAttributes.rnCarouselDefaultIndex);
                             options.defaultIndex = defaultIndexModel(scope.$parent) || 0;
@@ -428,7 +428,7 @@
                                     }
                                 });
                                 isIndexBound = true;
-                                
+
                                 if (options.defaultIndex) {
                                     goToSlide(options.defaultIndex, {
                                         animate: !init
@@ -508,7 +508,7 @@
                                     slidesMove = -scope.carouselIndex;
                                 }
                                 var moveOffset = shouldMove ? slidesMove : 0;
-                                
+
                                 destination = (scope.carouselIndex + moveOffset);
 
                                 goToSlide(destination);
@@ -520,7 +520,7 @@
                                     $parse(iAttributes.rnCarouselOnInfiniteScrollLeft)(scope)
                                     goToSlide(currentSlides.length);
                                 }
-                                
+
                             } else {
                                 scope.$apply(function() {
                                     scope.carouselIndex = parseInt(-offset / 100, 10);
