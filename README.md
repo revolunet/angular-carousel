@@ -52,7 +52,8 @@ angular.module('MyApp', ['angular-carousel']);
  - `rn-carousel-deep-watch`: Deep watch the collection which enable to dynamically add slides at beginning without corrupting position
  - `rn-carousel-easing`: add this attritube to specify a formula for easing, these can be found in the [shifty
  library](https://github.com/jeremyckahn/shifty/blob/master/src/shifty.formulas.js) (default=easeIn)
- - `rn-carousel-duration`: add this attritube to set the duration of the transition (default=300)
+ - `rn-carousel-duration`: add this attribute to set the duration of the transition (default=300)
+ - `rn-carousel-controls-allow-loop`: add this attribute to allow looping through slides from prev/next controls
 
 ## Indicators
 
