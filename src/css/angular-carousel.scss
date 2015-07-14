@@ -2,7 +2,8 @@ input[type=range] {
   width:300px;
 }
 
-ul[rn-carousel] {
+ul[rn-carousel],
+ul[data-rn-carousel] {
   overflow:hidden;
   padding:0;
   white-space: nowrap;
@@ -29,11 +30,13 @@ ul[rn-carousel] {
 }
 
 /* prevent flickering when moving buffer */
-ul[rn-carousel-buffered] > li {
+ul[rn-carousel-buffered],
+ul[data-rn-carousel-buffered] > li {
   display:none;
 }
 
-ul[rn-carousel-transition="hexagon"] {
+ul[rn-carousel-transition="hexagon"],
+ul[data-rn-carousel-transition="hexagon"] {
   overflow:visible;
 }
 
