@@ -394,12 +394,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                 return rect.width ? rect.width : rect.right - rect.left;
               }
 
-              var semaphore;
               function updateContainerWidth() {
-                window.clearTimeout(semaphore);
-                semaphore = window.setTimeout(function() {
-                  elWidth = getContainerWidth();
-                }, 250);
+                elWidth = getContainerWidth();
               }
 
               function bindMouseUpEvent() {
@@ -655,9 +651,13 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                 }
               }
 
+              var semaphore;
               function onOrientationChange() {
+                window.clearTimeout(semaphore);
+                semaphore = window.setTimeout(function() {
                 updateContainerWidth();
                 goToSlide();
+                }, 250);
               }
 
               // handle orientation change
