@@ -651,13 +651,19 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                 }
               }
 
-              var semaphore;
+              var semaphore, isFirst = true;
               function onOrientationChange() {
-                window.clearTimeout(semaphore);
-                semaphore = window.setTimeout(function() {
-                updateContainerWidth();
-                goToSlide();
-                }, 250);
+                if(isFirst) {
+                  updateContainerWidth();
+                  goToSlide();
+                } else {
+                  window.clearTimeout(semaphore);
+                  semaphore = window.setTimeout(function() {
+                    updateContainerWidth();
+                    goToSlide();
+                  }, 250);
+                }
+                isFirst = false;
               }
 
               // handle orientation change
