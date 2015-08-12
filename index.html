@@ -144,6 +144,28 @@
                     <div rn-carousel-indicators ng-if="slides6.length > 1" slides="slides6" rn-carousel-index="carouselIndex6"></div>
                 </div>
             </div>
+            <br>
+            <div>
+                <h3>End to End Swiping</h3>
+                <div class="details">
+                    The carousel is bound to your ngRepeat collection.<br>
+                    Total images: {{ totalimg }} <br>
+                    Images in one set: {{ setOfImagesToShow }} <br>
+                    Total sets of images: {{ totalimg / setOfImagesToShow | number:0}}<br>
+                    <br>
+                </div>
+                <div class="carousel-demo" >
+                    
+                    <ul rn-carousel rn-carousel-index="carouselIndex7" rn-carousel-buffered rn-carousel-on-infinite-scroll-right="loadNextImages()" rn-carousel-on-infinite-scroll-left="loadPreviousImages()" class="carousel5">
+                        <li ng-repeat="slide in slides7 track by slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                              #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
+                    <div rn-carousel-indicators ng-if="slides7.length > 1" slides="slides7" rn-carousel-index="carouselIndex7"></div>
+                </div>
+            </div>
 
         </div>
         <p>&nbsp;</p>
@@ -222,6 +244,84 @@
                 } else {
                     $scope.slides6.push(getSlide($scope.slides6, 'people'));
                 }
+            }
+            
+            // End to End swiping
+            // load 130 images in main javascript container
+            var slideImages = [];
+            addSlides(slideImages, 'sports', 10);
+            addSlides(slideImages, 'people', 10);
+            addSlides(slideImages, 'city', 10);
+            addSlides(slideImages, 'abstract', 10);
+            addSlides(slideImages, 'nature', 10);
+            addSlides(slideImages, 'food', 10);
+            addSlides(slideImages, 'transport', 10);
+            addSlides(slideImages, 'animals', 10);
+            addSlides(slideImages, 'business', 10);
+            addSlides(slideImages, 'nightlife', 10);
+            addSlides(slideImages, 'cats', 10);
+            addSlides(slideImages, 'fashion', 10);
+            addSlides(slideImages, 'technics', 10);
+            $scope.totalimg = slideImages.length;
+            $scope.galleryNumber = 1;
+            console.log($scope.galleryNumber);
+            
+            function getImage(target) {
+                var i = target.length
+                    , p = (($scope.galleryNumber-1)*$scope.setOfImagesToShow)+i;
+                console.log("i=" + i + "--" + p);
+                
+                return slideImages[p];
+            }
+            function addImages(target, qty) {
+                                
+                for (var i=0; i < qty; i++) {
+                    addImage(target);
+                }
+            }
+            
+            function addImage(target) {
+                target.push(getImage(target));
+            }
+            
+            $scope.slides7 = [];
+            $scope.carouselIndex7 = 0;
+            $scope.setOfImagesToShow = 3;
+            addImages($scope.slides7, $scope.setOfImagesToShow);
+            $scope.loadNextImages = function() {
+                console.log("loading Next images");
+                if (slideImages[slideImages.length-1].id !== $scope.slides7[$scope.slides7.length-1].id) {
+                    // Go to next set of images if exist
+                    $scope.slides7 = [];
+                    $scope.carouselIndex7 = 0;
+                    ++$scope.galleryNumber;
+                    addImages($scope.slides7, $scope.setOfImagesToShow);
+                } else {
+                    // Go to first set of images if not exist
+                    $scope.galleryNumber = 1;
+                    $scope.slides7 = [];
+                    $scope.carouselIndex7 = 0;
+                    addImages($scope.slides7, $scope.setOfImagesToShow);
+                }
+            }
+            $scope.loadPreviousImages = function() {
+                if (slideImages[0].id !== $scope.slides7[0].id) {
+                    // Go to previous set of images if exist
+                    $scope.slides7 = [];
+                    $scope.carouselIndex7 = 0;
+                    --$scope.galleryNumber;
+                    addImages($scope.slides7, $scope.setOfImagesToShow);
+                } else {
+                    // Go to last set of images if not exist
+                    console.log("slideimageslength: " + slideImages.length + ", " + slideImages.length-1 / $scope.setOfImagesToShow);
+                    // console.log("slideimageslength: " + slideImages.length );
+                    $scope.galleryNumber = slideImages.length / $scope.setOfImagesToShow;
+                    $scope.slides7 = [];
+                    $scope.carouselIndex7 = 0;
+                    addImages($scope.slides7, $scope.setOfImagesToShow);
+                    console.log("no images left");
+                }
+                
             }
 
         })
