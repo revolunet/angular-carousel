@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.13 - 2015-06-15
+ * @version v0.3.13 - 2015-08-13
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -354,6 +354,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             }
 
                             slideOptions = slideOptions || {};
+
+                            if (currentSlides && currentSlides.length >= 1 && index >= currentSlides.length) {
+                                index = currentSlides.length - 1;
+                                slideOptions.animate = false;
+                            }
+
                             if (slideOptions.animate === false || options.transitionType === 'none') {
                                 locked = false;
                                 offset = index * -100;
