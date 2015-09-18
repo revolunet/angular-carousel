@@ -275,6 +275,12 @@
                             }
 
                             slideOptions = slideOptions || {};
+
+                            if (currentSlides && currentSlides.length >= 1 && index >= currentSlides.length) {
+                                index = currentSlides.length - 1;
+                                slideOptions.animate = false;
+                            }
+
                             if (slideOptions.animate === false || options.transitionType === 'none') {
                                 locked = false;
                                 offset = index * -100;
