@@ -25,8 +25,9 @@ If you don't use NPM or Bower, just download files [from the github repo](./dist
 <script src="angular-touch.js"></script>
 <script src="angular-carousel.js"></script>
 ```
- - Or just require the module the CommonJS way
+ - Or just require the module the CommonJS way (if you use npm)
 ```js
+var angular = require('angular');
 var ngTouch = require('angular-touch');
 var carousel  = require('angular-carousel');
 ```
