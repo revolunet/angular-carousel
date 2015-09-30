@@ -28,6 +28,15 @@ ul[rn-carousel] {
   }
 }
 
+div.slides-per-click-demo {
+  ul[rn-carousel] {
+    width: 420px; /* wrapper created a bit bigger to show that next slide is 'on its way' */
+    > li {
+      width: 200px;
+    }
+  }
+}
+
 /* prevent flickering when moving buffer */
 ul[rn-carousel-buffered] > li {
   display:none;
@@ -44,6 +53,10 @@ div.rn-carousel-indicator span {
   &.active {
     color: white
   }
+}
+
+div.demo-container > div {
+  position: relative;
 }
 
 /* prev/next controls */

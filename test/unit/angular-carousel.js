@@ -40,7 +40,8 @@ describe('carousel', function () {
       useControl: false,
       useBuffer: false,
       nbItems: 25,
-      useWatch: false
+      useWatch: false,
+      useSlidesPerClick: 2
     };
     if (overrideOptions) angular.extend(options, overrideOptions);
     var sampleData = {
@@ -61,6 +62,7 @@ describe('carousel', function () {
     if (options.useBuffer) tpl += ' rn-carousel-buffered ';
     if (options.useWatch) tpl += ' rn-carousel-watch ';
     if (options.useIndex) tpl += ' rn-carousel-index="' + options.useIndex + '" ';
+   if (options.useSlidesPerClick) tpl += ' rn-carousel-items-per-slide="' + options.useSlidesPerClick + '" ';
     tpl += '><li class="test" style="width:200px" ng-repeat="item in items" id="slide-{{ item.id }}">{{ item.text }}</li></ul>';
     angular.extend(scope, sampleData.scope);
  //   var $element = $(tpl).appendTo($sandbox);
@@ -573,7 +575,7 @@ describe('carousel', function () {
         expect(elm.find('li').last()[0].id).toBe('slide-' + scope.items[scope.items.length - 1].id);
       });
     });
-    
+
   });
   // describe('delayed collection and index', function () {
   //   it('should follow multiple moves and buffer accordingly', function() {

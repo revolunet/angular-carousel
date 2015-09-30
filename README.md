@@ -54,6 +54,7 @@ angular.module('MyApp', ['angular-carousel']);
  library](https://github.com/jeremyckahn/shifty/blob/master/src/shifty.formulas.js) (default=easeIn)
  - `rn-carousel-duration`: add this attribute to set the duration of the transition (default=300)
  - `rn-carousel-controls-allow-loop`: add this attribute to allow looping through slides from prev/next controls
+ - `rn-carousel-items-per-slide`: add this attribute to specify how many slides will slide on one click (used for multiple item slider) / default value "1" if not used 
 
 ## Indicators
 
