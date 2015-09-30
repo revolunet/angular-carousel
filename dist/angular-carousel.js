@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.13 - 2015-06-15
+ * @version v0.3.13 - 2015-09-30
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -292,7 +292,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             intialState = true,
                             animating = false,
                             mouseUpBound = false,
-                            locked = false;
+                            locked = false,
+                            slidesPerClickLimit = parseInt(iAttributes.rnCarouselItemsPerSlide);
 
                         //rn-swipe-disabled =true will only disable swipe events
                         if(iAttributes.rnSwipeDisabled !== "true") {
@@ -329,7 +330,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         }
 
                         scope.nextSlide = function(slideOptions) {
-                            var index = scope.carouselIndex + 1;
+                            var index;
+                            if(isNaN(slidesPerClickLimit) === false && currentSlides.length - scope.carouselIndex + slidesPerClickLimit >= slidesPerClickLimit && currentSlides.length/slidesPerClickLimit > 1) {
+                                index = scope.carouselIndex + slidesPerClickLimit;
+                            } else {
+                                index = scope.carouselIndex + 1;
+                            }
                             if (index > currentSlides.length - 1) {
                                 index = 0;
                             }
@@ -339,7 +345,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         };
 
                         scope.prevSlide = function(slideOptions) {
-                            var index = scope.carouselIndex - 1;
+                            var index;
+                            if(isNaN(slidesPerClickLimit) === false && currentSlides.length - scope.carouselIndex + slidesPerClickLimit >= slidesPerClickLimit && currentSlides.length/slidesPerClickLimit > 1) {
+                                index = scope.carouselIndex - slidesPerClickLimit;
+                            } else {
+                                index = scope.carouselIndex - 1;
+                            }
                             if (index < 0) {
                                 index = currentSlides.length - 1;
                             }
@@ -453,8 +464,15 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                         if (iAttributes.rnCarouselControls!==undefined) {
                             // dont use a directive for this
+                            var slidesCountInCurrent = isRepeatBased ? scope[repeatCollection.replace('::', '')].length : currentSlides.length;
+                            var noneDividableCarouselItemCount = 1;
+                            if(isNaN(slidesPerClickLimit) === false){
+                                noneDividableCarouselItemCount = (slidesCountInCurrent%slidesPerClickLimit !== 0 && slidesCountInCurrent/slidesPerClickLimit > 1) ? (slidesCountInCurrent%slidesPerClickLimit) : 1;
+                            } else {
+                                noneDividableCarouselItemCount = 1;
+                            }
                             var canloop = ((isRepeatBased ? scope[repeatCollection.replace('::', '')].length : currentSlides.length) > 1) ? angular.isDefined(tAttributes['rnCarouselControlsAllowLoop']) : false;
-                            var nextSlideIndexCompareValue = isRepeatBased ? repeatCollection.replace('::', '') + '.length - 1' : currentSlides.length - 1;
+                            var nextSlideIndexCompareValue = isRepeatBased ? repeatCollection.replace('::', '') + '.length - ' + noneDividableCarouselItemCount.toString() : currentSlides.length - 1;
                             var tpl = '<div class="rn-carousel-controls">\n' +
                                 '  <span class="rn-carousel-control rn-carousel-control-prev" ng-click="prevSlide()" ng-if="carouselIndex > 0 || ' + canloop + '"></span>\n' +
                                 '  <span class="rn-carousel-control rn-carousel-control-next" ng-click="nextSlide()" ng-if="carouselIndex < ' + nextSlideIndexCompareValue + ' || ' + canloop + '"></span>\n' +

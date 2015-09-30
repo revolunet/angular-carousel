@@ -29,6 +29,12 @@ ul[rn-carousel] {
     height: 100%;
     display: inline-block; }
 
+div.slides-per-click-demo ul[rn-carousel] {
+  width: 420px;
+  /* wrapper created a bit bigger to show that next slide is 'on its way' */ }
+  div.slides-per-click-demo ul[rn-carousel] > li {
+    width: 200px; }
+
 /* prevent flickering when moving buffer */
 ul[rn-carousel-buffered] > li {
   display: none; }
@@ -42,6 +48,9 @@ div.rn-carousel-indicator span {
   color: #666; }
   div.rn-carousel-indicator span.active {
     color: white; }
+
+div.demo-container > div {
+  position: relative; }
 
 /* prev/next controls */
 .rn-carousel-control {
@@ -62,3 +71,5 @@ div.rn-carousel-indicator span {
     right: 0.5em; }
     .rn-carousel-control.rn-carousel-control-next:before {
       content: ">"; }
+
+/*# sourceMappingURL=angular-carousel.css.map */
