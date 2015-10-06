@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v0.3.13 - 2015-06-15
+ * @version v0.3.13 - 2015-08-24
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -138,7 +138,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
     .service('computeCarouselSlideStyle', ["DeviceCapabilities", function(DeviceCapabilities) {
         // compute transition transform properties for a given slide and global offset
-        return function(slideIndex, offset, transitionType) {
+        return function(slideIndex, offset, transitionType, minOpacity) {
             var style = {
                     display: 'inline-block'
                 },
@@ -153,9 +153,10 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
             } else {
                 if (transitionType == 'fadeAndSlide') {
                     style[DeviceCapabilities.transformProperty] = slideTransformValue;
-                    opacity = 0;
+                    opacity = minOpacity;
                     if (Math.abs(absoluteLeft) < 100) {
                         opacity = 0.3 + distance * 0.7;
+                        if(opacity < minOpacity) opacity = minOpacity;
                     }
                     style.opacity = opacity;
                 } else if (transitionType == 'hexagon') {
@@ -175,9 +176,10 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                     }
                     style[DeviceCapabilities.transformProperty] += ' scale(' + scale + ')';
                     style[DeviceCapabilities.transformProperty + '-origin'] = '50% 50%';
-                    opacity = 0;
+                    opacity = minOpacity;
                     if (Math.abs(absoluteLeft) < 100) {
                         opacity = 0.3 + distance * 0.7;
+                        if(opacity < minOpacity) opacity = minOpacity;
                     }
                     style.opacity = opacity;
                 } else {
@@ -272,7 +274,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             bufferSize: 5,
                             /* in container % how much we need to drag to trigger the slide change */
                             moveTreshold: 0.1,
-                            defaultIndex: 0
+                            defaultIndex: 0,
+                            minOpacity: Number(iAttributes.rnMinOpacity) || 0
                         };
 
                         // TODO
@@ -324,7 +327,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             // todo : optim : apply only to visible items
                             var x = scope.carouselBufferIndex * 100 + offset;
                             angular.forEach(getSlidesDOM(), function(child, index) {
-                                child.style.cssText = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType));
+                                child.style.cssText = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType, options.minOpacity));
                             });
                         }
 
@@ -511,7 +514,6 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     }
                                 });
                                 isIndexBound = true;
-
                                 if (options.defaultIndex) {
                                     goToSlide(options.defaultIndex, {
                                         animate: !init
