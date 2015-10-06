@@ -8,16 +8,32 @@ Comments and contributions welcome :)
 
 Proudly brought to you by the [@revolunet](http://twitter.com/revolunet) team.
 
+## Install :
+
+### Bower
+`bower install angular-carousel`
+
+### npm
+`npm install angular-carousel`
+
+If you don't use NPM or Bower, just download files [from the github repo](./dist)
 
 ## Usage :
-
- - If you use bower, just `bower install angular-carousel`. If not, download files [from the github repo](./dist)
- - Add `angular-touch.js`, `angular-carousel.css`, and `angular-carousel.js` to your code:
+ - Add `angular-touch.js` and `angular-carousel.js` to your code:
 ```html
-<link href="angular-carousel.css" rel="stylesheet" type="text/css" />
 <script src="angular.js"></script>
 <script src="angular-touch.js"></script>
 <script src="angular-carousel.js"></script>
+```
+ - Or just require the module the CommonJS way (if you use npm)
+```js
+var angular = require('angular');
+var ngTouch = require('angular-touch');
+var carousel  = require('angular-carousel');
+```
+ - Add `angular-carousel.css` to your code:
+```html
+<link href="angular-carousel.css" rel="stylesheet" type="text/css" />
 ```
  - Add a dependency to the `angular-carousel` module in your application.
 ```js
