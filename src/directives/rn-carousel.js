@@ -514,6 +514,9 @@
                                 var moveOffset = shouldMove ? slidesMove : 0;
 
                                 destination = (scope.carouselIndex + moveOffset);
+                                if(angular.isDefined(tAttributes['rnCarouselControlsAllowLoop'])){
+                                  destination = moveOffset === 0 ? 0 : destination;
+                                }
 
                                 goToSlide(destination);
                                 if(iAttributes.rnCarouselOnInfiniteScrollRight!==undefined && slidesMove === 0 && scope.carouselIndex !== 0) {

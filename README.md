@@ -69,7 +69,7 @@ angular.module('MyApp', ['angular-carousel']);
  - `rn-carousel-easing`: add this attritube to specify a formula for easing, these can be found in the [shifty
  library](https://github.com/jeremyckahn/shifty/blob/master/src/shifty.formulas.js) (default=easeIn)
  - `rn-carousel-duration`: add this attribute to set the duration of the transition (default=300)
- - `rn-carousel-controls-allow-loop`: add this attribute to allow looping through slides from prev/next controls
+ - `rn-carousel-controls-allow-loop`: add this attribute to allow looping through slides using the prev/next controls or swiping
 
 ## Indicators
 
