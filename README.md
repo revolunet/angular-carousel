@@ -78,7 +78,12 @@ You can add position indicators by adding this directive where you want :
 <div rn-carousel-indicators ng-if="slides.length > 1" slides="slides" rn-carousel-index="carouselIndex"></div>
 ```
  - `slides` is the same collection you use in the carousel ng-repeat
+
+Note: If loading in slides from an async service, the `ng-if="slides.length > 1"` may not update as expected. In this case, try `ng-if="slides"`.
+
  - `carouselIndex` is the same index you've defined for the carousel
+
+ Note: If the indicators don't seem to update with the slides, try binding to an object param i.e. `carousel.index`, set in the controller like `$scope.carousel.index = 0` [Explanation.](http://www.codelord.net/2014/05/10/understanding-angulars-magic-dont-bind-to-primitives/)
 
 ## Notes :
  - if you use IE<=9, iOS<7 or Android<4 please include the [requestAnimationFrame polyfill](https://github.com/darius/requestAnimationFrame/blob/master/requestAnimationFrame.js) in your application.
