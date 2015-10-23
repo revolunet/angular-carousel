@@ -1,6 +1,8 @@
 # AngularJS Touch Carousel
 
-An AngularJS carousel implementation optimised for mobile devices.
+An AngularJS 1 carousel implementation optimised for mobile devices.
+
+**This project is not maintained anymore, and looking for maintainers.**
 
 Demo : http://revolunet.github.io/angular-carousel
 
