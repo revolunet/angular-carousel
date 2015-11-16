@@ -299,8 +299,7 @@
                                       updateSlidesPosition(state.x);
                                     }
                                 },
-
-                              finish: function() {
+                                finish: function() {
                                     scope.$apply(function() {
                                         scope.carouselIndex = index;
                                         offset = index * -100;
