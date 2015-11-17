@@ -295,7 +295,9 @@
                                 duration: options.transitionDuration,
                                 easing: options.transitionEasing,
                                 step: function(state) {
-                                    updateSlidesPosition(state.x);
+                                    if (isFinite(state.x)) {
+                                      updateSlidesPosition(state.x);
+                                    }
                                 },
                                 finish: function() {
                                     scope.$apply(function() {
