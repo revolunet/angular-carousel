@@ -72,6 +72,24 @@
                 </div>
             </div>
             <br>
+            <div>
+                <h3>buffered ngRepeat and custom indicators and vertical slide</h3>
+                <div class="details">
+                </div>
+                <div class="carousel-demo">
+                    <ul rn-carousel rn-carousel-vertical rn-carousel-index="carouselIndex221" rn-carousel-auto-slide rn-carousel-buffered class="carousel2">
+                        <li ng-repeat="slide in slides2 track by slide.id" ng-class="'id-' + slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                              #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="rn-carousel-indicator custom-indicator">
+                        <span ng-repeat="slide in slides2" ng-class="{active: $index==$parent.carouselIndex221}" ng-click="$parent.carouselIndex221 = $index">★</span>
+                    </div>
+                </div>
+            </div>
+            <br>
             <div >
                 <h3>buffered ngRepeat with custom transition</h3>
                 <div class="details">Use the 'hexagon' transition. index is shared with the carousel below.
@@ -84,6 +102,24 @@
                             </div>
                         </li>
                     </ul>
+                </div>
+            </div>
+            <br>
+            <div >
+                <h3>buffered ngRepeat with custom transition and vertical slide</h3>
+                <div class="details">Use the 'hexagon' transition. index is shared with the carousel below.
+                </div>
+                <div class="carousel-demo">
+                    <ul rn-carousel rn-carousel-vertical rn-carousel-index="carouselIndex31" rn-carousel-transition="hexagon" rn-carousel-buffered class="carousel3">
+                        <li ng-repeat="slide in slides3 track by slide.id">
+                            <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                              #{{ slide.id }}
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="rn-carousel-indicator custom-indicator">
+                        <span ng-repeat="slide in slides2" ng-class="{active: $index==$parent.carouselIndex31}" ng-click="$parent.carouselIndex31 = $index">★</span>
+                    </div>
                 </div>
             </div>
             <br>

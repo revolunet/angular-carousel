@@ -35,6 +35,8 @@ ul[rn-carousel-buffered] > li {
 
 ul[rn-carousel-transition="hexagon"] {
   overflow: visible; }
+  ul[rn-carousel-transition="hexagon"][rn-carousel-vertical] {
+    overflow: hidden; }
 
 /* indicators */
 div.rn-carousel-indicator span {

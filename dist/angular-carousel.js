@@ -138,16 +138,20 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
     .service('computeCarouselSlideStyle', ["DeviceCapabilities", function(DeviceCapabilities) {
         // compute transition transform properties for a given slide and global offset
-        return function(slideIndex, offset, transitionType) {
+        return function(slideIndex, offset, transitionType, options) {
             var style = {
                     display: 'inline-block'
                 },
                 opacity,
+                slideTransformValue,
                 absoluteLeft = (slideIndex * 100) + offset,
-                // slideTransformValue = DeviceCapabilities.has3d ? 'translate3d(' + absoluteLeft + '%, 0, 0)' : 'translate3d(' + absoluteLeft + '%, 0)',
-                // vertical
-                slideTransformValue = DeviceCapabilities.has3d ? 'translate3d(0, ' + absoluteLeft + '%, 0)' : 'translate3d(' + absoluteLeft + '%, 0)',
                 distance = ((100 - Math.abs(absoluteLeft)) / 100);
+            if(options.isVertical) {
+                // vertical
+                slideTransformValue = DeviceCapabilities.has3d ? 'translate3d(0, ' + absoluteLeft + '%, 0)' : 'translate3d(0, ' + absoluteLeft + '%)';
+            } else {
+                slideTransformValue = DeviceCapabilities.has3d ? 'translate3d(' + absoluteLeft + '%, 0, 0)' : 'translate3d(' + absoluteLeft + '%, 0)';
+            }
 
             if (!DeviceCapabilities.transformProperty) {
                 // fallback to default slide if transformProperty is not available
@@ -167,7 +171,11 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                     transformFrom = offset < (slideIndex * -100) ? 100 : 0;
                     degrees = offset < (slideIndex * -100) ? maxDegrees : -maxDegrees;
-                    style[DeviceCapabilities.transformProperty] = slideTransformValue + ' ' + 'rotateY(' + degrees + 'deg)';
+                    if(options.isVertical) {
+                        style[DeviceCapabilities.transformProperty] = slideTransformValue + ' ' + 'rotateX(' + (-degrees) + 'deg)';
+                    } else {
+                        style[DeviceCapabilities.transformProperty] = slideTransformValue + ' ' + 'rotateY(' + degrees + 'deg)';
+                    }
                     style[DeviceCapabilities.transformProperty + '-origin'] = transformFrom + '% 50%';
                 } else if (transitionType == 'zoom') {
                     style[DeviceCapabilities.transformProperty] = slideTransformValue;
@@ -274,7 +282,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             bufferSize: 5,
                             /* in container % how much we need to drag to trigger the slide change */
                             moveTreshold: 0.1,
-                            defaultIndex: 0
+                            defaultIndex: 0,
+                            isVertical: iAttributes.rnCarouselVertical === ''
                         };
 
                         // TODO
@@ -326,7 +335,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             // todo : optim : apply only to visible items
                             var x = scope.carouselBufferIndex * 100 + offset;
                             angular.forEach(getSlidesDOM(), function(child, index) {
-                                child.style.cssText = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType));
+                                child.style.cssText = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType, options));
                             });
                         }
 
