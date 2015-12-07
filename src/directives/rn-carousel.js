@@ -193,7 +193,8 @@
                             bufferSize: 5,
                             /* in container % how much we need to drag to trigger the slide change */
                             moveTreshold: 0.1,
-                            defaultIndex: 0
+                            defaultIndex: 0,
+                            wrap: true
                         };
 
                         // TODO
@@ -252,7 +253,9 @@
                         scope.nextSlide = function(slideOptions) {
                             var index = scope.carouselIndex + 1;
                             if (index > currentSlides.length - 1) {
-                                index = 0;
+                                if (slideOptions.wrap) {
+                                  index = 0;
+                                }
                             }
                             if (!locked) {
                                 goToSlide(index, slideOptions);
@@ -262,7 +265,9 @@
                         scope.prevSlide = function(slideOptions) {
                             var index = scope.carouselIndex - 1;
                             if (index < 0) {
-                                index = currentSlides.length - 1;
+                                if (slideOptions.wrap) {
+                                  index = currentSlides.length - 1;
+                                }
                             }
                             goToSlide(index, slideOptions);
                         };
