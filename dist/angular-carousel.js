@@ -273,7 +273,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             /* in container % how much we need to drag to trigger the slide change */
                             moveTreshold: 0.1,
                             defaultIndex: 0,
-                            wrap: true
+                            wrap: iAttributes.rnCarouselWrap || true
                         };
 
                         // TODO
@@ -332,7 +332,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         scope.nextSlide = function(slideOptions) {
                             var index = scope.carouselIndex + 1;
                             if (index > currentSlides.length - 1) {
-                                if (slideOptions.wrap) {
+                                if (options.wrap) {
                                   index = 0;
                                 }
                             }
@@ -344,7 +344,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         scope.prevSlide = function(slideOptions) {
                             var index = scope.carouselIndex - 1;
                             if (index < 0) {
-                                if (slideOptions.wrap) {
+                                if (options.wrap) {
                                   index = currentSlides.length - 1;
                                 }
                             }
