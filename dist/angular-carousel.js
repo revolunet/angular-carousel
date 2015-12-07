@@ -263,6 +263,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                         carouselId++;
 
+                        var wrap = scope.$eval(iAttributes.rnCarouselWrap);
+
+                        if (!angular.isDefined(wrap)) {
+                          wrap = false
+                        }
+
                         var defaultOptions = {
                             transitionType: iAttributes.rnCarouselTransition || 'slide',
                             transitionEasing: iAttributes.rnCarouselEasing || 'easeTo',
@@ -273,7 +279,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             /* in container % how much we need to drag to trigger the slide change */
                             moveTreshold: 0.1,
                             defaultIndex: 0,
-                            wrap: iAttributes.rnCarouselWrap || true
+                            wrap: wrap
                         };
 
                         // TODO
@@ -334,6 +340,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             if (index > currentSlides.length - 1) {
                                 if (options.wrap) {
                                   index = 0;
+                                } else {
+                                  index = scope.carouselIndex;
                                 }
                             }
                             if (!locked) {
@@ -346,6 +354,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             if (index < 0) {
                                 if (options.wrap) {
                                   index = currentSlides.length - 1;
+                                } else {
+                                  index = scope.carouselIndex;
                                 }
                             }
                             goToSlide(index, slideOptions);
