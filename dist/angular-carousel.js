@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v1.0.1 - 2015-12-07
+ * @version v1.0.1 - 2015-12-14
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -266,7 +266,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         var wrap = scope.$eval(iAttributes.rnCarouselWrap);
 
                         if (!angular.isDefined(wrap)) {
-                          wrap = false
+                          wrap = true
                         }
 
                         var defaultOptions = {
