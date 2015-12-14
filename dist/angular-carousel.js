@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v1.0.1 - 2015-11-16
+ * @version v1.0.1 - 2015-12-14
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -263,6 +263,12 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                         carouselId++;
 
+                        var wrap = scope.$eval(iAttributes.rnCarouselWrap);
+
+                        if (!angular.isDefined(wrap)) {
+                          wrap = true
+                        }
+
                         var defaultOptions = {
                             transitionType: iAttributes.rnCarouselTransition || 'slide',
                             transitionEasing: iAttributes.rnCarouselEasing || 'easeTo',
@@ -272,7 +278,8 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             bufferSize: 5,
                             /* in container % how much we need to drag to trigger the slide change */
                             moveTreshold: 0.1,
-                            defaultIndex: 0
+                            defaultIndex: 0,
+                            wrap: wrap
                         };
 
                         // TODO
@@ -331,7 +338,11 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         scope.nextSlide = function(slideOptions) {
                             var index = scope.carouselIndex + 1;
                             if (index > currentSlides.length - 1) {
-                                index = 0;
+                                if (options.wrap) {
+                                  index = 0;
+                                } else {
+                                  index = scope.carouselIndex;
+                                }
                             }
                             if (!locked) {
                                 goToSlide(index, slideOptions);
@@ -341,7 +352,11 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         scope.prevSlide = function(slideOptions) {
                             var index = scope.carouselIndex - 1;
                             if (index < 0) {
-                                index = currentSlides.length - 1;
+                                if (options.wrap) {
+                                  index = currentSlides.length - 1;
+                                } else {
+                                  index = scope.carouselIndex;
+                                }
                             }
                             goToSlide(index, slideOptions);
                         };
