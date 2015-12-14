@@ -187,7 +187,7 @@
                         var wrap = scope.$eval(iAttributes.rnCarouselWrap);
 
                         if (!angular.isDefined(wrap)) {
-                          wrap = false
+                          wrap = true
                         }
 
                         var defaultOptions = {
