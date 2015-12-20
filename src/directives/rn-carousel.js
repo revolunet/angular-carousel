@@ -264,7 +264,9 @@
                             if (index < 0) {
                                 index = currentSlides.length - 1;
                             }
-                            goToSlide(index, slideOptions);
+                            if (!locked) {
+                              goToSlide(index, slideOptions);
+                            }
                         };
 
                         function goToSlide(index, slideOptions) {
@@ -364,6 +366,7 @@
                         }
 
                         var init = true;
+
                         scope.carouselIndex = 0;
 
                         if (!isRepeatBased) {
@@ -394,7 +397,11 @@
                                 }
                                 scope.autoSlider = $interval(function() {
                                     if (!locked && !pressed) {
-                                        scope.nextSlide();
+                                        if (iAttributes.rnCarouselRtl) {
+                                            scope.prevSlide();
+                                        } else {
+                                            scope.nextSlide();
+                                        }
                                     }
                                 }, duration * 1000);
                             };
