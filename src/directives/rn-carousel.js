@@ -312,8 +312,16 @@
                                 },
                                 finish: function() {
                                     scope.$apply(function() {
+                                        var slidesDOM = getSlidesDOM();
+                                        if(index >= slidesDOM.length) {
+                                            index = 0;
+                                        }
                                         scope.carouselIndex = index;
-                                        offset = index * -100;
+                                        if(slidesDOM.length < 2) {
+                                            offset = 0;
+                                        } else {
+                                            offset = index * -100;
+                                        }
                                         updateBufferIndex();
                                         $timeout(function () {
                                           locked = false;
