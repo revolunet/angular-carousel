@@ -473,6 +473,9 @@
                                 //console.log('repeatCollection', currentSlides);
                                 currentSlides = newValue;
                                 // if deepWatch ON ,manually compare objects to guess the new position
+                                if (!angular.isArray(currentSlides)) {
+                                  throw Error('the slides collection must be an Array');
+                                }
                                 if (deepWatch && angular.isArray(newValue)) {
                                     var activeElement = oldValue[scope.carouselIndex];
                                     var newIndex = getItemIndex(newValue, activeElement, scope.carouselIndex);
