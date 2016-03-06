@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v1.0.1 - 2015-11-16
+ * @version v1.0.1 - 2016-03-05
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -552,6 +552,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                 //console.log('repeatCollection', currentSlides);
                                 currentSlides = newValue;
                                 // if deepWatch ON ,manually compare objects to guess the new position
+                                if (!angular.isArray(currentSlides)) {
+                                  throw Error('the slides collection must be an Array');
+                                }
                                 if (deepWatch && angular.isArray(newValue)) {
                                     var activeElement = oldValue[scope.carouselIndex];
                                     var newIndex = getItemIndex(newValue, activeElement, scope.carouselIndex);
