@@ -267,6 +267,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             transitionType: iAttributes.rnCarouselTransition || 'slide',
                             transitionEasing: iAttributes.rnCarouselEasing || 'easeTo',
                             transitionDuration: parseInt(iAttributes.rnCarouselDuration, 10) || 300,
+                            swipeTransitionDuration: parseInt(iAttributes.rnCarouselSwipeTransitionDuration, 10) || false,
                             isSequential: true,
                             autoSlideDuration: 3,
                             bufferSize: 5,
@@ -346,7 +347,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             goToSlide(index, slideOptions);
                         };
 
-                        function goToSlide(index, slideOptions) {
+                        function goToSlide(index, slideOptions, isSwipe) {
                             //console.log('goToSlide', arguments);
                             // move a to the given slide index
                             if (index === undefined) {
@@ -371,7 +372,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                 to: {
                                     'x': index * -100
                                 },
-                                duration: options.transitionDuration,
+                                duration: (isSwipe && options.swipeTransitionDuration ? options.swipeTransitionDuration : options.transitionDuration),
                                 easing: options.transitionEasing,
                                 step: function(state) {
                                     if (isFinite(state.x)) {
@@ -599,14 +600,14 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
                                 destination = (scope.carouselIndex + moveOffset);
 
-                                goToSlide(destination);
+                                goToSlide(destination, {}, 1);
                                 if(iAttributes.rnCarouselOnInfiniteScrollRight!==undefined && slidesMove === 0 && scope.carouselIndex !== 0) {
                                     $parse(iAttributes.rnCarouselOnInfiniteScrollRight)(scope)
-                                    goToSlide(0);
+                                    goToSlide(0, {}, 1);
                                 }
                                 if(iAttributes.rnCarouselOnInfiniteScrollLeft!==undefined && slidesMove === 0 && scope.carouselIndex === 0 && moveOffset === 0) {
                                     $parse(iAttributes.rnCarouselOnInfiniteScrollLeft)(scope)
-                                    goToSlide(currentSlides.length);
+                                    goToSlide(currentSlides.length, {}, 1);
                                 }
 
                             } else {
