@@ -9,8 +9,8 @@
     "url": "git://github.com/revolunet/angular-carousel.git"
   },
   "main": [
-    "dist/angular-carousel.js",
-    "dist/angular-carousel.css"
+    "./dist/angular-carousel.js",
+    "./dist/angular-carousel.css"
   ],
   "ignore": [
     "demo"
