@@ -250,7 +250,7 @@
                         }
 
                         scope.nextSlide = function(slideOptions) {
-                            var index = scope.carouselIndex + 1;
+                            var index = scope.carouselIndex*1 + 1;
                             if (index > currentSlides.length - 1) {
                                 index = 0;
                             }
@@ -260,7 +260,7 @@
                         };
 
                         scope.prevSlide = function(slideOptions) {
-                            var index = scope.carouselIndex - 1;
+                            var index = scope.carouselIndex*1 - 1;
                             if (index < 0) {
                                 index = currentSlides.length - 1;
                             }
@@ -271,7 +271,7 @@
                             //console.log('goToSlide', arguments);
                             // move a to the given slide index
                             if (index === undefined) {
-                                index = scope.carouselIndex;
+                                index = scope.carouselIndex*1;
                             }
 
                             slideOptions = slideOptions || {};
@@ -510,22 +510,22 @@
                                     slidesMove = -Math[absMove >= 0 ? 'ceil' : 'floor'](absMove / elWidth),
                                     shouldMove = Math.abs(absMove) > minMove;
 
-                                if (currentSlides && (slidesMove + scope.carouselIndex) >= currentSlides.length) {
-                                    slidesMove = currentSlides.length - 1 - scope.carouselIndex;
+                                if (currentSlides && (slidesMove + scope.carouselIndex*1) >= currentSlides.length) {
+                                    slidesMove = currentSlides.length - 1 - scope.carouselIndex*1;
                                 }
-                                if ((slidesMove + scope.carouselIndex) < 0) {
-                                    slidesMove = -scope.carouselIndex;
+                                if ((slidesMove + scope.carouselIndex*1) < 0) {
+                                    slidesMove = -scope.carouselIndex*1;
                                 }
                                 var moveOffset = shouldMove ? slidesMove : 0;
 
-                                destination = (scope.carouselIndex + moveOffset);
+                                destination = (scope.carouselIndex*1 + moveOffset);
 
                                 goToSlide(destination);
-                                if(iAttributes.rnCarouselOnInfiniteScrollRight!==undefined && slidesMove === 0 && scope.carouselIndex !== 0) {
+                                if(iAttributes.rnCarouselOnInfiniteScrollRight!==undefined && slidesMove === 0 && scope.carouselIndex*1 !== 0) {
                                     $parse(iAttributes.rnCarouselOnInfiniteScrollRight)(scope)
                                     goToSlide(0);
                                 }
-                                if(iAttributes.rnCarouselOnInfiniteScrollLeft!==undefined && slidesMove === 0 && scope.carouselIndex === 0 && moveOffset === 0) {
+                                if(iAttributes.rnCarouselOnInfiniteScrollLeft!==undefined && slidesMove === 0 && scope.carouselIndex*1 === 0 && moveOffset === 0) {
                                     $parse(iAttributes.rnCarouselOnInfiniteScrollLeft)(scope)
                                     goToSlide(currentSlides.length);
                                 }
@@ -563,7 +563,7 @@
                                     bufferIndex = currentSlides.length - scope.carouselBufferSize;
                                 } else {
                                     // compute buffer start
-                                    bufferIndex = scope.carouselIndex - bufferEdgeSize;
+                                    bufferIndex = scope.carouselIndex*1 - bufferEdgeSize;
                                 }
 
                                 scope.carouselBufferIndex = bufferIndex;
