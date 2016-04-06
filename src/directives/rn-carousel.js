@@ -300,14 +300,13 @@
                                     }
                                 },
                                 finish: function() {
-                                    scope.$apply(function() {
-                                        scope.carouselIndex = index;
-                                        offset = index * -100;
-                                        updateBufferIndex();
-                                        $timeout(function () {
+                                    scope.carouselIndex = index;
+                                    offset = index * -100;
+                                    updateBufferIndex();
+                                    $timeout(function () {
                                           locked = false;
                                         }, 0, false);
-                                    });
+                                    scope.$digest();
                                 }
                             });
                         }
@@ -531,11 +530,9 @@
                                 }
 
                             } else {
-                                scope.$apply(function() {
-                                    scope.carouselIndex = parseInt(-offset / 100, 10);
-                                    updateBufferIndex();
-                                });
-
+                                scope.carouselIndex = parseInt(-offset / 100, 10);
+                                updateBufferIndex();
+                                scope.$digest();
                             }
 
                         }
