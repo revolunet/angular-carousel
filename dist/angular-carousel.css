@@ -18,7 +18,6 @@ ul[rn-carousel] {
     backface-visibility: hidden;
     overflow: visible;
     vertical-align: top;
-    position: absolute;
     left: 0;
     right: 0;
     white-space: normal;
@@ -62,5 +61,3 @@ div.rn-carousel-indicator span {
     right: 0.5em; }
     .rn-carousel-control.rn-carousel-control-next:before {
       content: ">"; }
-
-/*# sourceMappingURL=angular-carousel.css.map */
