@@ -47,6 +47,8 @@
   },
   "scripts": {
     "test": "karma start test/karma.conf.js --single-run --browsers Chrome",
-    "test-server": "karma start test/karma.conf.js --browsers Chrome"
+    "test-server": "karma start test/karma.conf.js --browsers Chrome",
+    "start": "grunt",
+    "build": "grunt build"
   }
 }

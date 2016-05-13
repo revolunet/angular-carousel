@@ -101,6 +101,7 @@ Note: If loading in slides from an async service, the `ng-if="slides.length > 1"
  - infinite loop support
 
 ## Contributing
+ - clone the repo then `npm i && npm start`
  - Please follow [AngularJS GIT conventions](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#)
  - Please add tests
  - Please update the README and demo (index.html)
