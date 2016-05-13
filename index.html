@@ -106,6 +106,41 @@
                 </div>
             </div>
             <br>
+           <div>
+              <h3>Custom templates with looping</h3>
+              <div class="details">
+              </div>
+              <div class="carousel-demo">
+                <ul rn-carousel rn-carousel-loop rn-carousel-controls class="carousel5">
+                  <li>Slide 1</li>
+                  <li>Slide 2</li>
+                  <li>Slide 3</li>
+                  <li>Slide 4</li>
+                  <li>Slide 5</li>
+                  <li>Slide 6</li>
+                  <li>Slide 7</li>
+                  <li>Slide 8</li>
+                  <li>Slide 9</li>
+                </ul>
+              </div>
+            </div>
+            <br>
+            <br>
+           <div>
+              <h3>Looping with ng-repeat and autoscroll looping</h3>
+              <div class="details">
+              </div>
+              <div class="carousel-demo">
+                <ul rn-carousel rn-carousel-loop  rn-carousel-auto-slide="3" rn-carousel-controls class="carousel5">
+                  <li ng-repeat="slide in slides3">
+                    <div ng-style="{'background-image': 'url(' + slide.img + ')'}"  class="bgimage">
+                      #{{ slide.id }}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <br>
             <div>
                 <h3>Lockable carousel</h3>
                 <div class="details">
@@ -173,8 +208,7 @@
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-touch.min.js"></script>
-
-    <script src="./dist/angular-carousel.min.js"></script>
+    <script src="./dist/angular-carousel.js"></script>
     <!--<script src="./src/angular-carousel.js"></script>
     <script src="./src/directives/rn-carousel.js"></script>
     <script src="./src/directives/rn-carousel-indicators.js"></script>

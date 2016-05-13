@@ -42,7 +42,8 @@
     "karma-requirejs": "~0.2.1",
     "karma-script-launcher": "~0.1.0",
     "load-grunt-tasks": "~0.3.0",
-    "requirejs": "~2.1.11"
+    "requirejs": "~2.1.11",
+    "karma-coverage": "~0.2.6"
   },
   "scripts": {
     "test": "karma start test/karma.conf.js --single-run --browsers Chrome",
