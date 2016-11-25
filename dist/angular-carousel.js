@@ -310,9 +310,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             var nodes = iElement[0].childNodes;
                             var slides = [];
                             for(var i=0; i<nodes.length ;i++){
-                              if(nodes[i].tagName === "LI"){
-                                slides.push(nodes[i]);
-                              }
+                                if(nodes[i].tagName === "LI"){
+                                    slides.push(nodes[i]);
+                                }
                             }
                             return slides;
                         }
