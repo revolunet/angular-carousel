@@ -64,7 +64,7 @@
                     display: 'inline-block'
                 },
                 opacity,
-                absoluteLeft = (slideIndex * 100) + offset,
+                absoluteLeft = offset,
                 slideTransformValue = DeviceCapabilities.has3d ? 'translate3d(' + absoluteLeft + '%, 0, 0)' : 'translate3d(' + absoluteLeft + '%, 0)',
                 distance = ((100 - Math.abs(absoluteLeft)) / 100);
 
