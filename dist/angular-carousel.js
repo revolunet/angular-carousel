@@ -307,7 +307,14 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         }
 
                         function getSlidesDOM() {
-                            return iElement[0].querySelectorAll('ul[rn-carousel] > li');
+                            var nodes = iElement[0].childNodes;
+                            var slides = [];
+                            for(var i=0; i<nodes.length ;i++){
+                                if(nodes[i].tagName === "LI"){
+                                    slides.push(nodes[i]);
+                                }
+                            }
+                            return slides;
                         }
 
                         function documentMouseUpEvent(event) {
