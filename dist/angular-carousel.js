@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v1.0.1 - 2016-03-05
+ * @version v1.0.1 - 2016-03-25
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -136,7 +136,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
 
     })
 
-    .service('computeCarouselSlideStyle', ["DeviceCapabilities", function(DeviceCapabilities) {
+    .service('computeCarouselSlideStyle', function(DeviceCapabilities) {
         // compute transition transform properties for a given slide and global offset
         return function(slideIndex, offset, transitionType) {
             var style = {
@@ -186,7 +186,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
             }
             return style;
         };
-    }])
+    })
 
     .service('createStyleString', function() {
         return function(object) {
@@ -336,7 +336,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         }
 
                         scope.nextSlide = function(slideOptions) {
-                            var index = scope.carouselIndex + 1;
+                            var index = scope.carouselIndex*1 + 1;
                             if (index > currentSlides.length - 1) {
                                 index = 0;
                             }
@@ -346,7 +346,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                         };
 
                         scope.prevSlide = function(slideOptions) {
-                            var index = scope.carouselIndex - 1;
+                            var index = scope.carouselIndex*1 - 1;
                             if (index < 0) {
                                 index = currentSlides.length - 1;
                             }
@@ -357,7 +357,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             //console.log('goToSlide', arguments);
                             // move a to the given slide index
                             if (index === undefined) {
-                                index = scope.carouselIndex;
+                                index = scope.carouselIndex*1;
                             }
 
                             slideOptions = slideOptions || {};
@@ -596,22 +596,22 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     slidesMove = -Math[absMove >= 0 ? 'ceil' : 'floor'](absMove / elWidth),
                                     shouldMove = Math.abs(absMove) > minMove;
 
-                                if (currentSlides && (slidesMove + scope.carouselIndex) >= currentSlides.length) {
-                                    slidesMove = currentSlides.length - 1 - scope.carouselIndex;
+                                if (currentSlides && (slidesMove + scope.carouselIndex*1) >= currentSlides.length) {
+                                    slidesMove = currentSlides.length - 1 - scope.carouselIndex*1;
                                 }
-                                if ((slidesMove + scope.carouselIndex) < 0) {
-                                    slidesMove = -scope.carouselIndex;
+                                if ((slidesMove + scope.carouselIndex*1) < 0) {
+                                    slidesMove = -scope.carouselIndex*1;
                                 }
                                 var moveOffset = shouldMove ? slidesMove : 0;
 
-                                destination = (scope.carouselIndex + moveOffset);
+                                destination = (scope.carouselIndex*1 + moveOffset);
 
                                 goToSlide(destination);
-                                if(iAttributes.rnCarouselOnInfiniteScrollRight!==undefined && slidesMove === 0 && scope.carouselIndex !== 0) {
+                                if(iAttributes.rnCarouselOnInfiniteScrollRight!==undefined && slidesMove === 0 && scope.carouselIndex*1 !== 0) {
                                     $parse(iAttributes.rnCarouselOnInfiniteScrollRight)(scope)
                                     goToSlide(0);
                                 }
-                                if(iAttributes.rnCarouselOnInfiniteScrollLeft!==undefined && slidesMove === 0 && scope.carouselIndex === 0 && moveOffset === 0) {
+                                if(iAttributes.rnCarouselOnInfiniteScrollLeft!==undefined && slidesMove === 0 && scope.carouselIndex*1 === 0 && moveOffset === 0) {
                                     $parse(iAttributes.rnCarouselOnInfiniteScrollLeft)(scope)
                                     goToSlide(currentSlides.length);
                                 }
@@ -649,7 +649,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                     bufferIndex = currentSlides.length - scope.carouselBufferSize;
                                 } else {
                                     // compute buffer start
-                                    bufferIndex = scope.carouselIndex - bufferEdgeSize;
+                                    bufferIndex = scope.carouselIndex*1 - bufferEdgeSize;
                                 }
 
                                 scope.carouselBufferIndex = bufferIndex;
