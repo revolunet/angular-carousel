@@ -1,4 +1,5 @@
 # AngularJS Touch Carousel
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/revolunet/angular-carousel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 An AngularJS 1 carousel implementation optimised for mobile devices.
 
