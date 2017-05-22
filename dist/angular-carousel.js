@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v1.0.2 - 2016-11-25
+ * @version v1.0.2 - 2017-05-22
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -137,8 +137,30 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
     })
 
     .service('computeCarouselSlideStyle', ["DeviceCapabilities", function(DeviceCapabilities) {
+        /**
+         *   apply user custom css style with carousel li element
+         *  @param style : existing style object
+         *  @param customStyle : user custom style object
+         *  @param onVisible : true : apply style on visible carousel li element. false : apply style on non visible carousel li element.
+         *  @returns {*}
+         **/
+        function applyCustomStyle(style, customStyle, onVisible) {
+          var restKeyPrefix = "_rest-"; //value of key containing this prefix will be apply on non visible carousel li element
+
+          angular.forEach(customStyle, function(value, key) {
+            if (onVisible && !key.match(restKeyPrefix)) { //middle
+            style[key] = value;
+            } else if (!onVisible && key.match(restKeyPrefix)) {
+              var restKey = key.replace(restKeyPrefix, "");
+              style[restKey] = value;
+            }
+          });
+
+          return style;
+        }
+
         // compute transition transform properties for a given slide and global offset
-        return function(slideIndex, offset, transitionType) {
+        return function(slideIndex, offset, transitionType, listSize, customStyle) {
             var style = {
                     display: 'inline-block'
                 },
@@ -184,6 +206,42 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                     style[DeviceCapabilities.transformProperty] = slideTransformValue;
                 }
             }
+
+            if (customStyle) {
+              var styleObj = JSON.parse(customStyle);
+              var currentIdx = Math.abs(offset / 100); //array index of current display card element
+
+              //apply keyword 'all' custom style with every carousel li element
+              var allStyle = styleObj.all;
+              angular.forEach(allStyle, function(value, key) {
+                style[key] = value;
+              });
+
+              var firstStyle = styleObj.first; //apply style on when first li element visible
+              var middleStyle = styleObj.middle; //apply style when li element visible except first, last li element
+              var endStyle = styleObj.end; //apply style when last li element visible
+
+              if (currentIdx == 0) { //on first carousel li element visible
+                if (slideIndex == currentIdx) {  //apply style with first list element
+                  style = applyCustomStyle(style, firstStyle, true)
+                } else if (slideIndex != currentIdx) { //apply style with rest list element
+                  style = applyCustomStyle(style, firstStyle, false)
+                }
+              } else if (currentIdx > 0 && currentIdx < listSize - 1) { ////on second ~ before last carousel li element visible
+                if (slideIndex != 0 && slideIndex != listSize -1) {
+                  style = applyCustomStyle(style, middleStyle, true)
+                } else if (!(slideIndex != 0 && slideIndex != listSize -1)) {
+                  style = applyCustomStyle(style, middleStyle, false)
+                }
+              } else if (currentIdx == listSize - 1) { //on  last carousel li element visible
+                if (slideIndex == currentIdx) {
+                  style = applyCustomStyle(style, endStyle, true)
+                } else if (slideIndex != currentIdx) {
+                  style = applyCustomStyle(style, endStyle, false)
+                }
+              }
+            }
+            
             return style;
         };
     }])
@@ -330,8 +388,9 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                             // manually apply transformation to carousel childrens
                             // todo : optim : apply only to visible items
                             var x = scope.carouselBufferIndex * 100 + offset;
-                            angular.forEach(getSlidesDOM(), function(child, index) {
-                                child.style.cssText = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType));
+                            var slidesDom = getSlidesDOM();
+                            angular.forEach(slidesDom, function(child, index) {
+                              child.style.cssText = createStyleString(computeCarouselSlideStyle(index, x, options.transitionType, slidesDom.length, iAttributes.rnCarouselCustomStyle));
                             });
                         }
 
