@@ -1,6 +1,6 @@
 /**
  * Angular Carousel - Mobile friendly touch carousel for AngularJS
- * @version v1.0.2 - 2016-11-25
+ * @version v1.0.2 - 2017-06-07
  * @link http://revolunet.github.com/angular-carousel
  * @author Julien Bouquillon <julien@revolunet.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -62,7 +62,8 @@ angular.module('angular-carousel')
     templateUrl: 'carousel-indicators.html',
     link: function(scope, iElement, iAttributes) {
       var indexModel = $parse(iAttributes.rnCarouselIndex);
-      scope.goToSlide = function(index) {
+      scope.goToSlide = function(event, index) {
+        event.stopPropagation();
         indexModel.assign(scope.$parent.$parent, index);
       };
     }
@@ -72,7 +73,7 @@ angular.module('angular-carousel')
 angular.module('angular-carousel').run(['$templateCache', function($templateCache) {
   $templateCache.put('carousel-indicators.html',
       '<div class="rn-carousel-indicator">\n' +
-        '<span ng-repeat="slide in slides" ng-class="{active: $index==index}" ng-click="goToSlide($index)">●</span>' +
+        '<span ng-repeat="slide in slides" ng-class="{active: $index==index}" ng-click="goToSlide($event, $index)">●</span>' +
       '</div>'
   );
 }]);
