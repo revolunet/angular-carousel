@@ -10,7 +10,8 @@ angular.module('angular-carousel')
     templateUrl: 'carousel-indicators.html',
     link: function(scope, iElement, iAttributes) {
       var indexModel = $parse(iAttributes.rnCarouselIndex);
-      scope.goToSlide = function(index) {
+      scope.goToSlide = function(event, index) {
+        event.stopPropagation();
         indexModel.assign(scope.$parent.$parent, index);
       };
     }
@@ -20,7 +21,7 @@ angular.module('angular-carousel')
 angular.module('angular-carousel').run(['$templateCache', function($templateCache) {
   $templateCache.put('carousel-indicators.html',
       '<div class="rn-carousel-indicator">\n' +
-        '<span ng-repeat="slide in slides" ng-class="{active: $index==index}" ng-click="goToSlide($index)">●</span>' +
+        '<span ng-repeat="slide in slides" ng-class="{active: $index==index}" ng-click="goToSlide($event, $index)">●</span>' +
       '</div>'
   );
 }]);
