@@ -379,6 +379,25 @@
                             angular.forEach(getSlidesDOM(), function(node, index) {
                                 currentSlides.push({id: index});
                             });
+                            if (iAttributes.rnCarouselHtmlSlides) {
+                                var updateParentSlides = function(value) {
+                                    slidesModel.assign(scope.$parent, value);
+                                };
+                                var slidesModel = $parse(iAttributes.rnCarouselHtmlSlides);
+                                if (angular.isFunction(slidesModel.assign)) {
+                                    /* check if this property is assignable then watch it */
+                                    scope.$watch('htmlSlides', function(newValue) {
+                                        updateParentSlides(newValue);
+                                    });
+                                    scope.$parent.$watch(slidesModel, function(newValue, oldValue) {
+                                        if (newValue !== undefined && newValue !== null) {
+                                            newValue = 0;
+                                            updateParentIndex(newValue);
+                                        }
+                                    });
+                                }
+                                scope.htmlSlides = currentSlides;
+                            }
                         }
 
                         if (iAttributes.rnCarouselControls!==undefined) {
