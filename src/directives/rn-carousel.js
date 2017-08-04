@@ -127,6 +127,26 @@
                 rubberTreshold = 3;
 
             var requestAnimationFrame = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame || $window.mozRequestAnimationFrame;
+            
+            var debounce = function(func, wait, immediate) {
+                var timeout;
+                return function() {
+                    var context = this,
+                        args = arguments;
+                    var later = function() {
+                        timeout = null;
+                        if ( !immediate ) {
+                            func.apply(context, args);
+                        }
+                    };
+                    var callNow = immediate && !timeout;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait || 300);
+                    if ( callNow ) {
+                        func.apply(context, args);
+                    }
+                };
+            };
 
             function getItemIndex(collection, target, defaultIndex) {
                 var result = defaultIndex;
@@ -603,10 +623,10 @@
                             }
                         }
 
-                        function onOrientationChange() {
+                        var onOrientationChange = debounce(function() {
                             updateContainerWidth();
                             goToSlide();
-                        }
+                        });
 
                         // handle orientation change
                         var winEl = angular.element($window);
