@@ -632,7 +632,7 @@ angular.module('angular-carousel').run(['$templateCache', function($templateCach
                                 }
                                 if(iAttributes.rnCarouselOnInfiniteScrollLeft!==undefined && slidesMove === 0 && scope.carouselIndex === 0 && moveOffset === 0) {
                                     $parse(iAttributes.rnCarouselOnInfiniteScrollLeft)(scope)
-                                    goToSlide(currentSlides.length);
+                                    goToSlide(currentSlides.length-1);
                                 }
 
                             } else {
