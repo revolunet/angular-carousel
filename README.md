@@ -62,6 +62,7 @@ angular.module('MyApp', ['angular-carousel']);
 
 ## Directive options :
  - `rn-carousel-index` two way binding integer to control the carousel position (0-indexed)
+ - `rn-rn-carousel-html-slides`: two way binding array to get slides if no ng-repeat was used (slides array)
  - `rn-carousel-buffered` add this attribute to enable the carousel buffering, good to minimize the DOM (5 slides)
  - `rn-carousel-controls` add this attribute to enable builtin prev/next buttons (you can override by CSS)
  - `rn-carousel-auto-slide` add this attribute to make the carousel slide automatically after given seconds (default=3)
